@@ -26,6 +26,7 @@
   ],
   "devDependencies": {
     "ava": "latest",
+    "coveralls": "^2.11.9",
     "nyc": "^6.4.0",
     "then-sleep": "^1.0.1",
     "xo": "latest"
