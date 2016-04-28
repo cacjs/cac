@@ -1,0 +1,44 @@
+{
+  "name": "cac",
+  "version": "0.0.0",
+  "description": "Command And Conquer.",
+  "license": "MIT",
+  "repository": "egoist/cac",
+  "author": {
+    "name": "EGOIST",
+    "email": "0x142857@gmail.com",
+    "url": "github.com/egoist"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "cli",
+    "commander",
+    "meow",
+    "minimist"
+  ],
+  "devDependencies": {
+    "ava": "latest",
+    "then-sleep": "^1.0.1",
+    "xo": "latest"
+  },
+  "xo": {
+    "semicolon": false,
+    "space": 2
+  },
+  "dependencies": {
+    "camelcase-keys": "^2.1.0",
+    "co": "^4.6.0",
+    "deep-assign": "^2.0.0",
+    "is-generator-function": "^1.0.3",
+    "minimist": "^1.2.0",
+    "read-pkg-up": "^1.0.1"
+  }
+}
