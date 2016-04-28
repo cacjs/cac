@@ -4,7 +4,7 @@
 
 ## Features
 
-- [x] Simplied [commander.js](https://github.com/tj/commander.js)
+- [x] Simplified [commander.js](https://github.com/tj/commander.js)
 - [x] Camelcased keys, eg `--disable-input` => `disableInput`
 - [x] Automatically read `package.json`, parse package meta
 - [x] Automatically print related data when `--version` and `--help`
