@@ -89,7 +89,7 @@ _.runCommand = function (commandFn) {
     const context = {
       input: this.argv.input,
       flags: this.argv.flags,
-      showHelp: this.showHelp
+      showHelp: this.showHelp.bind(this)
     }
     if (isGeneratorFunction(commandFn)) {
       co(commandFn.bind(context))
