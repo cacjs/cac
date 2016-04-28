@@ -13,7 +13,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "xo && ava"
+    "test": "xo && nyc ava"
   },
   "files": [
     "index.js"
@@ -26,12 +26,28 @@
   ],
   "devDependencies": {
     "ava": "latest",
+    "nyc": "^6.4.0",
     "then-sleep": "^1.0.1",
     "xo": "latest"
   },
   "xo": {
     "semicolon": false,
-    "space": 2
+    "space": 2,
+    "rules": {
+      "operator-linebreak": [
+        2,
+        "before"
+      ],
+      "no-warning-comments": [
+        2,
+        {
+          "terms": [
+            "fixme"
+          ],
+          "location": "start"
+        }
+      ]
+    }
   },
   "dependencies": {
     "camelcase-keys": "^2.1.0",

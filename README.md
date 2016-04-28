@@ -1,4 +1,4 @@
-# CAC [![NPM version](https://img.shields.io/npm/v/cac.svg)](https://npmjs.com/package/cac) [![NPM downloads](https://img.shields.io/npm/dm/cac.svg)](https://npmjs.com/package/cac) [![Build Status](https://img.shields.io/circleci/project/egoist/cac/master.svg)](https://circleci.com/gh/egoist/cac)
+# CAC [![NPM version](https://img.shields.io/npm/v/cac.svg)](https://npmjs.com/package/cac) [![NPM downloads](https://img.shields.io/npm/dm/cac.svg)](https://npmjs.com/package/cac) [![Build Status](https://img.shields.io/circleci/project/egoist/cac/master.svg)](https://circleci.com/gh/egoist/cac) [![Coveralls branch](https://img.shields.io/coveralls/egoist/cac/master.svg)](https://github.com/egoist/cac)
 
 **C**ommand **A**nd **C**onquer, the queen living in your command line.
 

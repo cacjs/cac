@@ -1,7 +1,16 @@
 import test from 'ava'
-import fn from './'
+import cac from './'
 
-// TODO: write real tests
-test('main', t => {
-  t.is(fn('unicorns'), 'unicorns & rainbows')
+test('camelcased keys', t => {
+  const cli = cac()
+  cli.parse(['--hide-progress'])
+  t.true(cli.argv.flags.hideProgress)
+})
+
+test('output help', t => {
+  const cli = cac(`wow`)
+  cli.parse(['--help'])
+  process.stdout.on('data', data => {
+    t.true(data.indexOf('wow') !== -1)
+  })
 })
