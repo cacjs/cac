@@ -2,6 +2,8 @@
 
 **C**ommand **A**nd **C**onquer, the queen living in your command line.
 
+<img src="http://i.giphy.com/v3FeH4swox9mg.gif" width="400"/>
+
 ## Features
 
 - [x] Simplified [commander.js](https://github.com/tj/commander.js)
