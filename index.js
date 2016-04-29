@@ -92,10 +92,11 @@ _.runCommand = function (commandFn) {
     const context = {
       input: this.argv.input,
       flags: this.argv.flags,
-      showHelp: this.showHelp.bind(this)
+      showHelp: this.showHelp.bind(this),
+      rawCommands: this.rawCommands
     }
     if (isGeneratorFunction(commandFn)) {
-      co(commandFn.bind(context)).catch(this.onError)
+      co(commandFn.bind(context)).catch(this.onError.bind(context))
     } else {
       commandFn.call(context)
     }
