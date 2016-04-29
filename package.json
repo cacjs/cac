@@ -13,7 +13,9 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "xo && nyc ava"
+    "test": "xo && nyc ava",
+    "example:help": "node examples/help -h",
+    "example:alias-command": "node examples/alias-command r"
   },
   "files": [
     "index.js"
