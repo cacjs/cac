@@ -52,3 +52,20 @@ test('hanle error', t => {
   }
   cli.parse(['foo'])
 })
+
+test('alias option', t => {
+  const cli = cac('help', {
+    alias: {
+      f: 'foo'
+    }
+  })
+  cli.command('*', function () {
+    if (this.flags.foo) {
+      console.log('foo')
+    }
+  })
+  cli.parse(['-f'])
+  process.stdout.on('data', data => {
+    t.true(data.indexOf('foo') !== -1)
+  })
+})
