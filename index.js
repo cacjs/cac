@@ -95,7 +95,7 @@ _.runCommand = function (commandFn) {
       showHelp: this.showHelp.bind(this)
     }
     if (isGeneratorFunction(commandFn)) {
-      co(commandFn.bind(context))
+      co(commandFn.bind(context)).catch(this.onError)
     } else {
       commandFn.call(context)
     }
@@ -110,6 +110,10 @@ _.showHelp = function () {
       printWrap(this.pkg, this.help)
     }
   }
+}
+
+_.onError = function (e) {
+  console.log(e.stack || e.message || e.name)
 }
 
 module.exports = Cac

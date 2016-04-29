@@ -15,12 +15,13 @@ const cli = cac(`
 })
 
 cli.command('init', function () {
-  console.log(this)
+  throw new Error('aieeeee')
 })
 
 cli.command('run, r', function* () {
   console.log('running...')
   yield sleep(2000)
+  throw new Error('aie!')
   console.log('bye')
 })
 
