@@ -10,7 +10,7 @@
 - [x] Automatically print related data when `--version` and `--help`
 - [x] Change `process.title` for you 
 - [x] Support [co](https://github.com/tj/co) flow
-- [ ] Well tested
+- [x] Well tested
 
 ## Install
 
@@ -47,7 +47,7 @@ cli.command('c, create', function* () {
   const fileName = this.input[1]
   const content = this.flags.message
   yield fs.createFile(fileName, 'hello')
-  console.log('Done'!
+  console.log('Done!')
 })
 
 cli.command('*', function () {
