@@ -18,7 +18,7 @@ cli.command('init', function () {
   console.log(this)
 })
 
-cli.command('run', function* () {
+cli.command('run, r', function* () {
   console.log('running...')
   yield sleep(2000)
   console.log('bye')

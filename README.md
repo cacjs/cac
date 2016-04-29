@@ -30,6 +30,9 @@ const cli = cac(`
   Usage:
     node example.js create <filename> -m [content]
     
+  Commands:
+    c, create           Create a file with specific content
+    
   Options:
     -m, --message       File content
     -h, --help          Print help (You are here!)
@@ -40,7 +43,7 @@ const cli = cac(`
   }
 })
 
-cli.command('create', function* () {
+cli.command('c, create', function* () {
   const fileName = this.input[1]
   const content = this.flags.message
   yield fs.createFile(fileName, 'hello')

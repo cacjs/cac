@@ -42,8 +42,11 @@ const Cac = function (help, options) {
 const _ = Cac.prototype
 
 _.command = function (name, fn) {
-  this.commands[name] = fn
-  this.rawCommands.push(name)
+  name.split(',').forEach(val => {
+    val = val.trim()
+    this.commands[val] = fn
+    this.rawCommands.push(val)
+  })
 }
 
 _.parse = function (argv) {
