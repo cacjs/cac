@@ -22,7 +22,6 @@ cli.command('run, r', function* () {
   console.log('running...')
   yield sleep(2000)
   throw new Error('aie!')
-  console.log('bye')
 })
 
 cli.command('*', function () {
