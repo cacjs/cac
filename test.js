@@ -23,6 +23,14 @@ test('output help', t => {
   })
 })
 
+test('built-in command: help', t => {
+  const cli = cac(`built-in help`)
+  cli.parse(['help'])
+  process.stdout.on('data', data => {
+    t.true(data.indexOf('built-in help') !== -1)
+  })
+})
+
 test('help is array', t => {
   const cli = cac(['wow'])
   cli.parse(['--help'])

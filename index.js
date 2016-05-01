@@ -29,8 +29,15 @@ const Cac = function (help, options) {
   if (!(this instanceof Cac)) {
     return new Cac(help, options)
   }
-  this.commands = {}
-  this.rawCommands = []
+  this.commands = {
+    help() {
+      this.showHelp()
+    },
+    version() {
+      console.log(this.pkg.version)
+    }
+  }
+  this.rawCommands = ['help', 'version']
   this.help = help || ''
   this.options = options || {}
   this.pkg = readPkgUp.sync({
