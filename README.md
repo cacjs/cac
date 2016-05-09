@@ -40,8 +40,8 @@ const cli = cac(`
     -h, --help          Print help (You are here!)
 `, {
   alias: {
-    m: message,
-    h: help
+    m: 'message',
+    h: 'help'
   }
 })
 
@@ -54,7 +54,7 @@ cli.command('c, create', function* () {
 
 cli.command('*', function () {
   console.log('Everything else')
-}}
+})
 
 // use .parse() to bootstrap the CLI
 cli.parse()
