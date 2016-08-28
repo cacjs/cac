@@ -42,10 +42,10 @@ const parseArgv = (argv, options) => {
   const input = args._
   delete args._
   result.input = input
-  result.flags = args
-  return camelcase(result, {
+  result.flags = camelcase(args, {
     excludeKeys: ['--']
   })
+  return result
 }
 
 const defaultOptions = {
