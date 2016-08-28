@@ -25,11 +25,15 @@ const parseNames = names => {
   if (names === '*') {
     return {name: '*'}
   }
-  const splitNames = names
+  let splitNames = names
     .match(/([\w\.]+)\s*,?\s*([\w\.]*)/)
     .slice(1, 3)
-    .sort()
-    .reverse()
+  if (splitNames.length === 1) {
+    return {
+      name: splitNames[0]
+    }
+  }
+  splitNames = splitNames.sort((a, b) => b.length - a.length)
   return {
     name: splitNames[0],
     alias: splitNames[1]
