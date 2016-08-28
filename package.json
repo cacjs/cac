@@ -52,6 +52,6 @@
     }
   },
   "kanpai": {
-    "testScript": "test2"
+    "test": "test2"
   }
 }
