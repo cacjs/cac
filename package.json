@@ -13,9 +13,8 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "xo src/index.js",
-    "build": "bubleup",
-    "prepublish": "npm run build"
+    "test": "npm run build && xo src/index.js",
+    "build": "bubleup"
   },
   "files": [
     "index.js"
