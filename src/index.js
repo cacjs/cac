@@ -75,6 +75,9 @@ class CAC {
       throw err
     }
     this.pkg = readPkg.sync().pkg
+    this.unknownFn = arg => {
+      console.log(`error: unknown option \`${arg}\``)
+    }
 
     this
       .addAliasOption('version', 'v')
@@ -182,11 +185,20 @@ ${indent(optionsTable, 2)}
     process.exit(0)
   }
 
+  unknown(fn) {
+    this.unknownFn = fn
+    return this
+  }
+
   parse(argv) {
     argv = argv || process.argv.slice(2)
     this.argv = parseArgv(argv, {
       alias: this.aliasOptions,
-      default: this.defaultValues
+      default: this.defaultValues,
+      unknown: arg => {
+        this.unknownFn(arg)
+        return false
+      }
     })
     if (this.argv.flags.help) {
       this.showHelp()

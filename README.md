@@ -60,6 +60,10 @@ cli.parse()
 
 - **handleError**: `function`, triggered when your program throws an error or was rejected by a Promise call.
 
+## .unknown(fn)
+
+- **fn**: `function`, invoked when an unknow option was provided by user.
+
 ## License
 
 MIT © [egoist](https://github.com/egoist)
