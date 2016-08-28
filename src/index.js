@@ -75,9 +75,6 @@ class CAC {
       throw err
     }
     this.pkg = readPkg.sync().pkg
-    this.unknownFn = arg => {
-      console.log(`error: unknown option \`${arg}\``)
-    }
 
     this
       .addAliasOption('version', 'v')
@@ -191,11 +188,6 @@ ${indent(optionsTable, 2)}
 
   boolean(value) {
     this.boolean = value
-  }
-
-  unknown(fn) {
-    this.unknownFn = fn
-    return this
   }
 
   parse(argv) {

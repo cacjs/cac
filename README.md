@@ -60,10 +60,6 @@ cli.parse()
 
 - **handleError**: `function`, triggered when your program throws an error or was rejected by a Promise call.
 
-## .unknown(fn)
-
-- **fn**: `function`, invoked when an unknow option was provided by user.
-
 ## .string(string | array)
 
 a string or array of strings argument names to always treat as strings

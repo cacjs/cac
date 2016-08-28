@@ -2,4 +2,4 @@
 const cac = require('../')
 
 const cli = cac()
-cli.parse(['--what'])
+cli.parse()
