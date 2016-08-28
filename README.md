@@ -46,7 +46,7 @@ cli.parse()
 
 ## .command(commands, description, fn)
 
-- **commands**: `string`, it could be `command` or `command, alias` or `alias, command`, the order does not matter. eg: `.command('clone, c')`
+- **commands**: `string`, it could be `command` or `command, alias` or `alias, command`, the order does not matter. eg: `.command('clone, c')`. It can also be a wildcard symbol `*`, which means always been triggered if no command was specified by user.
 - **description**: `string`, command description, will be used to output cli usage
 - **fn**: `function`, command function, will be triggered when this command matches user's input
 

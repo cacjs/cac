@@ -13,7 +13,8 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "npm run build && xo src/index.js",
+    "test": "xo src/index.js",
+    "test2": "npm run build && npm test",
     "build": "bubleup"
   },
   "files": [
@@ -49,5 +50,8 @@
     "transforms": {
       "dangerousForOf": true
     }
+  },
+  "kanpai": {
+    "testScript": "test2"
   }
 }

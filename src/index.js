@@ -22,6 +22,9 @@ const showDefaultValue = value => {
 }
 
 const parseNames = names => {
+  if (names === '*') {
+    return {name: '*'}
+  }
   const splitNames = names
     .match(/([\w\.]+)\s*,?\s*([\w\.]*)/)
     .slice(1, 3)
@@ -188,7 +191,7 @@ ${indent(optionsTable, 2)}
       this.showVersion()
     }
 
-    const command = this.commands[this.argv.input[0]]
+    const command = this.commands[this.argv.input[0] || '*']
     this.runCommand(command)
 
     return this
