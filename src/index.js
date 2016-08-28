@@ -195,7 +195,10 @@ ${indent(optionsTable, 2)}
       this.showVersion()
     }
 
-    const command = this.commands[this.argv.input[0] || '*']
+    let command = this.commands[this.argv.input[0]]
+    if (this.commands['*'] && !command) {
+      command = this.commands['*']
+    }
     this.runCommand(command)
 
     return this
