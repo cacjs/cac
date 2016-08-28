@@ -64,6 +64,14 @@ cli.parse()
 
 - **fn**: `function`, invoked when an unknow option was provided by user.
 
+## .string(string | array)
+
+a string or array of strings argument names to always treat as strings
+
+## .boolean(boolean | string | array)
+
+a boolean, string or array of strings to always treat as booleans. if true will treat all double hyphenated arguments without equal signs as boolean (e.g. affects --foo, not -f or --foo=bar)
+
 ## License
 
 MIT © [egoist](https://github.com/egoist)

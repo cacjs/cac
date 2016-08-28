@@ -185,6 +185,14 @@ ${indent(optionsTable, 2)}
     process.exit(0)
   }
 
+  string(value) {
+    this.string = value
+  }
+
+  boolean(value) {
+    this.boolean = value
+  }
+
   unknown(fn) {
     this.unknownFn = fn
     return this
@@ -195,6 +203,8 @@ ${indent(optionsTable, 2)}
     this.argv = parseArgv(argv, {
       alias: this.aliasOptions,
       default: this.defaultValues,
+      string: this.string,
+      boolean: this.boolean,
       unknown: arg => {
         this.unknownFn(arg)
         return false
