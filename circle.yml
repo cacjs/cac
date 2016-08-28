@@ -3,6 +3,8 @@ machine:
     version: 5
 
 test:
+  pre:
+    - npm install -g bubleup
   override:
     - nvm use 4 && npm test
     - nvm use 5 && npm test
