@@ -15,7 +15,8 @@
   "scripts": {
     "test": "xo src/index.js",
     "test2": "npm run build && npm test",
-    "build": "bubleup"
+    "build": "bubleup",
+    "dev": "node watch"
   },
   "files": [
     "index.js"
@@ -29,6 +30,7 @@
     "minimist"
   ],
   "devDependencies": {
+    "nswatch": "^0.1.0",
     "xo": "latest"
   },
   "xo": {
