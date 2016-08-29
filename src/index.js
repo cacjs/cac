@@ -190,10 +190,12 @@ ${indent(optionsTable, 2)}
 
   string(value) {
     this.string = value
+    return this
   }
 
   boolean(value) {
     this.boolean = value
+    return this
   }
 
   parse(argv) {
