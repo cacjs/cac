@@ -75,6 +75,7 @@ class CAC {
       throw err
     }
     this.pkg = readPkg.sync().pkg
+    this.cliUsage = `${chalk.yellow(this.pkg.name)} ${chalk.grey('[options] [commands]')}`
 
     this
       .addAliasOption('version', 'v')
@@ -134,7 +135,7 @@ class CAC {
     }))
 
     let help = `${this.pkg.description ? `\n${this.pkg.description}\n` : ''}
-Usage: ${chalk.yellow(this.pkg.name)} ${chalk.grey('[options] [commands]')}
+Usage: ${this.cliUsage}
 
 Commands:
 
@@ -182,6 +183,11 @@ ${indent(optionsTable, 2)}
     process.exit(0)
   }
 
+  usage(text) {
+    this.cliUsage = text
+    return this
+  }
+
   string(value) {
     this.string = value
   }
@@ -196,11 +202,7 @@ ${indent(optionsTable, 2)}
       alias: this.aliasOptions,
       default: this.defaultValues,
       string: this.string,
-      boolean: this.boolean,
-      unknown: arg => {
-        this.unknownFn(arg)
-        return false
-      }
+      boolean: this.boolean
     })
     if (this.argv.flags.help) {
       this.showHelp()

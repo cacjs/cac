@@ -52,6 +52,10 @@ cli.parse()
   - *input*: non-flag arguments
   - *flags*: flags converted to camelCase
 
+## .usage(text)
+
+- **text**: `string`, the cli usage. default is `$bin [options] [commands]`
+
 ## .parse(argv)
 
 - **argv**: `array`, default is `process.argv.slice(2)`
