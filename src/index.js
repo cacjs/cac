@@ -1,9 +1,13 @@
+import path from 'path'
 import minimist from 'minimist'
 import table from 'text-table'
 import indent from 'indent-string'
 import chalk from 'chalk'
 import camelcase from 'camelcase-keys'
 import readPkg from 'read-pkg-up'
+
+delete require.cache[__filename]
+const parentDir = path.dirname(module.parent.filename)
 
 const prefixedOption = (option, aliasOptions) => {
   const options = [option]
@@ -74,7 +78,9 @@ class CAC {
     this.handleError = err => {
       throw err
     }
-    this.pkg = readPkg.sync().pkg
+    this.pkg = readPkg.sync({
+      cwd: parentDir
+    }).pkg
     this.cliUsage = `${chalk.yellow(this.pkg.name)} ${chalk.grey('[options] [commands]')}`
 
     this
