@@ -27,14 +27,14 @@ cli.command('hi', 'Say hi!', (input) => {
 cli.parse()
 ```
 
-<img src="http://ww4.sinaimg.cn/large/a15b4afegw1f79ix3vc2uj20p00akjsj.jpg" width="400" />
+<img src="./media/preview-1.jpg" width="400" />
 
 ### Default commands and options
 
 - Options: `--help` `-h` `--version` `-v`
 - Commands: `help`
 
-<img src="http://ww4.sinaimg.cn/large/a15b4afegw1f79k0eifspj20ug0g0mz3.jpg" width="400" />
+<img src="./media/preview-2.jpg" width="400" />
  
 ## API
 
