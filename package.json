@@ -1,6 +1,6 @@
 {
   "name": "cac",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Command & Conquer, the command-line queen.",
   "license": "MIT",
   "repository": "egoist/cac",
@@ -19,7 +19,9 @@
     "dev": "node watch"
   },
   "watch": {
-    "./src": ["build"]
+    "./src": [
+      "build"
+    ]
   },
   "files": [
     "index.js"
