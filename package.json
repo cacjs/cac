@@ -18,6 +18,9 @@
     "build": "bubleup",
     "dev": "node watch"
   },
+  "watch": {
+    "./src": ["build"]
+  },
   "files": [
     "index.js"
   ],

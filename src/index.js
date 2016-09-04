@@ -82,6 +82,7 @@ class CAC {
       cwd: parentDir
     }).pkg
     this.cliUsage = `${chalk.yellow(this.pkg.name)} ${chalk.grey('[options] [commands]')}`
+    this.examples = []
 
     this
       .addAliasOption('version', 'v')
@@ -140,9 +141,13 @@ class CAC {
       ]
     }))
 
+    const examples = this.examples.length > 0 ?
+      `\nExamples:\n\n${indent(this.examples.join('\n'), 2)}\n` :
+      ''
+
     let help = `${this.pkg.description ? `\n${this.pkg.description}\n` : ''}
 Usage: ${this.cliUsage}
-
+${examples}
 Commands:
 
 ${indent(commandsTable, 2)}
@@ -191,6 +196,11 @@ ${indent(optionsTable, 2)}
 
   usage(text) {
     this.cliUsage = text
+    return this
+  }
+
+  example(text) {
+    this.examples.push(text)
     return this
   }
 

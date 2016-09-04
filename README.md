@@ -38,13 +38,13 @@ cli.parse()
  
 ## API
 
-## .option(options, description, defaultValue)
+### .option(options, description, defaultValue)
 
 - **options**: `string`, it could be `option` or `option, alias` or `alias, option`, the order does not matter. eg: `.option('install, i')`
 - **description**: `string`, option description, will be used to output cli usage
 - **defaultValue**: `any`, give a default value to this option
 
-## .command(commands, description, fn)
+### .command(commands, description, fn)
 
 - **commands**: `string`, it could be `command` or `command, alias` or `alias, command`, the order does not matter. eg: `.command('clone, c')`. It can also be a wildcard symbol `*`, which means always been triggered if no command was specified by user.
 - **description**: `string`, command description, will be used to output cli usage
@@ -52,25 +52,29 @@ cli.parse()
   - *input*: non-flag arguments
   - *flags*: flags converted to camelCase
 
-## .usage(text)
+### .usage(text)
 
 - **text**: `string`, the cli usage. default is `$bin [options] [commands]`
 
-## .parse(argv)
+### .parse(argv)
 
 - **argv**: `array`, default is `process.argv.slice(2)`
 
-## .onError(handleError)
+### .onError(handleError)
 
 - **handleError**: `function`, triggered when your program throws an error or was rejected by a Promise call.
 
-## .string(string | array)
+### .string(string | array)
 
 a string or array of strings argument names to always treat as strings
 
-## .boolean(boolean | string | array)
+### .boolean(boolean | string | array)
 
 a boolean, string or array of strings to always treat as booleans. if true will treat all double hyphenated arguments without equal signs as boolean (e.g. affects --foo, not -f or --foo=bar)
+
+### .example(text)
+
+Add an example command for your command, will be shown in CLI usage.
 
 ## License
 
