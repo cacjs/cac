@@ -30,7 +30,7 @@ const parseNames = names => {
     return {name: '*'}
   }
   let splitNames = names
-    .match(/([\w\.]+)\s*,?\s*([\w\.]*)/)
+    .match(/([\w\.\-]+)\s*,?\s*([\w\.\-]*)/)
     .slice(1, 3)
   if (splitNames.length === 1) {
     return {
