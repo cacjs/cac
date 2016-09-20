@@ -24,8 +24,9 @@
     ]
   },
   "files": [
-    "index.js"
+    "dist"
   ],
+  "main": "dist/cac.common.js",
   "keywords": [
     "cli",
     "commander",
