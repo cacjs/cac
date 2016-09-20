@@ -210,7 +210,7 @@ ${indent(optionsTable, 2)}
   }
 
   boolean(value) {
-    this.boolean = value
+    this.booleanOptions = value
     return this
   }
 
@@ -220,7 +220,7 @@ ${indent(optionsTable, 2)}
       alias: this.aliasOptions,
       default: this.defaultValues,
       string: this.string,
-      boolean: this.boolean
+      boolean: this.booleanOptions
     })
     if (this.argv.flags.help) {
       this.showHelp()
