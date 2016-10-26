@@ -9,7 +9,8 @@ import {readlinkSync} from 'graceful-readlink'
 import suffix from 'suffix'
 
 delete require.cache[__filename]
-const parentDir = path.dirname(module.parent.filename)
+const parentFile = module.parent.filename
+const parentDir = path.dirname(parentFile)
 
 const prefixedOption = (option, aliasOptions) => {
   const options = [option]
@@ -60,9 +61,13 @@ const parseArgv = (argv, options) => {
 
 const defaultOptions = {
   help: {
+    name: 'help',
+    alias: 'h',
     description: 'Output usage information'
   },
   version: {
+    name: 'version',
+    alias: 'v',
     description: 'Output version number'
   }
 }
@@ -114,6 +119,8 @@ class CAC {
   option(names, description, defaultValue) {
     const {name, alias} = parseNames(names)
     this.options[name] = {
+      name,
+      alias,
       description,
       defaultValue
     }
@@ -169,7 +176,6 @@ ${indent(optionsTable, 2)}
     // second arg can be description or command function
     let description = ''
     let commandFn
-    let sub = false
     if (typeof args[1] === 'string') {
       description = args[1]
       commandFn = args[2]
@@ -181,31 +187,11 @@ ${indent(optionsTable, 2)}
     // eg: i, init => name: ini, alias: i
     const {name, alias} = parseNames(names)
 
-    if (commandFn === undefined) {
-      // when commandFn is undefined
-      // load it from the directory of executable file
-      const f = readlinkSync(process.argv[1])
-      const baseDir = path.dirname(f)
-      const binName = suffix(path.basename(f), `-${name}`)
-      const subCommand = path.join(baseDir, binName)
-      try {
-        commandFn = require(subCommand)
-        sub = true
-      } catch (err) {
-        if (err.code === 'MODULE_NOT_FOUND') {
-          console.error('\n  %s(1) does not exist, try --help\n', binName)
-        } else {
-          throw err
-        }
-      }
-    }
-
     this.commands[name] = {
       name,
       alias,
       description,
-      fn: commandFn,
-      sub
+      fn: commandFn
     }
     this.aliasCommand(name, alias)
 
@@ -213,18 +199,34 @@ ${indent(optionsTable, 2)}
   }
 
   runCommand(command) {
-    const commandFn = command && command.fn
-    if (typeof commandFn === 'function') {
-      let result
+    let commandFn = command && command.fn
+
+    if (!commandFn) {
+      // when commandFn is undefined
+      // load it from the directory of executable file
+      const binName = suffix(path.basename(parentFile), `-${command.name}`)
+      const subCommand = path.join(parentDir, binName)
       try {
-        const input = command.name === '*' ? this.argv.input : this.argv.input.slice(1)
-        result = commandFn(input, this.argv.flags)
+        commandFn = require(subCommand)
       } catch (err) {
-        this.handleError(err)
+        if (err.code === 'MODULE_NOT_FOUND') {
+          console.error('\n  %s(1) does not exist, try --help\n', binName)
+          process.exit(1)
+        } else {
+          throw err
+        }
       }
-      if (result && result.then) {
-        result.catch(this.handleError)
-      }
+    }
+
+    let result
+    try {
+      const input = command.name === '*' ? this.argv.input : this.argv.input.slice(1)
+      result = commandFn(input, this.argv.flags)
+    } catch (err) {
+      this.handleError(err)
+    }
+    if (result && result.then) {
+      result.catch(this.handleError)
     }
 
     return this
