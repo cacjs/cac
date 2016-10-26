@@ -43,7 +43,9 @@
     "semicolon": false,
     "space": 2,
     "rules": {
-      "xo/no-process-exit": 0
+      "xo/no-process-exit": 0,
+      "unicorn/no-process-exit": 0,
+      "import/no-dynamic-require": 0
     }
   },
   "dependencies": {
