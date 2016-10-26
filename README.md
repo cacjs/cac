@@ -20,7 +20,7 @@ const cli = cac()
 
 // add your very first command
 cli.command('hi', 'Say hi!', (input) => {
-  console.log(`hi ${input[1] || 'boy'}!`)
+  console.log(`hi ${input[0] || 'boy'}!`)
 })
 
 // parse arguments and bootstrap
