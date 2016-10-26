@@ -5,6 +5,8 @@ import indent from 'indent-string'
 import chalk from 'chalk'
 import camelcase from 'camelcase-keys'
 import readPkg from 'read-pkg-up'
+import {readlinkSync} from 'graceful-readlink'
+import suffix from 'suffix'
 
 delete require.cache[__filename]
 const parentDir = path.dirname(module.parent.filename)
@@ -161,11 +163,49 @@ ${indent(optionsTable, 2)}
     process.exit(0)
   }
 
-  command(names, description, fn) {
+  command(...args) {
+    // first arg is always the command
+    const names = args[0]
+    // second arg can be description or command function
+    let description = ''
+    let commandFn
+    let sub = false
+    if (typeof args[1] === 'string') {
+      description = args[1]
+      commandFn = args[2]
+    } else if (typeof args[1] === 'function') {
+      commandFn = args[1]
+    }
+
+    // read name and alias from the command
+    // eg: i, init => name: ini, alias: i
     const {name, alias} = parseNames(names)
+
+    if (commandFn === undefined) {
+      // when commandFn is undefined
+      // load it from the directory of executable file
+      const f = readlinkSync(process.argv[1])
+      const baseDir = path.dirname(f)
+      const binName = suffix(path.basename(f), `-${name}`)
+      const subCommand = path.join(baseDir, binName)
+      try {
+        commandFn = require(subCommand)
+        sub = true
+      } catch (err) {
+        if (err.code === 'MODULE_NOT_FOUND') {
+          console.error('\n  %s(1) does not exist, try --help\n', binName)
+        } else {
+          throw err
+        }
+      }
+    }
+
     this.commands[name] = {
+      name,
+      alias,
       description,
-      fn
+      fn: commandFn,
+      sub
     }
     this.aliasCommand(name, alias)
 
@@ -177,7 +217,8 @@ ${indent(optionsTable, 2)}
     if (typeof commandFn === 'function') {
       let result
       try {
-        result = commandFn(this.argv.input, this.argv.flags)
+        const input = command.name === '*' ? this.argv.input : this.argv.input.slice(1)
+        result = commandFn(input, this.argv.flags)
       } catch (err) {
         this.handleError(err)
       }

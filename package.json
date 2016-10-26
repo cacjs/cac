@@ -15,8 +15,8 @@
   "scripts": {
     "test": "xo src/index.js",
     "test2": "npm run build && npm test",
-    "build": "bubleup",
-    "dev": "node watch"
+    "build": "bili",
+    "dev": "bili --watch"
   },
   "watch": {
     "./src": [
@@ -49,12 +49,14 @@
   "dependencies": {
     "camelcase-keys": "^3.0.0",
     "chalk": "^1.1.3",
+    "graceful-readlink": "^1.0.1",
     "indent-string": "^3.0.0",
     "minimist": "^1.2.0",
     "read-pkg-up": "^1.0.1",
+    "suffix": "^0.1.0",
     "text-table": "^0.2.0"
   },
-  "bubleup": {
+  "bili": {
     "transforms": {
       "dangerousForOf": true
     }
