@@ -5,7 +5,6 @@ import indent from 'indent-string'
 import chalk from 'chalk'
 import camelcase from 'camelcase-keys'
 import readPkg from 'read-pkg-up'
-import {readlinkSync} from 'graceful-readlink'
 import suffix from 'suffix'
 
 delete require.cache[__filename]
