@@ -203,7 +203,8 @@ ${indent(optionsTable, 2)}
     if (!commandFn) {
       // when commandFn is undefined
       // load it from the directory of executable file
-      const binName = suffix(path.basename(parentFile), `-${command.name}`)
+      const commandName = command.name === '*' ? 'default' : command.name
+      const binName = suffix(path.basename(parentFile), `-${commandName}`)
       const subCommand = path.join(parentDir, binName)
       try {
         commandFn = require(subCommand)
