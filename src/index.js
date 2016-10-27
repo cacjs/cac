@@ -209,12 +209,8 @@ ${indent(optionsTable, 2)}
       try {
         commandFn = require(subCommand)
       } catch (err) {
-        if (err.code === 'MODULE_NOT_FOUND') {
-          console.error('\n  %s(1) does not exist, try --help\n', binName)
-          process.exit(1)
-        } else {
-          throw err
-        }
+        console.error('\n  %s(1) does not exist, try --help\n', binName)
+        throw err
       }
     }
 
