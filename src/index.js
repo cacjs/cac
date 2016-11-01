@@ -198,6 +198,8 @@ ${indent(optionsTable, 2)}
   }
 
   runCommand(command) {
+    if (!command) return
+
     let commandFn = command && command.fn
 
     if (!commandFn) {
