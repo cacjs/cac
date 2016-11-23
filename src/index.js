@@ -24,7 +24,7 @@ const prefixedOption = (option, aliasOptions) => {
 const showDefaultValue = value => {
   return (typeof value === 'undefined') ?
     '' :
-    chalk.grey(`[default: ${value}]`)
+    chalk.dim(`[default: ${value}]`)
 }
 
 const parseNames = names => {
@@ -87,7 +87,7 @@ class CAC {
     this.pkg = readPkg.sync({
       cwd: parentDir
     }).pkg
-    this.cliUsage = `${chalk.yellow(this.pkg.name)} ${chalk.grey('[options] [commands]')}`
+    this.cliUsage = `${chalk.yellow(this.pkg.name)} ${chalk.dim('[options] [commands]')}`
     this.examples = []
 
     this
@@ -137,7 +137,7 @@ class CAC {
   showHelp() {
     const optionsTable = table(Object.keys(this.options).map(option => [
       chalk.yellow(prefixedOption(option, this.aliasOptions)),
-      chalk.grey(this.options[option].description),
+      chalk.dim(this.options[option].description),
       showDefaultValue(this.options[option].defaultValue)
     ]))
 
@@ -145,7 +145,7 @@ class CAC {
       const alias = this.aliasCommands[command]
       return [
         chalk.yellow(`${command}${alias ? `, ${alias}` : ''}`),
-        chalk.grey(this.commands[command].description)
+        chalk.dim(this.commands[command].description)
       ]
     }))
 
