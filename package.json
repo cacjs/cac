@@ -26,7 +26,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/cac.common.js",
+  "main": "dist/cac.cjs.js",
   "keywords": [
     "cli",
     "commander",
@@ -36,6 +36,7 @@
     "minimist"
   ],
   "devDependencies": {
+    "bili": "^0.12.0",
     "nswatch": "^0.1.0",
     "xo": "latest"
   },
