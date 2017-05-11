@@ -86,7 +86,7 @@ class CAC {
     }
     this.pkg = readPkg.sync({
       cwd: parentDir
-    }).pkg
+    }).pkg || {}
     this.cliUsage = `${chalk.yellow(this.pkg.name)} ${chalk.dim('[options] [commands]')}`
     this.examples = []
 
