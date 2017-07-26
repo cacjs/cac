@@ -23,29 +23,29 @@ export default class Help {
       this.opts.displayCommands ? '<command> ' : `${this.command.command.name} `
     )
     help += `${chalk.bold('USAGE')}\n\n`
-    help += `${chalk.dim.italic(this.root.bin)} ${commandText}${chalk.yellow(
+    help += redent(`${chalk.dim.italic(this.root.bin)} ${commandText}${chalk.yellow(
       '[options]'
-    )}`
+    )}`, 2)
     help += '\n\n'
 
     if (this.opts.displayCommands && !this.root.isCommandsEmpty()) {
       help += `${chalk.bold('COMMANDS')}\n\n`
 
-      help += this.root.commandsToString()
+      help += redent(this.root.commandsToString(), 2)
       help += '\n\n'
     }
 
     if (this.command && !this.command.options.isEmpty()) {
       help += `${chalk.bold('COMMAND OPTIONS')}\n\n`
 
-      help += this.command.options.toString()
+      help += redent(this.command.options.toString(), 2)
       help += '\n\n'
     }
 
     if (!this.root.options.isEmpty()) {
       help += `${chalk.bold('GLOBAL OPTIONS')}\n\n`
 
-      help += this.root.options.toString()
+      help += redent(this.root.options.toString(), 2)
       help += '\n'
     }
 
