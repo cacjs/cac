@@ -108,6 +108,14 @@ It's set to different level in different cases:
 - option
   - run: `boolean` Defaults to `true` Run command after parsed argv.
 
+### cli.showHelp()
+
+Display cli helps, must be called after `cli.parse()`
+
+### cli.argv
+
+A getter which simply returns `cli.parse(null, { run: false })`
+
 ## Contributing
 
 1. Fork it!
