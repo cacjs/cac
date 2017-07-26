@@ -23,9 +23,12 @@ export default class Help {
       this.opts.displayCommands ? '<command> ' : `${this.command.command.name} `
     )
     help += `${chalk.bold('USAGE')}\n\n`
-    help += redent(`${chalk.dim.italic(this.root.bin)} ${commandText}${chalk.yellow(
-      '[options]'
-    )}`, 2)
+    help += redent(
+      `${chalk.dim.italic(this.root.bin)} ${commandText}${chalk.yellow(
+        '[options]'
+      )}`,
+      2
+    )
     help += '\n\n'
 
     if (this.opts.displayCommands && !this.root.isCommandsEmpty()) {

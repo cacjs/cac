@@ -51,7 +51,7 @@ Then run it:
 
 And the **Help Documentation** is ready out of the box:
 
-<img width="847" alt="2017-07-26 4 26 41" src="https://user-images.githubusercontent.com/8784712/28611705-418e79e6-721f-11e7-9091-90a7a9570023.png">
+<img width="854" alt="2017-07-26 4 29 36" src="https://user-images.githubusercontent.com/8784712/28611814-a8da742e-721f-11e7-8b52-17bda78809fe.png">
 
 
 ## Documentations
