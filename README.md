@@ -11,6 +11,32 @@
 yarn add cac
 ```
 
+## Table of contents
+
+<!-- toc -->
+
+- [Usage](#usage)
+  * [No-command app](#no-command-app)
+- [Friends](#friends)
+- [Documentation](#documentation)
+  * [cli.option(name, [option])](#clioptionname-option)
+  * [cli.command(name, [option], [handler])](#clicommandname-option-handler)
+    + [command](#command)
+      - [command.option(name, [option])](#commandoptionname-option)
+    + [logger](#logger)
+  * [cli.parse([argv], [option])](#cliparseargv-option)
+  * [cli.showHelp()](#clishowhelp)
+  * [cli.argv](#cliargv)
+  * [Events](#events)
+  * [error](#error)
+- [FAQ](#faq)
+  * [Why not `commander.js` `yargs` `caporal.js` or `meow`?](#why-not-commanderjs-yargs-caporaljs-or-meow)
+  * [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
+- [Contributing](#contributing)
+- [Author](#author)
+
+<!-- tocstop -->
+
 ## Usage
 
 Use `./examples/simple.js` as example:

@@ -23,7 +23,8 @@
     "test": "npm run lint && ava",
     "lint": "xo",
     "build": "bili --buble.target.node 4",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "toc": "markdown-toc -i README.md"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
@@ -43,11 +44,14 @@
     "babel-register": "^6.24.1",
     "bili": "^0.17.3",
     "eslint-config-rem": "^3.0.0",
+    "markdown-toc": "^1.1.0",
     "xo": "^0.18.0"
   },
   "ava": {
     "babel": "inherit",
-    "require": ["babel-register"]
+    "require": [
+      "babel-register"
+    ]
   },
   "xo": {
     "extends": "rem/prettier",
