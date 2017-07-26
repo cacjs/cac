@@ -159,6 +159,16 @@ cli.on('error', (err, logger) => {
 
 ## FAQ
 
+### Why not `commander.js` `yargs` `caporal.js` or `meow`?
+
+Commander.js and Caporal.js do not allow unknown options, Commander.js does not support [chaining option](https://github.com/tj/commander.js/issues/606).
+
+Yargs has a powerful API, but it's so massive that my brain trembles. Meow is simple and elegant but I have to manully construct the *help* message, which will be annoying. And I want it to support *sub-command* too.
+
+**CAC** is kind of like a combination of the simplicity of Meow and the powerful features of the rest. And our *help* log is inspired by Caporal.js, I guess it might be the most elegant one out there?
+
+<img alt="preview" src="https://i.loli.net/2017/07/26/59789ed2112f6.png" width="500">
+
 ### How is the name written and pronounced?
 
 CAC, not Cac or cac, [Pronounced `/kɑk/`](https://www.howtopronounce.com/cac/).
