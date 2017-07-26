@@ -124,6 +124,18 @@ Display cli helps, must be called after `cli.parse()`
 
 A getter which simply returns `cli.parse(null, { run: false })`
 
+### Events
+
+### error
+
+Error handler for errors in your command handler:
+
+```js
+cli.on('error', (err, logger) => {
+  logger.error('command failed:', err)
+})
+```
+
 ## Contributing
 
 1. Fork it!
