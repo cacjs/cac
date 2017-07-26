@@ -2,6 +2,10 @@
 
 [![NPM version](https://img.shields.io/npm/v/cac.svg?style=flat)](https://npmjs.com/package/cac) [![NPM downloads](https://img.shields.io/npm/dm/cac.svg?style=flat)](https://npmjs.com/package/cac) [![CircleCI](https://circleci.com/gh/egoist/cac/tree/master.svg?style=shield)](https://circleci.com/gh/egoist/cac/tree/master)  [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/egoist/donate)
 
+**C**ommand **A**nd **C**onquer, the queen living in your command line.
+
+<img src="http://i.giphy.com/v3FeH4swox9mg.gif" width="400"/>
+
 ## Install
 
 ```bash
