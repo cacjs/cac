@@ -34,7 +34,13 @@
     "xo": "^0.18.0"
   },
   "xo": {
-    "extends": "rem"
+    "extends": "rem/prettier",
+    "ignores": [
+      "examples/**"
+    ],
+    "rules": {
+      "unicorn/filename-case": 0
+    }
   },
   "babel": {
     "presets": [

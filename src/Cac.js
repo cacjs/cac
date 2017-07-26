@@ -7,40 +7,35 @@ import Options from './Options'
 import Help from './Help'
 import { textTable, isExplictCommand } from './utils'
 
-function getCommandName(name) {
-  return (!name || /^\-/.test(name)) ? '*' : name
-}
-
 export default class Cac {
-  constructor({
-    bin,
-    pkg
-  } = {}) {
+  constructor({ bin, pkg } = {}) {
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
-    this.pkg = Object.assign({}, pkg || readPkg.sync({ cwd: path.join(__dirname, '..') }).pkg)
+    this.pkg = Object.assign(
+      {},
+      pkg || readPkg.sync({ cwd: path.join(__dirname, '..') }).pkg
+    )
 
-    this
-    .option('version', {
+    this.option('version', {
       alias: 'v',
       type: Boolean,
       desc: 'Display version'
     })
-    .option('help', {
-      alias: 'h',
-      type: Boolean,
-      desc: `Display help (You're already here)`
-    })
-    .option('quiet', {
-      type: Boolean,
-      desc: 'Quiet mode - only display warn and error messages'
-    })
-    .option('verbose', {
-      alias: 'V',
-      type: Boolean,
-      desc: 'Verbose mode - will always output debug messages'
-    })
+      .option('help', {
+        alias: 'h',
+        type: Boolean,
+        desc: `Display help (You're already here)`
+      })
+      .option('quiet', {
+        type: Boolean,
+        desc: 'Quiet mode - only display warn and error messages'
+      })
+      .option('verbose', {
+        alias: 'V',
+        type: Boolean,
+        desc: 'Verbose mode - will always output debug messages'
+      })
   }
 
   option(...args) {
@@ -55,12 +50,14 @@ export default class Cac {
   }
 
   commandsToString() {
-    return textTable(this.commands.map(({ command }) => {
-      return [
-        command.names.map(v => chalk.magenta(v)).join(', '),
-        chalk.dim(command.desc)
-      ]
-    }))
+    return textTable(
+      this.commands.map(({ command }) => {
+        return [
+          command.names.map(v => chalk.magenta(v)).join(', '),
+          chalk.dim(command.desc)
+        ]
+      })
+    )
   }
 
   isCommandsEmpty() {

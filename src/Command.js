@@ -1,6 +1,5 @@
-import chalk from 'chalk'
 import Options from './Options'
-import { parseType, orderNames } from './utils'
+import { orderNames } from './utils'
 
 export default class Command {
   constructor(name, option, handler) {

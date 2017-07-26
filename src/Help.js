@@ -10,11 +10,17 @@ export default class Help {
   output() {
     let help = '\n'
 
-    help += `${chalk.cyan(this.root.bin)} ${chalk.dim(this.root.pkg.version)}\n\n`
+    help += `${chalk.cyan(this.root.bin)} ${chalk.dim(
+      this.root.pkg.version
+    )}\n\n`
 
-    const commandText = chalk.magenta(this.opts.displayCommands ? '<command> ' : `${this.command.command.name} `)
+    const commandText = chalk.magenta(
+      this.opts.displayCommands ? '<command> ' : `${this.command.command.name} `
+    )
     help += `${chalk.bold('USAGE')}\n\n`
-    help += `${chalk.dim.italic(this.root.bin)} ${commandText}${chalk.yellow('[options]')}`
+    help += `${chalk.dim.italic(this.root.bin)} ${commandText}${chalk.yellow(
+      '[options]'
+    )}`
     help += '\n\n'
 
     if (this.opts.displayCommands && !this.root.isCommandsEmpty()) {

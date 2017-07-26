@@ -28,5 +28,5 @@ export function prefixOption(option) {
 }
 
 export function isExplictCommand(name) {
-  return name && !/^\-/.test(name)
+  return name && !name.startsWith('-')
 }
