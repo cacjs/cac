@@ -10,6 +10,15 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "cli",
+    "framework",
+    "parse",
+    "argv",
+    "app",
+    "simple",
+    "cac"
+  ],
   "scripts": {
     "test": "echo 'no tests!' && npm run lint",
     "lint": "xo",
