@@ -53,8 +53,16 @@ And the **Help Documentation** is ready out of the box:
 
 <img width="854" alt="2017-07-26 4 29 36" src="https://user-images.githubusercontent.com/8784712/28611814-a8da742e-721f-11e7-8b52-17bda78809fe.png">
 
+## Friends
 
-## Documentations
+Projects that use **CAC**:
+
+- [SAO](https://github.com/egoist/sao): ⚔️ Futuristic scaffolding tool.
+- [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
+- [bili](https://github.com/egoist/bili): 🥂 Schweizer Armeemesser for bundling JavaScript libraries.
+- Feel free to add yours here...
+
+## Documentation
 
 ### cli.option(name, [option])
 
