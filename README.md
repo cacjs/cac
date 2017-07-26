@@ -191,6 +191,10 @@ Commander.js and Caporal.js do not allow unknown options, Commander.js does not 
 
 Yargs has a powerful API, but it's so massive that my brain trembles. Meow is simple and elegant but I have to manully construct the *help* message, which will be annoying. And I want it to support *sub-command* too.
 
+**So why creating a new thing instead of pull request?**
+
+I would ask me myself why there's `preact` instead of PR to `react`, and why `yarn` instead of PR to `npm`? It's obvious.
+
 **CAC** is kind of like a combination of the simplicity of Meow and the powerful features of the rest. And our *help* log is inspired by Caporal.js, I guess it might be the most elegant one out there?
 
 <img alt="preview" src="https://i.loli.net/2017/07/26/59789ed2112f6.png" width="500">
