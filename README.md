@@ -53,6 +53,28 @@ And the **Help Documentation** is ready out of the box:
 
 <img width="854" alt="2017-07-26 4 29 36" src="https://user-images.githubusercontent.com/8784712/28611814-a8da742e-721f-11e7-8b52-17bda78809fe.png">
 
+### No-command app
+
+In many cases your app is small and doesn't even need a *command*:
+
+```js
+const cli = require('cac')()
+// Use default command symbol '*'
+cli.command('*', option, runMyApp)
+cli.parse()
+```
+
+Instead of using a default command, you can skip adding and running command by:
+
+```js
+const cli = require('cac')
+// cli.argv is a getter
+// bascially it's the return value of cli.parse(null, { run: false })
+const { input, flags } = cli.argv
+
+runMyApp(input, flags)
+```
+
 ## Friends
 
 Projects that use **CAC**:
