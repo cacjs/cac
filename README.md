@@ -199,7 +199,7 @@ Yargs has a powerful API, but it's so massive that my brain trembles. Meow is si
 
 CAC, not Cac or cac, [Pronounced `/kɑk/`](https://www.howtopronounce.com/cac/).
 
-And this project is dedicated to our lovely C.C. sama.
+And this project is dedicated to our lovely C.C. sama. Maybe CAC stands for C&C as well :P
 
 <img src="http://i.giphy.com/v3FeH4swox9mg.gif" width="400"/>
 
