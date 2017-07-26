@@ -90,7 +90,7 @@ const command = cli.command('init', 'init a new project', (input, flags, logger)
 
 ##### command.option(name, [option])
 
-Same as [cli.option](clioptionnameoption) but it adds options for specified command.
+Same as [cli.option](#clioptionname-option) but it adds options for specified command.
 
 #### logger
 
