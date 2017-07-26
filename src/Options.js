@@ -8,6 +8,9 @@ export default class Options {
 
   add(name, opt) {
     opt = opt || {}
+    if (typeof opt === 'string') {
+      opt = { desc: opt }
+    }
     const option = {
       name,
       alias: opt.alias || [],

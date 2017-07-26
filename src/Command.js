@@ -4,6 +4,9 @@ import { orderNames } from './utils'
 export default class Command {
   constructor(name, option, handler) {
     option = option || {}
+    if (typeof option === 'string') {
+      option = { desc: option }
+    }
     const command = {
       name,
       alias: option.alias || [],
