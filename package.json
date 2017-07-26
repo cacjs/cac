@@ -1,0 +1,54 @@
+{
+  "name": "cac",
+  "version": "0.0.0",
+  "description": "Command-line queen.",
+  "repository": {
+    "url": "egoist/cac",
+    "type": "git"
+  },
+  "main": "dist/cac.common.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo 'no tests!' && npm run lint",
+    "lint": "xo",
+    "build": "bili --buble.target.node 4",
+    "prepublish": "npm run build"
+  },
+  "author": "egoist <0x142857@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "minimost": "^1.0.0",
+    "read-pkg-up": "^2.0.0",
+    "string-width": "^2.1.1",
+    "text-table": "^0.2.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.24.1",
+    "eslint-config-rem": "^3.0.0",
+    "xo": "^0.18.0"
+  },
+  "xo": {
+    "extends": "rem"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
+  }
+}
