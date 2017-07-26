@@ -67,7 +67,7 @@ cli.parse()
 Instead of using a default command, you can skip adding and running command by:
 
 ```js
-const cli = require('cac')
+const cli = require('cac')()
 // cli.argv is a getter
 // bascially it's the return value of cli.parse(null, { run: false })
 const { input, flags } = cli.argv
