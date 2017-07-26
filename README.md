@@ -54,6 +54,60 @@ And the **Help Documentation** is ready out of the box:
 <img width="817" alt="2017-07-26 2 59 08" src="https://user-images.githubusercontent.com/8784712/28608471-06f6bc14-7213-11e7-9787-6c9111f78286.png">
 
 
+## Documentations
+
+### cli.option(name, [option])
+
+Register an option globally, i.e. for all commands
+
+- name: `string` option name
+- option: `object` `string`
+  - desc: `string` description
+  - alias: `string` `Array<string>` option name alias
+  - type: `string` option type, valid values: `boolean` `number`
+  - default: `any` option default value
+
+### cli.command(name, [option], [handler])
+
+- name: `string`
+- option: `object` `string` (`string` is used as `desc`)
+  - desc: `string` description
+  - alias: `string` `Array<string>` command name alias
+- handler: `function` command handler
+  - input: `Array<string>` cli arguments
+  - flags: `object` cli flags
+
+```js
+const command = cli.command('init', 'init a new project', (input, flags, logger) => {
+  const folderName = input[0]
+  console.log(`init project in folder ${folderName}`)
+})
+```
+
+`cli.command` returns a [command](#command) instance.
+
+#### command
+
+##### command.option(name, [option])
+
+Same as [cli.option](clioptionnameoption) but it adds options for specified command.
+
+#### logger
+
+The third argument of command `handler` is a `logger` object which is a [winston](https://github.com/winstonjs/winston) instance.
+
+It's set to different level in different cases:
+
+- when `--verbose`: it's set to `debug`
+- when `--quiet`: it's set to `warn`
+- by default it's `info`
+
+### cli.parse([argv], [option])
+
+- argv: `Array<string>` Defaults to `process.argv.slice(2)`
+- option
+  - run: `boolean` Defaults to `true` Run command after parsed argv.
+
 ## Contributing
 
 1. Fork it!
