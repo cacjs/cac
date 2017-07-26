@@ -72,11 +72,11 @@ cli.parse()
 
 Then run it:
 
-<img width="403" alt="2017-07-26 2 29 46" src="https://user-images.githubusercontent.com/8784712/28607539-f016218c-720e-11e7-8552-af88c183ad7f.png">
+<img width="303" alt="2017-07-26 2 29 46" src="https://i.loli.net/2017/07/26/5978a1a7c72f5.png">
 
 And the **Help Documentation** is ready out of the box:
 
-<img width="854" alt="2017-07-26 4 29 36" src="https://user-images.githubusercontent.com/8784712/28611814-a8da742e-721f-11e7-8b52-17bda78809fe.png">
+<img width="600" alt="2017-07-26 4 29 36" src="https://ooo.0o0.ooo/2017/07/26/5978a121886c4.png">
 
 ### No-command app
 
