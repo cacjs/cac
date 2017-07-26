@@ -1,5 +1,6 @@
 import table from 'text-table'
 import stringWidth from 'string-width'
+import CacError from './CacError'
 
 export function parseType(type) {
   if (typeof type === 'string' || type instanceof String) {
@@ -29,4 +30,10 @@ export function prefixOption(option) {
 
 export function isExplictCommand(name) {
   return name && !name.startsWith('-')
+}
+
+export function invariant(exp, message) {
+  if (!exp) {
+    throw new CacError(message)
+  }
 }

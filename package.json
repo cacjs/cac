@@ -20,7 +20,7 @@
     "cac"
   ],
   "scripts": {
-    "test": "echo 'no tests!' && npm run lint",
+    "test": "npm run lint && ava",
     "lint": "xo",
     "build": "bili --buble.target.node 4",
     "prepublish": "npm run build"
@@ -37,12 +37,17 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
+    "ava": "^0.21.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.24.1",
     "bili": "^0.17.3",
     "eslint-config-rem": "^3.0.0",
     "xo": "^0.18.0"
+  },
+  "ava": {
+    "babel": "inherit",
+    "require": ["babel-register"]
   },
   "xo": {
     "extends": "rem/prettier",
