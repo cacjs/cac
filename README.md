@@ -72,7 +72,7 @@ Register an option globally, i.e. for all commands
 - option: `object` `string`
   - desc: `string` description
   - alias: `string` `Array<string>` option name alias
-  - type: `string` option type, valid values: `boolean` `number`
+  - type: `string` option type, valid values: `boolean` `string`
   - default: `any` option default value
 
 ### cli.command(name, [option], [handler])
