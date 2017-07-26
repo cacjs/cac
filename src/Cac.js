@@ -8,15 +8,20 @@ import Options from './Options'
 import Help from './Help'
 import { textTable, isExplictCommand } from './utils'
 
+// Prevent caching of this module so module.parent is always accurate
+delete require.cache[__filename]
+const parentDir = path.dirname(module.parent.filename)
+
 export default class Cac extends EventEmitter {
   constructor({ bin, pkg } = {}) {
     super()
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
+
     this.pkg = Object.assign(
       {},
-      pkg || readPkg.sync({ cwd: path.join(__dirname, '..') }).pkg
+      pkg || readPkg.sync({ cwd: parentDir, normalize: false }).pkg
     )
 
     this.option('version', {
@@ -118,6 +123,10 @@ export default class Cac extends EventEmitter {
     return this
   }
 
+  showVersion() {
+    console.log(this.pkg.version)
+  }
+
   parse(argv, { run = true } = {}) {
     this.started = true
     argv = argv || process.argv.slice(2)
@@ -152,6 +161,8 @@ export default class Cac extends EventEmitter {
 
     if (flags.help) {
       this.showHelp()
+    } else if (flags.version) {
+      this.showVersion()
     } else if (command && command.handler) {
       const winston = require('winston')
 
