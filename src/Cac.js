@@ -1,4 +1,5 @@
 import path from 'path'
+import EventEmitter from 'events'
 import chalk from 'chalk'
 import minimost from 'minimost'
 import readPkg from 'read-pkg-up'
@@ -7,8 +8,9 @@ import Options from './Options'
 import Help from './Help'
 import { textTable, isExplictCommand } from './utils'
 
-export default class Cac {
+export default class Cac extends EventEmitter {
   constructor({ bin, pkg } = {}) {
+    super()
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
@@ -96,9 +98,32 @@ export default class Cac {
     }
   }
 
-  parse(argv = process.argv.slice(2)) {
-    const firstArg = argv[0]
-    const { command, sliceFirstArg } = this.getCommand(firstArg)
+  get argv() {
+    return this.parse(null, { run: false })
+  }
+
+  showHelp() {
+    if (!this.started) {
+      throw new Error(
+        '[cac] You have to call .parse() before running .showHelp()'
+      )
+    }
+
+    const displayCommands = !isExplictCommand(this.firstArg)
+    const help = new Help(this, this.matchedCommand, {
+      displayCommands
+    })
+
+    help.output()
+    return this
+  }
+
+  parse(argv, { run = true } = {}) {
+    this.started = true
+    argv = argv || process.argv.slice(2)
+    this.firstArg = argv[0]
+    const { command, sliceFirstArg } = this.getCommand(this.firstArg)
+    this.matchedCommand = command
 
     let { input, flags } = minimost(argv, {
       boolean: [
@@ -119,22 +144,43 @@ export default class Cac {
       }
     })
 
-    if (flags.help) {
-      const displayCommands = !isExplictCommand(firstArg)
-      const help = new Help(this, command, {
-        displayCommands
-      })
-      help.output()
-    } else if (command && command.handler) {
-      input = sliceFirstArg ? input.slice(1) : input
+    input = sliceFirstArg ? input.slice(1) : input
 
+    if (!run) {
+      return { input, flags }
+    }
+
+    if (flags.help) {
+      this.showHelp()
+    } else if (command && command.handler) {
       const winston = require('winston')
 
       const logger = new winston.Logger({
-        level: flags.verbose ? 'debug' : flags.quiet ? 'warn' : 'info'
+        level: flags.verbose ? 'debug' : flags.quiet ? 'warn' : 'info',
+        transports: [
+          new winston.transports.Console({
+            handleExceptions: true
+          })
+        ]
       })
 
-      command.handler(input, flags, logger)
+      try {
+        const res = command.handler(input, flags, logger)
+        if (res && res.catch) {
+          res.catch(err => this.handleError(err, logger))
+        }
+      } catch (err) {
+        this.handleError(err, logger)
+      }
+    }
+  }
+
+  handleError(err, logger) {
+    process.exitCode = process.exitCode || 1
+    if (EventEmitter.listenerCount(this, 'error') === 0) {
+      logger.error(err)
+    } else {
+      this.emit('error', err, logger)
     }
   }
 }
