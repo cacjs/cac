@@ -26,23 +26,13 @@ export default class Cac extends EventEmitter {
 
     this.option('version', {
       alias: 'v',
-      type: Boolean,
+      type: 'boolean',
       desc: 'Display version'
+    }).option('help', {
+      alias: 'h',
+      type: 'boolean',
+      desc: `Display help (You're already here)`
     })
-      .option('help', {
-        alias: 'h',
-        type: Boolean,
-        desc: `Display help (You're already here)`
-      })
-      .option('quiet', {
-        type: Boolean,
-        desc: 'Quiet mode - only display warn and error messages'
-      })
-      .option('verbose', {
-        alias: 'V',
-        type: Boolean,
-        desc: 'Verbose mode - will always output debug messages'
-      })
   }
 
   option(...args) {
@@ -164,34 +154,23 @@ export default class Cac extends EventEmitter {
     } else if (flags.version) {
       this.showVersion()
     } else if (command && command.handler) {
-      const winston = require('winston')
-
-      const logger = new winston.Logger({
-        level: flags.verbose ? 'debug' : flags.quiet ? 'warn' : 'info',
-        transports: [
-          new winston.transports.Console({
-            handleExceptions: true
-          })
-        ]
-      })
-
       try {
-        const res = command.handler(input, flags, logger)
+        const res = command.handler(input, flags)
         if (res && res.catch) {
-          res.catch(err => this.handleError(err, logger))
+          res.catch(err => this.handleError(err))
         }
       } catch (err) {
-        this.handleError(err, logger)
+        this.handleError(err)
       }
     }
   }
 
-  handleError(err, logger) {
-    process.exitCode = process.exitCode || 1
+  handleError(err) {
     if (EventEmitter.listenerCount(this, 'error') === 0) {
-      logger.error(err)
+      console.error(err)
+      process.exitCode = process.exitCode || 1
     } else {
-      this.emit('error', err, logger)
+      this.emit('error', err)
     }
   }
 }

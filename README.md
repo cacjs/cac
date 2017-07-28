@@ -133,7 +133,7 @@ Register an option globally, i.e. for all commands
   - flags: `object` cli flags
 
 ```js
-const command = cli.command('init', 'init a new project', (input, flags, logger) => {
+const command = cli.command('init', 'init a new project', (input, flags) => {
   const folderName = input[0]
   console.log(`init project in folder ${folderName}`)
 })
@@ -146,16 +146,6 @@ const command = cli.command('init', 'init a new project', (input, flags, logger)
 ##### command.option(name, [option])
 
 Same as [cli.option](#clioptionname-option) but it adds options for specified command.
-
-#### logger
-
-The third argument of command `handler` is a `logger` object which is a [winston](https://github.com/winstonjs/winston) instance.
-
-It's set to different level in different cases:
-
-- when `--verbose`: it's set to `debug`
-- when `--quiet`: it's set to `warn`
-- by default it's `info`
 
 ### cli.parse([argv], [option])
 
@@ -178,8 +168,9 @@ A getter which simply returns `cli.parse(null, { run: false })`
 Error handler for errors in your command handler:
 
 ```js
-cli.on('error', (err, logger) => {
-  logger.error('command failed:', err)
+cli.on('error', err => {
+  console.error('command failed:', err)
+  process.exit(1)
 })
 ```
 
