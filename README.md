@@ -162,7 +162,7 @@ A getter which simply returns `cli.parse(null, { run: false })`
 
 ### Events
 
-### error
+#### error
 
 Error handler for errors in your command handler:
 
