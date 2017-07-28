@@ -23,7 +23,6 @@ yarn add cac
   * [cli.command(name, [option], [handler])](#clicommandname-option-handler)
     + [command](#command)
       - [command.option(name, [option])](#commandoptionname-option)
-    + [logger](#logger)
   * [cli.parse([argv], [option])](#cliparseargv-option)
   * [cli.showHelp()](#clishowhelp)
   * [cli.argv](#cliargv)
