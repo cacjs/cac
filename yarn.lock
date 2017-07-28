@@ -2817,10 +2817,6 @@ mixin-deep@^1.1.3:
   dependencies:
     minimist "0.0.8"
 
-mri@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/mri/-/mri-1.1.0.tgz#5c0a3f29c8ccffbbb1ec941dcec09d71fa32f36a"
-
 ms@2.0.0, ms@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
