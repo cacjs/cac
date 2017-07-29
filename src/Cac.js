@@ -35,6 +35,17 @@ export default class Cac extends EventEmitter {
     })
   }
 
+  use(plugin) {
+    if (Array.isArray(plugin)) {
+      plugin.forEach(p => this.use(p))
+    } else if (typeof plugin === 'function') {
+      plugin(this)
+    } else {
+      throw new TypeError('plugin has to be a function or an array of it.')
+    }
+    return this
+  }
+
   option(...args) {
     this.options.add(...args)
     return this
