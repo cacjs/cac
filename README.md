@@ -3,7 +3,9 @@
 
 [![NPM version](https://img.shields.io/npm/v/cac.svg?style=flat)](https://npmjs.com/package/cac) [![NPM downloads](https://img.shields.io/npm/dm/cac.svg?style=flat)](https://npmjs.com/package/cac) [![CircleCI](https://circleci.com/gh/egoist/cac/tree/master.svg?style=shield)](https://circleci.com/gh/egoist/cac/tree/master)  [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/egoist/donate)
 
-**C**ommand **A**nd **C**onquer, the queen living in your command line.
+## Introduction
+
+**C**ommand **A**nd **C**onquer, the queen living in your command line, is a minimalistic but pluggable CLI framework.
 
 ## Install
 
@@ -25,9 +27,11 @@ yarn add cac
       - [command.option(name, [option])](#commandoptionname-option)
   * [cli.parse([argv], [option])](#cliparseargv-option)
   * [cli.showHelp()](#clishowhelp)
+  * [cli.use(plugin)](#cliuseplugin)
   * [cli.argv](#cliargv)
   * [Events](#events)
-  * [error](#error)
+    + [error](#error)
+    + [parsed](#parsed)
 - [FAQ](#faq)
   * [Why not `commander.js` `yargs` `caporal.js` or `meow`?](#why-not-commanderjs-yargs-caporaljs-or-meow)
   * [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
@@ -155,6 +159,22 @@ Same as [cli.option](#clioptionname-option) but it adds options for specified co
 ### cli.showHelp()
 
 Display cli helps, must be called after `cli.parse()`
+
+### cli.use(plugin)
+
+- plugin: `Plugin` `Array<Plugin>`
+
+Apply a plugin to cli instance:
+
+```js
+cli.use(plugin(options))
+
+function plugin(options) {
+  return cli => {
+    // do something...
+  }
+}
+```
 
 ### cli.argv
 
