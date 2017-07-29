@@ -173,6 +173,16 @@ cli.on('error', err => {
 })
 ```
 
+#### parsed
+
+Emit after CAC parsed cli arguments:
+
+```js
+cli.on('parsed', (command, input, flags) => {
+  // command might be undefined
+})
+```
+
 ## FAQ
 
 ### Why not `commander.js` `yargs` `caporal.js` or `meow`?

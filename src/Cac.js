@@ -145,6 +145,8 @@ export default class Cac extends EventEmitter {
 
     input = sliceFirstArg ? input.slice(1) : input
 
+    this.emit('parsed', command, input, flags)
+
     if (!run) {
       return { input, flags }
     }
