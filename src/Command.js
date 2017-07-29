@@ -12,6 +12,7 @@ export default class Command {
     invariant(option.desc, 'Expect command to have a description.')
 
     const command = {
+      ...option,
       name,
       alias: option.alias || [],
       desc: option.desc

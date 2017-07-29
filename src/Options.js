@@ -12,6 +12,7 @@ export default class Options {
       opt = { desc: opt }
     }
     const option = {
+      ...opt,
       name,
       alias: opt.alias || [],
       desc: opt.desc,
