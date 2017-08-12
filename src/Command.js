@@ -1,3 +1,4 @@
+// @ts-check
 import Options from './Options'
 import { orderNames, invariant } from './utils'
 
