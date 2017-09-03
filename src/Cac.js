@@ -180,7 +180,7 @@ export default class Cac extends EventEmitter {
 
   handleError(err) {
     if (EventEmitter.listenerCount(this, 'error') === 0) {
-      console.error(err)
+      console.error(err.stack)
       process.exitCode = process.exitCode || 1
     } else {
       this.emit('error', err)
