@@ -1,3 +1,5 @@
 import Cac from './Cac'
 
-export default opts => new Cac(opts)
+export default function(opts) {
+  return new Cac(opts)
+}
