@@ -19,7 +19,7 @@ cli.command('b', {
   required: true, // <-- Make it a required flag!
   desc: 'baz is a flag for command b'
 }).option('zoo', {
-  desc: 'bar is a flag for command b'
+  desc: 'zoo is a flag for command b'
 })
 
 cli.use(requiredFlags())
