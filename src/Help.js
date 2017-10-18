@@ -11,9 +11,13 @@ export default class Help {
   output() {
     let help = '\n'
 
-    help += `${chalk.cyan(this.root.bin)} ${chalk.dim(
-      this.root.pkg.version
-    )}\n\n`
+    help += chalk.cyan(this.root.bin)
+
+    if (this.root.pkg.version) {
+      help += ` ${this.root.pkg.version}`
+    }
+
+    help += '\n\n'
 
     if (this.root.pkg.description) {
       help += `${chalk.dim.italic(this.root.pkg.description)}\n\n`
