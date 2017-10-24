@@ -32,6 +32,7 @@ yarn add cac
   * [Events](#events)
     + [error](#error)
     + [parsed](#parsed)
+- [Plugins](#plugins)
 - [FAQ](#faq)
   * [Why not `commander.js` `yargs` `caporal.js` or `meow`?](#why-not-commanderjs-yargs-caporaljs-or-meow)
   * [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
@@ -203,6 +204,10 @@ cli.on('parsed', (command, input, flags) => {
   // command might be undefined
 })
 ```
+
+## Plugins
+
+- [required-option](https://github.com/cacjs/required-option) - Mark an option as required for specific command.
 
 ## FAQ
 
