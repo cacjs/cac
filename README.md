@@ -211,11 +211,15 @@ cli.on('parsed', (command, input, flags) => {
 
 ## FAQ
 
-### Why not `commander.js` `yargs` `caporal.js` or `meow`?
+### Why not `commander.js` `yargs` `caporal.js` or `meow` ?
 
-Commander.js and Caporal.js do not allow unknown options, Commander.js does not support [chaining option](https://github.com/tj/commander.js/issues/606).
+`CAC` is simpler and less opinionated comparing to `commander.js` `yargs` `caporal.js`.
+
+Commander.js does not support [chaining option](https://github.com/tj/commander.js/issues/606) which is a feature I like a lot. It's not really actively maintained at the time of writing either.
 
 Yargs has a powerful API, but it's so massive that my brain trembles. Meow is simple and elegant but I have to manully construct the *help* message, which will be annoying. And I want it to support *sub-command* too.
+
+And none of them are pluggable.
 
 **So why creating a new thing instead of pull request?**
 
