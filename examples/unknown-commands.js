@@ -3,12 +3,15 @@ const cac = require('../src').default
 
 const cli = cac()
 
-const knownCommands = new Set(['hi'])
-
 cli.command('*', {
   desc: 'default command'
 }, input => {
-  if (input[0] && !knownCommands.has(input[0])) {
+  const isKnownCommand = input[0] && cli.commands
+    .filter(command => {
+      return command.command.names.includes(input[0])
+    }).length === 1
+
+  if (!isKnownCommand) {
     console.error(`${input[0]} is not a known command`)
     process.exit(1)
   }
