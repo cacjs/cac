@@ -176,6 +176,8 @@ export default class Cac extends EventEmitter {
         this.handleError(err)
       }
     }
+
+    this.emit('executed', command, input, flags)
   }
 
   handleError(err) {
