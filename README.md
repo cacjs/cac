@@ -205,6 +205,16 @@ cli.on('parsed', (command, input, flags) => {
 })
 ```
 
+#### executed
+
+Emit after CAC executed commands or outputed help / version number:
+
+```js
+cli.on('executed', (command, input, flags) => {
+  // command might be undefined
+})
+```
+
 ## Plugins
 
 - [required-option](https://github.com/cacjs/required-option) - Mark an option as required for specific command.
