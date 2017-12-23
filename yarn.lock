@@ -1009,9 +1009,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bili@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/bili/-/bili-1.0.2.tgz#8250237ff5746e119fb1f89b178db4debd047917"
+bili@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/bili/-/bili-1.1.0.tgz#5b64e5f35007209f208432461a7ae948bfd5e9d1"
   dependencies:
     babel-core "^6.26.0"
     babel-plugin-external-helpers "^6.22.0"
