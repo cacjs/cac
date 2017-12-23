@@ -6,7 +6,7 @@
     "url": "egoist/cac",
     "type": "git"
   },
-  "main": "dist/cac.common.js",
+  "main": "dist/cac.js",
   "files": [
     "dist",
     "index.d.ts"
@@ -23,7 +23,7 @@
   "scripts": {
     "test": "npm run lint && ava",
     "lint": "xo",
-    "build": "bili --buble.target.node 4",
+    "build": "bili --js buble --buble.target.node 4 --filename cac.js",
     "prepublish": "npm run build",
     "toc": "markdown-toc -i README.md"
   },
@@ -42,7 +42,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.24.1",
-    "bili": "^0.17.3",
+    "bili": "^1.0.2",
     "eslint-config-rem": "^3.0.0",
     "markdown-toc": "^1.1.0",
     "xo": "^0.18.0"
