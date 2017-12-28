@@ -6,6 +6,9 @@ import readPkg from 'read-pkg-up'
 import Command from './Command'
 import Options from './Options'
 import Help from './Help'
+import examplesPlugin from './plugins/command-examples'
+import optionChoicesPlugin from './plugins/option-choices'
+import requiredOptionPlugin from './plugins/required-option'
 import { textTable, isExplictCommand } from './utils'
 
 // Prevent caching of this module so module.parent is always accurate
@@ -18,6 +21,7 @@ export default class Cac extends EventEmitter {
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
+    this.extraHelps = []
 
     this.pkg = Object.assign(
       {},
@@ -33,6 +37,10 @@ export default class Cac extends EventEmitter {
       type: 'boolean',
       desc: `Display help (You're already here)`
     })
+
+    this.use(examplesPlugin())
+    this.use(optionChoicesPlugin())
+    this.use(requiredOptionPlugin())
   }
 
   use(plugin) {
@@ -126,6 +134,11 @@ export default class Cac extends EventEmitter {
 
   showVersion() {
     console.log(this.pkg.version)
+  }
+
+  extraHelp(help) {
+    this.extraHelps.push(help)
+    return this
   }
 
   parse(argv, { run = true } = {}) {

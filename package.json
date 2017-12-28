@@ -20,10 +20,13 @@
     "simple",
     "cac"
   ],
+  "engines": {
+    "node": ">=6"
+  },
   "scripts": {
     "test": "npm run lint && ava",
     "lint": "xo",
-    "build": "bili --buble.target.node 4 --filename cac.js",
+    "build": "bili --buble.target.node 6 --filename cac.js",
     "prepublish": "npm run build",
     "toc": "markdown-toc -i README.md"
   },

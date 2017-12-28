@@ -8,7 +8,7 @@ export default class Help {
     this.opts = opts
   }
 
-  output() {
+  getHelp() {
     let help = '\n'
 
     help += chalk.cyan(this.root.bin)
@@ -36,26 +36,47 @@ export default class Help {
     help += '\n\n'
 
     if (this.opts.displayCommands && !this.root.isCommandsEmpty()) {
-      help += `${chalk.bold('COMMANDS')}\n\n`
-
-      help += redent(this.root.commandsToString(), 2)
-      help += '\n\n'
+      help += formatSection({
+        title: 'COMMANDS',
+        body: this.root.commandsToString()
+      })
     }
 
     if (this.command && !this.command.options.isEmpty()) {
-      help += `${chalk.bold('COMMAND OPTIONS')}\n\n`
-
-      help += redent(this.command.options.toString(), 2)
-      help += '\n\n'
+      help += formatSection({
+        title: 'COMMAND OPTIONS',
+        body: this.command.options.toString()
+      })
     }
 
     if (!this.root.options.isEmpty()) {
-      help += `${chalk.bold('GLOBAL OPTIONS')}\n\n`
-
-      help += redent(this.root.options.toString(), 2)
-      help += '\n'
+      help += formatSection({
+        title: 'GLOBAL OPTIONS',
+        body: this.root.options.toString()
+      })
     }
 
-    console.log(redent(help, 2))
+    for (const h of this.root.extraHelps) {
+      help += formatSection(h)
+    }
+
+    return redent(help, 2)
   }
+
+  output() {
+    process.stdout.write(this.getHelp())
+    return this
+  }
+}
+
+function formatSection(sec) {
+  if (typeof sec === 'string') {
+    return sec
+  }
+
+  const { title, body } = sec
+  return `${title ? `${chalk.bold(title)}\n\n` : ''}${redent(
+    body.trim(),
+    2
+  )}\n\n`
 }

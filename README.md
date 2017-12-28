@@ -18,7 +18,6 @@ yarn add cac
 <!-- toc -->
 
 - [Usage](#usage)
-  * [No-command app](#no-command-app)
 - [Friends](#friends)
 - [Documentation](#documentation)
   * [cli.option(name, [option])](#clioptionname-option)
@@ -32,9 +31,10 @@ yarn add cac
   * [Events](#events)
     + [error](#error)
     + [parsed](#parsed)
+    + [executed](#executed)
 - [Plugins](#plugins)
 - [FAQ](#faq)
-  * [Why not `commander.js` `yargs` `caporal.js` or `meow`?](#why-not-commanderjs-yargs-caporaljs-or-meow)
+  * [Why not `commander.js` `yargs` `caporal.js` or `meow` ?](#why-not-commanderjs-yargs-caporaljs-or-meow-)
   * [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
 - [Contributing](#contributing)
 - [Author](#author)
@@ -82,28 +82,6 @@ And the **Help Documentation** is ready out of the box:
 
 <img width="600" alt="2017-07-26 4 29 36" src="https://ooo.0o0.ooo/2017/07/26/5978a121886c4.png">
 
-### No-command app
-
-In many cases your app is small and doesn't even need a *command*:
-
-```js
-const cli = require('cac')()
-// Use default command symbol '*'
-cli.command('*', option, runMyApp)
-cli.parse()
-```
-
-Instead of using a default command, you can skip adding and running command by:
-
-```js
-const cli = require('cac')()
-// cli.argv is a getter
-// bascially it's the return value of cli.parse(null, { run: false })
-const { input, flags } = cli.argv
-
-runMyApp(input, flags)
-```
-
 ## Friends
 
 Projects that use **CAC**:
@@ -126,6 +104,8 @@ Register an option globally, i.e. for all commands
   - alias: `string` `Array<string>` option name alias
   - type: `string` option type, valid values: `boolean` `string`
   - default: `any` option default value
+  - required: `boolean` mark option as required
+  - choices: `Array<any>` limit valid values for the option
 
 ### cli.command(name, [option], [handler])
 
@@ -133,6 +113,7 @@ Register an option globally, i.e. for all commands
 - option: `object` `string` (`string` is used as `desc`)
   - desc: `string` description
   - alias: `string` `Array<string>` command name alias
+  - examples: `Array<string>` command examples
 - handler: `function` command handler
   - input: `Array<string>` cli arguments
   - flags: `object` cli flags
@@ -182,6 +163,16 @@ function plugin(options) {
 
 A getter which simply returns `cli.parse(null, { run: false })`
 
+### cli.extraHelp(help)
+
+Add extra help messages to the bottom of help.
+
+#### help
+
+Type: `string` `object`
+
+The `help` could be a `string` or in `{ title, body }` format.
+
 ### Events
 
 #### error
@@ -214,10 +205,6 @@ cli.on('executed', (command, input, flags) => {
   // command might be undefined
 })
 ```
-
-## Plugins
-
-- [required-option](https://github.com/cacjs/required-option) - Mark an option as required for specific command.
 
 ## FAQ
 
