@@ -238,7 +238,7 @@ I would ask me myself why there's `preact` instead of PR to `react`, and why `ya
 
 ### How is the name written and pronounced?
 
-CAC, not Cac or cac, [Pronounced `/kɑk/`](https://www.howtopronounce.com/cac/).
+CAC, not Cac or cac, pronounced `C-A-C`.
 
 And this project is dedicated to our lovely C.C. sama. Maybe CAC stands for C&C as well :P
 
