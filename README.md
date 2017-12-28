@@ -159,6 +159,14 @@ function plugin(options) {
 }
 ```
 
+### cli.bin
+
+Type: `string`
+
+The filename of executed file.
+
+e.g. It's `cli.js` when you run `node ./cli.js`.
+
 ### cli.argv
 
 A getter which simply returns `cli.parse(null, { run: false })`
