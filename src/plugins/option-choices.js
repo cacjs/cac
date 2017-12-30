@@ -3,7 +3,7 @@ export default () => cli => {
     if (!command) return
 
     const failedOptions = command.options.options.filter(option => {
-      const shouldCheck = typeof flags[option.name] !== 'undefined'
+      const shouldCheck = option.choices && typeof flags[option.name] !== 'undefined'
       const isOneOfChices =
         option.choices &&
         option.choices.filter(choice => {
