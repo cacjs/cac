@@ -7,9 +7,10 @@
     "type": "git"
   },
   "main": "dist/cac.js",
+  "types": "types/index.d.ts",
   "files": [
     "dist",
-    "index.d.ts"
+    "types/index.d.ts"
   ],
   "keywords": [
     "cli",
@@ -25,9 +26,9 @@
   },
   "scripts": {
     "test": "npm run lint && ava",
-    "lint": "xo",
+    "lint": "xo && tslint types/*.ts",
     "build": "bili --buble.target.node 6 --filename cac.js",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "toc": "markdown-toc -i README.md"
   },
   "author": "egoist <0x142857@gmail.com>",
@@ -46,8 +47,11 @@
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.24.1",
     "bili": "^1.1.0",
+    "dtslint": "^0.2.0",
     "eslint-config-rem": "^3.0.0",
     "markdown-toc": "^1.1.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2",
     "xo": "^0.18.0"
   },
   "ava": {
