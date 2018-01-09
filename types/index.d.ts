@@ -1,5 +1,6 @@
 declare module 'cac' {
   export default function cac(): CAC
+  export = cac
 
   export interface CAC {
     option: Options['add']
