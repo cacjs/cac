@@ -16,10 +16,6 @@ delete require.cache[__filename]
 const parentDir = path.dirname(module.parent.filename)
 
 export default class Cac extends EventEmitter {
-  static parse(argv, opts) {
-    return minimost(argv, opts)
-  }
-
   constructor({ bin, pkg } = {}) {
     super()
     this.bin = bin || path.basename(process.argv[1])
