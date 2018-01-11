@@ -1,5 +1,10 @@
+import minimost from 'minimost'
 import Cac from './Cac'
 
-export default function(opts) {
+function cac(opts) {
   return new Cac(opts)
 }
+
+cac.parse = (...args) => minimost(...args)
+
+export default cac
