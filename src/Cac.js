@@ -185,12 +185,12 @@ export default class Cac extends EventEmitter {
         if (res && res.catch) {
           res.catch(err => this.handleError(err))
         }
+        this.emit('executed', command, input, flags)
+        return res
       } catch (err) {
         this.handleError(err)
       }
     }
-
-    this.emit('executed', command, input, flags)
   }
 
   handleError(err) {
