@@ -16,12 +16,13 @@ delete require.cache[__filename]
 const parentDir = path.dirname(module.parent.filename)
 
 export default class Cac extends EventEmitter {
-  constructor({ bin, pkg } = {}) {
+  constructor({ bin, pkg, showHelp } = {}) {
     super()
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
     this.extraHelps = []
+    this.shouldShowHelp = showHelp || ((command, input, flags) => flags.help)
 
     this.pkg = Object.assign(
       {},
@@ -175,7 +176,7 @@ export default class Cac extends EventEmitter {
       return { input, flags }
     }
 
-    if (flags.help) {
+    if (this.shouldShowHelp(command, input, flags)) {
       this.showHelp()
     } else if (flags.version) {
       this.showVersion()
