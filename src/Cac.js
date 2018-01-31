@@ -183,9 +183,9 @@ export default class Cac extends EventEmitter {
       this.showVersion()
     } else if (command && command.handler) {
       try {
-        const res = command.handler(input, flags)
+        let res = command.handler(input, flags)
         if (res && res.catch) {
-          res.catch(err => this.handleError(err))
+          res = res.catch(err => this.handleError(err))
         }
         this.emit('executed', command, input, flags)
         return res
