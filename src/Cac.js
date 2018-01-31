@@ -134,7 +134,7 @@ export default class Cac extends EventEmitter {
     argv = argv || process.argv.slice(2)
     this.firstArg = argv[0] || ''
     // Ensure that first arg is not a flag
-    this.firstArg = this.firstArgs.startsWith('-') ? null : this.firstArgs
+    this.firstArg = this.firstArg.startsWith('-') ? null : this.firstArg
     const { command, sliceFirstArg } = this.getCommand(this.firstArg)
     this.matchedCommand = command
 
