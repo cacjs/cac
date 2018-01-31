@@ -80,36 +80,24 @@ export default class Cac extends EventEmitter {
     return this.commands.length === 0
   }
 
-  findCommandByNameOrAlias(name) {
-    return this.commands.filter(({ command }) => {
-      return command.names.indexOf(name) > -1
-    })[0]
+  /**
+   * Find command by command name, alias or addtionalMatch
+   */
+  findCommand(name) {
+    for (const command of this.commands) {
+      const { names, match } = command.command
+      if (names.includes(name)) {
+        return { command, sliceFirstArg: name && name !== '*' }
+      }
+      if (match && match(name)) {
+        return { command, sliceFirstArg: false }
+      }
+    }
+    return null
   }
 
   getCommand(name) {
-    // No command name, use default command
-    if (!isExplictCommand(name)) {
-      return {
-        command: this.findCommandByNameOrAlias('*'),
-        sliceFirstArg: false
-      }
-    }
-
-    const command = this.findCommandByNameOrAlias(name)
-
-    // Found sub command
-    if (command) {
-      return {
-        command,
-        sliceFirstArg: true
-      }
-    }
-
-    // Fallback to default command
-    return {
-      command: this.findCommandByNameOrAlias('*'),
-      sliceFirstArg: false
-    }
+    return this.findCommand(name) || this.findCommand('*') || {}
   }
 
   get argv() {
@@ -144,7 +132,9 @@ export default class Cac extends EventEmitter {
   parse(argv, { run = true, showHelp } = {}) {
     this.started = true
     argv = argv || process.argv.slice(2)
-    this.firstArg = argv[0]
+    this.firstArg = argv[0] || ''
+    // Ensure that first arg is not a flag
+    this.firstArg = this.firstArgs.startsWith('-') ? null : this.firstArgs
     const { command, sliceFirstArg } = this.getCommand(this.firstArg)
     this.matchedCommand = command
 

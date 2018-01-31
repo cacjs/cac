@@ -45,7 +45,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.24.1",
-    "bili": "^1.1.0",
+    "bili": "^2.2.6",
     "eslint-config-rem": "^3.0.0",
     "markdown-toc": "^1.1.0",
     "xo": "^0.18.0"

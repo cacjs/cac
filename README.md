@@ -116,6 +116,7 @@ Register an option globally, i.e. for all commands
   - desc: `string` description
   - alias: `string` `Array<string>` command name alias
   - examples: `Array<string>` command examples
+  - match: `(name: string) => boolean` A custom command matcher
 - handler: `function` command handler
   - input: `Array<string>` cli arguments
   - flags: `object` cli flags

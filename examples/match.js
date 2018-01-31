@@ -1,0 +1,23 @@
+require('babel-register')
+const cac = require('../src').default
+
+const cli = cac()
+
+/**
+ * ./match run index.js
+ * ./match index.js
+ */
+cli.command('run', {
+  desc: 'run command',
+  match(name) {
+    return name && name.endsWith('.js')
+  }
+}, input => {
+  console.log(input[0])
+})
+
+cli.command('*', 'default', input => {
+  console.log('default', input)
+})
+
+cli.parse()
