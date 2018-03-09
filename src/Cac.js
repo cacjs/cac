@@ -16,27 +16,30 @@ delete require.cache[__filename]
 const parentDir = path.dirname(module.parent.filename)
 
 export default class Cac extends EventEmitter {
-  constructor({ bin, pkg } = {}) {
+  constructor({ bin, pkg, defaultOpts } = {}) {
     super()
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
     this.extraHelps = []
+    this.defaultOpts = defaultOpts !== false
 
     this.pkg = Object.assign(
       {},
       pkg || readPkg.sync({ cwd: parentDir, normalize: false }).pkg
     )
 
-    this.option('version', {
-      alias: 'v',
-      type: 'boolean',
-      desc: 'Display version'
-    }).option('help', {
-      alias: 'h',
-      type: 'boolean',
-      desc: `Display help (You're already here)`
-    })
+    if (this.defaultOpts) {
+      this.option('version', {
+        alias: 'v',
+        type: 'boolean',
+        desc: 'Display version'
+      }).option('help', {
+        alias: 'h',
+        type: 'boolean',
+        desc: `Display help (You're already here)`
+      })
+    }
 
     this.use(examplesPlugin())
     this.use(optionChoicesPlugin())
@@ -167,9 +170,9 @@ export default class Cac extends EventEmitter {
 
     const shouldShowHelp = showHelp || ((command, input, flags) => flags.help)
 
-    if (shouldShowHelp(command, input, flags)) {
+    if (this.defaultOpts && shouldShowHelp(command, input, flags)) {
       this.showHelp()
-    } else if (flags.version) {
+    } else if (this.defaultOpts && flags.version) {
       this.showVersion()
     } else if (command && command.handler) {
       try {
