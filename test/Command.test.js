@@ -1,5 +1,5 @@
 import test from 'ava'
-import Command from './Command'
+import Command from '../src/Command'
 
 test('require name', t => {
   t.throws(() => new Command(), 'Expect command name to be a string.')
