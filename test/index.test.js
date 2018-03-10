@@ -7,26 +7,26 @@ function fixture(file) {
 }
 
 test('help message when no command', async t => {
-  const { stdout } = await execa('node', [
+  const { stdout, cmd } = await execa('node', [
     fixture('help-message/no-command.js'),
     '--help'
   ])
-  t.snapshot(stdout)
+  t.snapshot(stdout, cmd)
 })
 
 test('help message for sub command', async t => {
-  const { stdout } = await execa('node', [
+  const { stdout, cmd } = await execa('node', [
     fixture('help-message/sub-command.js'),
     'sub',
     '--help'
   ])
-  t.snapshot(stdout)
+  t.snapshot(stdout, cmd)
 })
 
 test('help message for wildcard command', async t => {
-  const { stdout } = await execa('node', [
+  const { stdout, cmd } = await execa('node', [
     fixture('help-message/wildcard-command.js'),
     '--help'
   ])
-  t.snapshot(stdout)
+  t.snapshot(stdout, cmd)
 })
