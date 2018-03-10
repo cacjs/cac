@@ -118,7 +118,9 @@ export default class Cac extends EventEmitter {
       )
     }
 
+    // Do not display `<command>` in help if it's a sub command
     const displayCommands = !(
+      // This matches a sub command
       this.matchedCommand && isExplictCommand(this.firstArg)
     )
     const help = new Help(this, this.matchedCommand, {
