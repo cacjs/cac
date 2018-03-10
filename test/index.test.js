@@ -21,7 +21,7 @@ test('help message for sub command', async t => {
 
 test('help message for wildcard command', async t => {
   const { stdout } = await execa('node', [
-    path.join(__dirname, 'fixtures/help-message/sub-command.js'),
+    path.join(__dirname, 'fixtures/help-message/wildcard-command.js'),
     '--help'
   ])
   t.snapshot(stdout)
