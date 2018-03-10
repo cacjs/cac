@@ -172,7 +172,8 @@ export default class Cac extends EventEmitter {
       return { input, flags }
     }
 
-    const shouldShowHelp = showHelp || ((command, input, flags) => this.helpOpt && flags.help)
+    const shouldShowHelp =
+      showHelp || ((command, input, flags) => this.helpOpt && flags.help)
 
     if (shouldShowHelp(command, input, flags)) {
       this.showHelp()
