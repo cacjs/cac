@@ -23,9 +23,13 @@ export default class Help {
       help += `${chalk.dim.italic(this.root.pkg.description)}\n\n`
     }
 
-    const commandText = chalk.magenta(
-      this.opts.displayCommands ? '<command> ' : `${this.command.command.name} `
-    )
+    const commandText = this.command
+      ? chalk.magenta(
+          this.opts.displayCommands
+            ? '<command> '
+            : `${this.command.command.name} `
+        )
+      : ''
     help += `${chalk.bold('USAGE')}\n\n`
     help += redent(
       `${chalk.dim.italic(this.root.bin)} ${commandText}${chalk.yellow(
