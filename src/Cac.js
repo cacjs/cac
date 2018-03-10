@@ -31,14 +31,14 @@ export default class Cac extends EventEmitter {
     )
 
     if (this.versionOpt) {
-      this.versionOpt && this.option('version', {
+      this.option('version', {
         alias: 'v',
         type: 'boolean',
         desc: 'Display version'
       })
     }
     if (this.helpOpt) {
-      this.helpOpt && this.option('help', {
+      this.option('help', {
         alias: 'h',
         type: 'boolean',
         desc: `Display help (You're already here)`
