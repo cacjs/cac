@@ -118,7 +118,9 @@ export default class Cac extends EventEmitter {
       )
     }
 
-    const displayCommands = !isExplictCommand(this.firstArg)
+    const displayCommands = !(
+      this.matchedCommand && isExplictCommand(this.firstArg)
+    )
     const help = new Help(this, this.matchedCommand, {
       displayCommands
     })
