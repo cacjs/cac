@@ -8,8 +8,7 @@
   },
   "main": "dist/cac.js",
   "files": [
-    "dist",
-    "index.d.ts"
+    "dist"
   ],
   "keywords": [
     "cli",
