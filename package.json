@@ -25,21 +25,24 @@
   "scripts": {
     "test": "npm run lint && ava",
     "lint": "xo",
-    "build": "bili --buble.target.node 6 --filename cac.js",
+    "build": "bili src/index.ts --js typescript2 --filename cac.js",
     "prepublish": "npm run build",
     "toc": "markdown-toc -i README.md"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^2.0.1",
-    "minimost": "^1.0.0",
+    "chalk": "^2.3.2",
+    "minimost": "^1.1.0",
     "read-pkg-up": "^2.0.0",
     "redent": "^2.0.0",
     "string-width": "^2.1.1",
     "text-table": "^0.2.0"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.0",
+    "@types/node": "^9.6.5",
+    "@types/read-pkg-up": "^3.0.1",
     "ava": "^0.25.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
@@ -48,6 +51,8 @@
     "eslint-config-rem": "^3.0.0",
     "execa": "^0.9.0",
     "markdown-toc": "^1.1.0",
+    "rollup-plugin-typescript2": "^0.13.0",
+    "typescript": "^2.8.1",
     "xo": "^0.18.0"
   },
   "ava": {

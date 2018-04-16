@@ -1,25 +1,54 @@
 import chalk from 'chalk'
-import { parseType, orderNames, textTable, prefixOption } from './utils'
+import { orderNames, textTable, prefixOption } from './utils'
+
+export interface IOptionInput {
+  name?: string
+  desc?: string
+  alias?: string | string[]
+  default?: any
+  type?: string
+  names?: string[]
+}
+
+export interface IOption {
+  name: string
+  desc?: string
+  alias?: string | string[]
+  default?: any
+  type?: string
+  names: string[]
+}
+
+export type IOptions = IOption[]
 
 export default class Options {
+  options: IOptions
+
   constructor() {
     this.options = []
   }
 
-  add(name, opt) {
+  add(name: string, opt: string | IOptionInput) {
     opt = opt || {}
+
+    let option: IOption
     if (typeof opt === 'string') {
-      opt = { desc: opt }
+      option = {
+        name,
+        desc: opt
+      }
+    } else {
+      if (!opt || !opt.desc) {
+        throw new Error('Expect option to have a description!')
+      }
+
+      option = {
+        name,
+        ...opt
+      }
     }
-    const option = {
-      ...opt,
-      name,
-      alias: opt.alias || [],
-      desc: opt.desc,
-      default: opt.default,
-      type: parseType(opt.type)
-    }
-    option.names = orderNames([option.name].concat(option.alias))
+
+    option.names = orderNames([option.name].concat(option.alias || []))
     this.options.push(option)
     return this
   }

@@ -15,8 +15,24 @@ import { textTable, isExplictCommand } from './utils'
 delete require.cache[__filename]
 const parentDir = path.dirname(module.parent.filename)
 
+export interface IOptions {
+  bin?: string
+  pkg?: {
+    [k: string]: any
+  }
+  defaultOpts?: boolean
+}
+
 export default class Cac extends EventEmitter {
-  constructor({ bin, pkg, defaultOpts = true } = {}) {
+  bin: string
+  pkg: {
+    [k: string]: any
+  }
+  extraHelps: string[]
+  helpOpt: boolean
+  versionOpt: boolean
+
+  constructor({ bin, pkg, defaultOpts = true }: IOptions = {}) {
     super()
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
