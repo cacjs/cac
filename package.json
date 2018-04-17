@@ -28,7 +28,8 @@
     "build": "bili",
     "prepublishOnly": "yarn build",
     "toc": "markdown-toc -i README.md",
-    "lint": "echo lint"
+    "lint": "echo lint",
+    "docs": "typedoc src --out docs"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
