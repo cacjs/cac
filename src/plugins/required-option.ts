@@ -1,5 +1,7 @@
-export default () => cli => {
-  cli.on('parsed', (command, input, flags) => {
+import Cac from '../Cac'
+
+export default () => (cli: Cac) => {
+  cli.on('parsed', (command, _, flags) => {
     if (!command) return
 
     const missingRequiredOptions = command.options.options.filter(option => {

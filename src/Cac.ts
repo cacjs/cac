@@ -3,7 +3,10 @@ import EventEmitter from 'events'
 import chalk from 'chalk'
 import minimost from 'minimost'
 import readPkg from 'read-pkg-up'
-import Command from './Command'
+import Command, {
+  IOption as CommandOption,
+  Handler as CommandHandler
+} from './Command'
 import Options from './Options'
 import Help from './Help'
 import examplesPlugin from './plugins/command-examples'
@@ -13,33 +16,81 @@ import { textTable, isExplictCommand } from './utils'
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename]
-const parentDir = path.dirname(module.parent.filename)
+let parentDir: string
+if (module.parent) {
+  parentDir = path.dirname(module.parent.filename)
+} else {
+  parentDir = process.cwd()
+}
 
 export interface IOptions {
   bin?: string
   pkg?: {
     [k: string]: any
   }
-  defaultOpts?: boolean
+  defaultOpts?: boolean | {
+    help?: boolean,
+    version?: boolean
+  }
 }
 
-export default class Cac extends EventEmitter {
+export interface IExtraHelp {
+  title: string,
+  body: string
+}
+
+export type Plugin = (ctx: Cac) => any
+
+export interface ParseOpt {
+  run?: boolean
+  showHelp?(
+    command: Command | null,
+    input: string[],
+    flags: { [k: string]: any }
+  ): boolean
+}
+
+export type Flags = {
+  [k: string]: any
+}
+
+declare interface Cac {
+  on(event: 'parsed', listener: (command: Command | null, input: string[], flags: Flags) => void): this
+  on(event: 'executed', listener: (command: Command | null, input: string[], flags: Flags) => void): this
+  on(event: 'error', listener: (err: Error) => void): this
+}
+
+class Cac extends EventEmitter {
   bin: string
   pkg: {
     [k: string]: any
   }
-  extraHelps: string[]
+  extraHelps: (IExtraHelp | string)[]
   helpOpt: boolean
   versionOpt: boolean
+  commands: Command[]
+  options: Options
+  option: Options['add']
+  started: boolean
+  firstArg: string | null
+  matchedCommand: Command | null
 
-  constructor({ bin, pkg, defaultOpts = true }: IOptions = {}) {
+  constructor({ bin, pkg, defaultOpts }: IOptions = {}) {
     super()
+    defaultOpts = defaultOpts || true
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
+    this.option = this.options.add.bind(this.options)
     this.extraHelps = []
-    this.helpOpt = defaultOpts !== false && defaultOpts.help !== false
-    this.versionOpt = defaultOpts !== false && defaultOpts.version !== false
+
+    if (typeof defaultOpts === 'boolean') {
+      this.helpOpt = defaultOpts
+      this.versionOpt = defaultOpts
+    } else if (typeof defaultOpts === 'object') {
+      this.helpOpt = defaultOpts.help !== false
+      this.versionOpt = defaultOpts.version !== false
+    }
 
     this.pkg = Object.assign(
       {},
@@ -47,17 +98,15 @@ export default class Cac extends EventEmitter {
     )
 
     if (this.versionOpt) {
-      this.option('version', {
+      this.option('version', 'Display version', {
         alias: 'v',
-        type: 'boolean',
-        desc: 'Display version'
+        type: 'boolean'
       })
     }
     if (this.helpOpt) {
-      this.option('help', {
+      this.option('help', `Display help (You're already here)`, {
         alias: 'h',
-        type: 'boolean',
-        desc: `Display help (You're already here)`
+        type: 'boolean'
       })
     }
 
@@ -66,7 +115,7 @@ export default class Cac extends EventEmitter {
     this.use(requiredOptionPlugin())
   }
 
-  use(plugin) {
+  use(plugin: Plugin | Plugin[]) {
     if (Array.isArray(plugin)) {
       plugin.forEach(p => this.use(p))
     } else if (typeof plugin === 'function') {
@@ -77,13 +126,13 @@ export default class Cac extends EventEmitter {
     return this
   }
 
-  option(...args) {
-    this.options.add(...args)
-    return this
-  }
-
-  command(...args) {
-    const command = new Command(...args)
+  command(
+    name: string,
+    desc: string,
+    opt: CommandOption,
+    handler: CommandHandler
+  ) {
+    const command = new Command(name, desc, opt, handler)
     this.commands.push(command)
     return command
   }
@@ -106,11 +155,11 @@ export default class Cac extends EventEmitter {
   /**
    * Find command by command name, alias or addtionalMatch
    */
-  findCommand(name) {
+  findCommand(name: string) {
     for (const command of this.commands) {
       const { names, match } = command.command
       if (names.includes(name)) {
-        return { command, sliceFirstArg: name && name !== '*' }
+        return { command, sliceFirstArg: Boolean(name && name !== '*') }
       }
       if (match && match(name)) {
         return { command, sliceFirstArg: false }
@@ -119,8 +168,15 @@ export default class Cac extends EventEmitter {
     return null
   }
 
-  getCommand(name) {
-    return this.findCommand(name) || this.findCommand('*') || {}
+  getCommand(
+    name: string | null
+  ): { command: Command | null; sliceFirstArg: boolean } {
+    return (
+      (name ? this.findCommand(name) : this.findCommand('*')) || {
+        command: null,
+        sliceFirstArg: false
+      }
+    )
   }
 
   get argv() {
@@ -149,12 +205,13 @@ export default class Cac extends EventEmitter {
     console.log(this.pkg.version)
   }
 
-  extraHelp(help) {
+  extraHelp(help: string | IExtraHelp) {
     this.extraHelps.push(help)
     return this
   }
 
-  parse(argv, { run = true, showHelp } = {}) {
+  parse(argv?: string[] | null, opt: ParseOpt = {}) {
+    const { run = true, showHelp } = opt
     this.started = true
     argv = argv || process.argv.slice(2)
     this.firstArg = argv[0] || ''
@@ -191,7 +248,7 @@ export default class Cac extends EventEmitter {
     }
 
     const shouldShowHelp =
-      showHelp || ((command, input, flags) => this.helpOpt && flags.help)
+      showHelp || (() => Boolean(this.helpOpt && flags.help))
 
     if (shouldShowHelp(command, input, flags)) {
       this.showHelp()
@@ -201,7 +258,7 @@ export default class Cac extends EventEmitter {
       try {
         let res = command.handler(input, flags)
         if (res && res.catch) {
-          res = res.catch(err => this.handleError(err))
+          res = res.catch((err: Error) => this.handleError(err))
         }
         this.emit('executed', command, input, flags)
         return res
@@ -211,8 +268,8 @@ export default class Cac extends EventEmitter {
     }
   }
 
-  handleError(err) {
-    if (EventEmitter.listenerCount(this, 'error') === 0) {
+  handleError(err: Error) {
+    if (this.listenerCount('error') === 0) {
       console.error(err.stack)
       process.exitCode = process.exitCode || 1
     } else {
@@ -220,3 +277,5 @@ export default class Cac extends EventEmitter {
     }
   }
 }
+
+export default Cac

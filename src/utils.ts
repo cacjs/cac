@@ -18,7 +18,7 @@ export function prefixOption(option: string) {
   return option.length === 1 ? `-${option}` : `--${option}`
 }
 
-export function isExplictCommand(name: string) {
+export function isExplictCommand(name: string | null) {
   return name && !name.startsWith('-')
 }
 

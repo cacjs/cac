@@ -2,20 +2,17 @@ import chalk from 'chalk'
 import { orderNames, textTable, prefixOption } from './utils'
 
 export interface IOptionInput {
-  name?: string
-  desc?: string
   alias?: string | string[]
   default?: any
   type?: string
-  names?: string[]
+  choices?: string[]
+  required?: boolean
+  [k: string]: any
 }
 
-export interface IOption {
+export interface IOption extends IOptionInput {
   name: string
-  desc?: string
-  alias?: string | string[]
-  default?: any
-  type?: string
+  desc: string
   names: string[]
 }
 
@@ -28,27 +25,13 @@ export default class Options {
     this.options = []
   }
 
-  add(name: string, opt: string | IOptionInput) {
-    opt = opt || {}
-
-    let option: IOption
-    if (typeof opt === 'string') {
-      option = {
-        name,
-        desc: opt
-      }
-    } else {
-      if (!opt || !opt.desc) {
-        throw new Error('Expect option to have a description!')
-      }
-
-      option = {
-        name,
-        ...opt
-      }
+  add(name: string, desc: string, opt: IOptionInput) {
+    const option = {
+      name,
+      desc,
+      ...opt,
+      names: orderNames([name].concat(opt.alias || []))
     }
-
-    option.names = orderNames([option.name].concat(option.alias || []))
     this.options.push(option)
     return this
   }
@@ -58,22 +41,22 @@ export default class Options {
       .filter(option => {
         return typeof option.default !== 'undefined'
       })
-      .reduce((res, next) => {
+      .reduce((res: {[k:string]: any}, next) => {
         res[next.name] = next.default
         return res
       }, {})
   }
 
-  getOptionsByType(type) {
+  getOptionsByType(type: string) {
     return this.options.filter(option => type === option.type)
   }
 
-  getOptionNamesByType(type) {
+  getOptionNamesByType(type: string) {
     return this.getOptionsByType(type).map(option => option.name)
   }
 
   getAliasMap() {
-    return this.options.reduce((res, next) => {
+    return this.options.reduce((res: {[k: string]: any}, next) => {
       res[next.name] = next.alias
       return res
     }, {})

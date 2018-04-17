@@ -7,9 +7,9 @@
     "pretty": true,
     "moduleResolution": "node",
     "lib": [
-      "es2015"
+      "es2015",
+      "es2016.array.include"
     ],
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "stripInternal": true,
 		"noImplicitAny": true,

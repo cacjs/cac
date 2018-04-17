@@ -26,7 +26,7 @@
     "test": "npm run lint && ava",
     "lint": "xo",
     "build": "bili src/index.ts --js typescript2 --filename cac.js",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "toc": "markdown-toc -i README.md"
   },
   "author": "egoist <0x142857@gmail.com>",
@@ -47,11 +47,12 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.24.1",
-    "bili": "^2.2.6",
+    "bili": "^3.1.0",
     "eslint-config-rem": "^3.0.0",
     "execa": "^0.9.0",
     "markdown-toc": "^1.1.0",
     "rollup-plugin-typescript2": "^0.13.0",
+    "typedoc": "^0.11.1",
     "typescript": "^2.8.1",
     "xo": "^0.18.0"
   },
