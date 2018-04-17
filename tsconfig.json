@@ -23,7 +23,6 @@
 		"alwaysStrict": true
   },
   "include": [
-    "src",
-    "__test__"
+    "src"
   ]
 }

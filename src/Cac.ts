@@ -28,14 +28,16 @@ export interface IOptions {
   pkg?: {
     [k: string]: any
   }
-  defaultOpts?: boolean | {
-    help?: boolean,
-    version?: boolean
-  }
+  defaultOpts?:
+    | boolean
+    | {
+        help?: boolean
+        version?: boolean
+      }
 }
 
 export interface IExtraHelp {
-  title: string,
+  title: string
   body: string
 }
 
@@ -55,22 +57,51 @@ export type Flags = {
 }
 
 declare interface Cac {
-  on(event: 'parsed', listener: (command: Command | null, input: string[], flags: Flags) => void): this
-  on(event: 'executed', listener: (command: Command | null, input: string[], flags: Flags) => void): this
+  on(
+    event: 'parsed',
+    listener: (command: Command | null, input: string[], flags: Flags) => void
+  ): this
+  on(
+    event: 'executed',
+    listener: (command: Command | null, input: string[], flags: Flags) => void
+  ): this
   on(event: 'error', listener: (err: Error) => void): this
 }
 
 class Cac extends EventEmitter {
+  /**
+   * The  name of executed file
+   *
+   * For `node cli.js` it defaults to `cli.js`
+   */
   bin: string
+  /**
+   * The data of the closest package.json
+   */
   pkg: {
     [k: string]: any
   }
+  /**
+   * Extra help Messages
+   */
   extraHelps: (IExtraHelp | string)[]
+  /**
+   * Add default `help` option
+   */
   helpOpt: boolean
+  /**
+   * Add default `version` option
+   */
   versionOpt: boolean
   commands: Command[]
   options: Options
+  /**
+   * Add a global option
+   */
   option: Options['add']
+  /**
+   * The CLI has parsed once
+   */
   started: boolean
   firstArg: string | null
   matchedCommand: Command | null
@@ -117,6 +148,9 @@ class Cac extends EventEmitter {
     this.use(requiredOptionPlugin())
   }
 
+  /**
+   * Use a plugin or an array of plugins
+   */
   use(plugin: Plugin | Plugin[]) {
     if (Array.isArray(plugin)) {
       plugin.forEach(p => this.use(p))
@@ -128,16 +162,20 @@ class Cac extends EventEmitter {
     return this
   }
 
-  command(
-    name: string,
-    opt: CommandOption | string,
-    handler: CommandHandler
-  ) {
+  /**
+   * Add a sub command
+   */
+  command(name: string, opt: CommandOption | string, handler: CommandHandler) {
     const command = new Command(name, opt, handler)
     this.commands.push(command)
     return command
   }
 
+  /**
+   * Commands to string
+   *
+   * Used to display help
+   */
   commandsToString() {
     return textTable(
       this.commands.map(({ command }) => {
@@ -149,6 +187,9 @@ class Cac extends EventEmitter {
     )
   }
 
+  /**
+   * Check if there's any command
+   */
   isCommandsEmpty() {
     return this.commands.length === 0
   }
@@ -156,7 +197,8 @@ class Cac extends EventEmitter {
   /**
    * Find command by command name, alias or addtionalMatch
    */
-  findCommand(name: string) {
+  findCommand(name: string | null) {
+    name = name || '*'
     for (const command of this.commands) {
       const { names, match } = command.command
       if (names.includes(name)) {
@@ -166,18 +208,10 @@ class Cac extends EventEmitter {
         return { command, sliceFirstArg: false }
       }
     }
-    return null
-  }
-
-  getCommand(
-    name: string | null
-  ): { command: Command | null; sliceFirstArg: boolean } {
-    return (
-      (name ? this.findCommand(name) : this.findCommand('*')) || {
-        command: null,
-        sliceFirstArg: false
-      }
-    )
+    return {
+      command: null,
+      sliceFirstArg: false
+    }
   }
 
   get argv() {
@@ -202,23 +236,33 @@ class Cac extends EventEmitter {
     return this
   }
 
+  /**
+   * Show version in console
+   */
   showVersion() {
     console.log(this.pkg.version)
   }
 
+  /**
+   * Add an extra help message
+   */
   extraHelp(help: string | IExtraHelp) {
     this.extraHelps.push(help)
     return this
   }
 
-  parse(argv?: string[] | null, opt: ParseOpt = {}) {
-    const { run = true, showHelp } = opt
+  /**
+   * Parse CLI argument and run commands
+   * @param argv Default to `process.argv.slice(2)`
+   * @param opt
+   */
+  parse(argv?: string[] | null, { run = true, showHelp }: ParseOpt = {}) {
     this.started = true
     argv = argv || process.argv.slice(2)
     this.firstArg = argv[0] || ''
     // Ensure that first arg is not a flag
     this.firstArg = this.firstArg.startsWith('-') ? null : this.firstArg
-    const { command, sliceFirstArg } = this.getCommand(this.firstArg)
+    const { command, sliceFirstArg } = this.findCommand(this.firstArg)
     this.matchedCommand = command
 
     let { input, flags } = minimost(argv, {

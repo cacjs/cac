@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`help message for sub command: node __test__/fixtures/help-message/sub-command.js sub --help 1`] = `
+exports[`help message for sub command: node src/__test__/fixtures/help-message/sub-command.js sub --help 1`] = `
 "
   sub-command.js 0.0.0
 
@@ -15,7 +15,7 @@ exports[`help message for sub command: node __test__/fixtures/help-message/sub-c
 "
 `;
 
-exports[`help message for wildcard command: node __test__/fixtures/help-message/wildcard-command.js --help 1`] = `
+exports[`help message for wildcard command: node src/__test__/fixtures/help-message/wildcard-command.js --help 1`] = `
 "
   wildcard-command.js 0.0.0
 
@@ -34,7 +34,7 @@ exports[`help message for wildcard command: node __test__/fixtures/help-message/
 "
 `;
 
-exports[`help message when no command: node __test__/fixtures/help-message/no-command.js --help 1`] = `
+exports[`help message when no command: node src/__test__/fixtures/help-message/no-command.js --help 1`] = `
 "
   no-command.js 0.0.0
 
