@@ -24,6 +24,6 @@
   },
   "include": [
     "src",
-    "declarations.d.ts"
+    "__test__"
   ]
 }

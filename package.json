@@ -7,6 +7,7 @@
     "type": "git"
   },
   "main": "dist/cac.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -26,6 +27,7 @@
     "test": "yarn lint && yarn integration",
     "integration": "yarn build && jest",
     "build": "bili",
+    "postbuild": "rm -rf dist/__test__",
     "prepublishOnly": "yarn build",
     "toc": "markdown-toc -i README.md",
     "lint": "echo lint",
@@ -44,6 +46,7 @@
     "@types/minimist": "^1.2.0",
     "@types/node": "^9.6.5",
     "@types/read-pkg-up": "^3.0.1",
+    "@types/strip-ansi": "^3.0.0",
     "bili": "^3.1.0",
     "eslint-config-rem": "^3.0.0",
     "execa": "^0.9.0",
@@ -52,6 +55,7 @@
     "redent": "^2.0.0",
     "rollup-plugin-typescript2": "^0.13.0",
     "string-width": "^2.1.1",
+    "strip-ansi": "^4.0.0",
     "text-table": "^0.2.0",
     "ts-jest": "^22.4.3",
     "typedoc": "^0.11.1",

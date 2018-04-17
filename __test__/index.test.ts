@@ -1,31 +1,46 @@
 import path from 'path'
 import execa from 'execa'
+import stripAnsi from 'strip-ansi'
 
-function fixture(file) {
+function fixture(file: string) {
   return path.relative(process.cwd(), path.join(__dirname, 'fixtures', file))
 }
 
-test('help message when no command', async () => {
-  const { stdout, cmd } = await execa('node', [
-    fixture('help-message/no-command.js'),
-    '--help'
-  ])
-  expect(stdout).toMatchSnapshot(cmd)
+function snapshotOutput({
+  title,
+  file,
+  args
+}: {
+  title: string,
+  file: string,
+  args?: string[]
+}) {
+  test(title, async () => {
+    const { stdout, cmd } = await execa('node', [
+      fixture(file),
+      ...(args || [])
+    ])
+    expect(stripAnsi(stdout)).toMatchSnapshot(cmd)
+  })
+}
+
+snapshotOutput({
+  title: 'help message when no command',
+  file: 'help-message/no-command.js',
+  args: ['--help']
 })
 
-test('help message for sub command', async () => {
-  const { stdout, cmd } = await execa('node', [
-    fixture('help-message/sub-command.js'),
+snapshotOutput({
+  title: 'help message for sub command',
+  file: 'help-message/sub-command.js',
+  args: [
     'sub',
     '--help'
-  ])
-  expect(stdout).toMatchSnapshot(cmd)
+  ]
 })
 
-test('help message for wildcard command', async () => {
-  const { stdout, cmd } = await execa('node', [
-    fixture('help-message/wildcard-command.js'),
-    '--help'
-  ])
-  expect(stdout).toMatchSnapshot(cmd)
+snapshotOutput({
+  title: 'help message for wildcard command',
+  file: 'help-message/wildcard-command.js',
+  args: ['--help']
 })
