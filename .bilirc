@@ -1,0 +1,5 @@
+{
+  "input": "src/index.ts",
+  "js": "typescript2",
+  "filename": "cac.js"
+}

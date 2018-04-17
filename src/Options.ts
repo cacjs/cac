@@ -1,25 +1,43 @@
 import chalk from 'chalk'
-import { parseType, orderNames, textTable, prefixOption } from './utils'
+import { orderNames, textTable, prefixOption } from './utils'
+
+export interface IOptionInput {
+  desc: string
+  alias?: string | string[]
+  default?: any
+  type?: string
+  choices?: string[]
+  required?: boolean
+  [k: string]: any
+}
+
+export interface IOption extends IOptionInput {
+  name: string
+  names: string[]
+}
+
+export type IOptions = IOption[]
 
 export default class Options {
+  options: IOptions
+
   constructor() {
     this.options = []
   }
 
-  add(name, opt) {
-    opt = opt || {}
+  add(name: string, opt: IOptionInput | string) {
+    let names = [name]
     if (typeof opt === 'string') {
       opt = { desc: opt }
+    } else if (typeof opt === 'object') {
+      names = names.concat(opt.alias || [])
     }
+
     const option = {
       ...opt,
       name,
-      alias: opt.alias || [],
-      desc: opt.desc,
-      default: opt.default,
-      type: parseType(opt.type)
+      names: orderNames(names)
     }
-    option.names = orderNames([option.name].concat(option.alias))
     this.options.push(option)
     return this
   }
@@ -29,22 +47,22 @@ export default class Options {
       .filter(option => {
         return typeof option.default !== 'undefined'
       })
-      .reduce((res, next) => {
+      .reduce((res: {[k:string]: any}, next) => {
         res[next.name] = next.default
         return res
       }, {})
   }
 
-  getOptionsByType(type) {
+  getOptionsByType(type: string) {
     return this.options.filter(option => type === option.type)
   }
 
-  getOptionNamesByType(type) {
+  getOptionNamesByType(type: string) {
     return this.getOptionsByType(type).map(option => option.name)
   }
 
   getAliasMap() {
-    return this.options.reduce((res, next) => {
+    return this.options.reduce((res: {[k: string]: any}, next) => {
       res[next.name] = next.alias
       return res
     }, {})

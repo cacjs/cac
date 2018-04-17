@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`help message for sub command: node __test__/fixtures/help-message/sub-command.js sub --help 1`] = `
+"
+  sub-command.js 0.0.0
+
+  USAGE
+
+    sub-command.js sub [options]
+
+  GLOBAL OPTIONS
+
+    -v, --version  Display version                     [Type: boolean]
+    -h, --help     Display help (You're already here)  [Type: boolean]
+"
+`;
+
+exports[`help message for wildcard command: node __test__/fixtures/help-message/wildcard-command.js --help 1`] = `
+"
+  wildcard-command.js 0.0.0
+
+  USAGE
+
+    wildcard-command.js <command> [options]
+
+  COMMANDS
+
+    *  wildcard command
+
+  GLOBAL OPTIONS
+
+    -v, --version  Display version                     [Type: boolean]
+    -h, --help     Display help (You're already here)  [Type: boolean]
+"
+`;
+
+exports[`help message when no command: node __test__/fixtures/help-message/no-command.js --help 1`] = `
+"
+  no-command.js 0.0.0
+
+  USAGE
+
+    no-command.js [options]
+
+  GLOBAL OPTIONS
+
+    -v, --version  Display version                     [Type: boolean]
+    -h, --help     Display help (You're already here)  [Type: boolean]
+"
+`;

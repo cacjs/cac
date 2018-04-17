@@ -7,8 +7,7 @@ const cli = cac()
  * ./match run index.js
  * ./match index.js
  */
-cli.command('run', {
-  desc: 'run command',
+cli.command('run', 'run command', {
   match(name) {
     return name && name.endsWith('.js')
   }

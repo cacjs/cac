@@ -3,15 +3,11 @@ const cac = require('../src').default
 
 const cli = cac()
 
-cli.command('*', {
-  desc: 'default command'
-}, () => {
+cli.command('*', 'default command', () => {
   throw new Error('damn')
 })
 
-cli.command('p', {
-  desc: 'p command'
-}, () => {
+cli.command('p', 'p command', () => {
   return Promise.reject(new Error('promise rejected'))
 })
 

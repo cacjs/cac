@@ -1,12 +1,14 @@
 import chalk from 'chalk'
 import redent from 'redent'
+import Cac from './Cac'
+import Command from './Command'
+
+export interface IOption {
+  displayCommands: boolean
+}
 
 export default class Help {
-  constructor(root, command, opts = {}) {
-    this.root = root
-    this.command = command
-    this.opts = opts
-  }
+  constructor(public root: Cac, public command: Command | null, public opts: IOption) {}
 
   getHelp() {
     let help = '\n'
@@ -73,7 +75,7 @@ export default class Help {
   }
 }
 
-function formatSection(sec) {
+function formatSection(sec: string | { title: string, body: string }) {
   if (typeof sec === 'string') {
     return sec
   }
