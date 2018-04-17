@@ -1,5 +1,4 @@
-require('babel-register')
-const cac = require('../src').default
+const cac = require('../')
 
 const cli = cac()
 
