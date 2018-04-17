@@ -98,13 +98,15 @@ class Cac extends EventEmitter {
     )
 
     if (this.versionOpt) {
-      this.option('version', 'Display version', {
+      this.option('version', {
+        desc: 'Display version',
         alias: 'v',
         type: 'boolean'
       })
     }
     if (this.helpOpt) {
-      this.option('help', `Display help (You're already here)`, {
+      this.option('help', {
+        desc: `Display help (You're already here)`,
         alias: 'h',
         type: 'boolean'
       })
@@ -128,11 +130,10 @@ class Cac extends EventEmitter {
 
   command(
     name: string,
-    desc: string,
-    opt: CommandOption,
+    opt: CommandOption | string,
     handler: CommandHandler
   ) {
-    const command = new Command(name, desc, opt, handler)
+    const command = new Command(name, opt, handler)
     this.commands.push(command)
     return command
   }

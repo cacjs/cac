@@ -2,7 +2,8 @@ import Options from './Options'
 import { orderNames, invariant } from './utils'
 
 export interface IOption {
-  alias?: string[]
+  desc: string
+  alias?: string | string[]
   examples?: string[]
   [k: string]: any
 }
@@ -10,7 +11,6 @@ export interface IOption {
 export interface ICommand extends IOption {
   name: string
   desc: string
-  alias: string[]
   names: string[]
 }
 
@@ -22,19 +22,23 @@ export default class Command {
   handler?: Handler
   option: Options['add']
 
-  constructor(name: string, desc: string, opt?: IOption, handler?: Handler) {
-    invariant(typeof name === 'string', 'Expect command name to be a string.')
-    invariant(typeof desc === 'string', 'Expect command to have a description.')
+  constructor(name: string, opt: IOption | string, handler?: Handler) {
+    invariant(typeof name === 'string', 'Expect command name to be a string')
 
-    const alias = opt && opt.alias || []
+    let names = [name]
+    if (typeof opt === 'string') {
+      opt = { desc: opt }
+    } else if (typeof opt === 'object') {
+      names = names.concat(opt.alias || [])
+    }
+
+    invariant(typeof opt.desc === 'string', 'Expect command description to be a string')
+
     const command = {
       ...opt,
       name,
-      desc,
-      alias,
-      names: orderNames([name].concat(alias))
+      names: orderNames(names)
     }
-
 
     this.command = command
     this.options = new Options()

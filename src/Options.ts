@@ -2,6 +2,7 @@ import chalk from 'chalk'
 import { orderNames, textTable, prefixOption } from './utils'
 
 export interface IOptionInput {
+  desc: string
   alias?: string | string[]
   default?: any
   type?: string
@@ -12,7 +13,6 @@ export interface IOptionInput {
 
 export interface IOption extends IOptionInput {
   name: string
-  desc: string
   names: string[]
 }
 
@@ -25,12 +25,18 @@ export default class Options {
     this.options = []
   }
 
-  add(name: string, desc: string, opt: IOptionInput) {
+  add(name: string, opt: IOptionInput | string) {
+    let names = [name]
+    if (typeof opt === 'string') {
+      opt = { desc: opt }
+    } else if (typeof opt === 'object') {
+      names = names.concat(opt.alias || [])
+    }
+
     const option = {
-      name,
-      desc,
       ...opt,
-      names: orderNames([name].concat(opt.alias || []))
+      name,
+      names: orderNames(names)
     }
     this.options.push(option)
     return this

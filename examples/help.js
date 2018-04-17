@@ -3,9 +3,7 @@ const cac = require('../src').default
 
 const cli = cac()
 
-cli.command('*', {
-  desc: 'default command'
-}, (input, flags) => {
+cli.command('*', 'default command', (input, flags) => {
   console.log(flags)
 })
 .option('hi', {
