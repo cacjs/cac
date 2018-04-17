@@ -1,8 +1,8 @@
 import Cac from '../Cac'
-import { IOption } from '../Options'
+import { IOptions } from '../Options'
 
-interface FailedOptions extends IOption {
-  choices: string[]
+interface FailedOptions extends IOptions {
+  choices: any[] // TODO: maybe not any
 }
 
 export default () => (cli: Cac) => {
@@ -14,7 +14,7 @@ export default () => (cli: Cac) => {
         option.choices && typeof flags[option.name] !== 'undefined'
       const isOneOfChices =
         option.choices &&
-        option.choices.filter((choice: string) => {
+        option.choices.filter((choice: any) => {
           return choice === flags[option.name]
         }).length > 0
       return Boolean(shouldCheck && !isOneOfChices)
@@ -24,7 +24,7 @@ export default () => (cli: Cac) => {
       for (const option of failedOptions) {
         console.log(
           `The value of flag "${option.name}" should be one of: ${option.choices.map(
-            (choice: string) => `"${choice}"`
+            (choice: any) => `"${choice}"`
           )}`
         )
       }

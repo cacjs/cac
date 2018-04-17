@@ -4,10 +4,10 @@ import chalk from 'chalk'
 import minimost from 'minimost'
 import readPkg from 'read-pkg-up'
 import Command, {
-  IOption as CommandOption,
-  Handler as CommandHandler
+  ICommandOptions,
+  CommandHandler
 } from './Command'
-import Options from './Options'
+import Options, { IOptionsInput } from './Options'
 import Help from './Help'
 import examplesPlugin from './plugins/command-examples'
 import optionChoicesPlugin from './plugins/option-choices'
@@ -23,7 +23,7 @@ if (module.parent) {
   parentDir = process.cwd()
 }
 
-export interface IOptions {
+export interface ICacOptions {
   bin?: string
   pkg?: {
     [k: string]: any
@@ -43,13 +43,13 @@ export interface IExtraHelp {
 
 export type Plugin = (ctx: Cac) => any
 
-export interface ParseOpt {
+export interface ParseOpts {
   run?: boolean
-  showHelp?(
+  showHelp?: (
     command: Command | null,
     input: string[],
     flags: { [k: string]: any }
-  ): boolean
+  ) => boolean
 }
 
 export type Flags = {
@@ -96,23 +96,18 @@ class Cac extends EventEmitter {
   commands: Command[]
   options: Options
   /**
-   * Add a global option
-   */
-  option: Options['add']
-  /**
    * The CLI has parsed once
    */
   started: boolean
   firstArg: string | null
   matchedCommand: Command | null
 
-  constructor({ bin, pkg, defaultOpts }: IOptions = {}) {
+  constructor({ bin, pkg, defaultOpts }: ICacOptions = {}) {
     super()
     defaultOpts = defaultOpts || true
     this.bin = bin || path.basename(process.argv[1])
     this.commands = []
     this.options = new Options()
-    this.option = this.options.add.bind(this.options)
     this.extraHelps = []
 
     if (typeof defaultOpts === 'boolean') {
@@ -163,9 +158,17 @@ class Cac extends EventEmitter {
   }
 
   /**
+   * Add a global option
+   */
+  option(name: string, opt: IOptionsInput | string) {
+    this.options.add(name, opt)
+    return this
+  }
+
+  /**
    * Add a sub command
    */
-  command(name: string, opt: CommandOption | string, handler: CommandHandler) {
+  command(name: string, opt: ICommandOptions | string, handler: CommandHandler) {
     const command = new Command(name, opt, handler)
     this.commands.push(command)
     return command
@@ -254,9 +257,10 @@ class Cac extends EventEmitter {
   /**
    * Parse CLI argument and run commands
    * @param argv Default to `process.argv.slice(2)`
-   * @param opt
+   * @param opts
    */
-  parse(argv?: string[] | null, { run = true, showHelp }: ParseOpt = {}) {
+  parse(argv?: string[] | null, opts: ParseOpts = {}) {
+    const { run = true, showHelp } = opts
     this.started = true
     argv = argv || process.argv.slice(2)
     this.firstArg = argv[0] || ''

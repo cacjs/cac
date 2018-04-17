@@ -1,28 +1,28 @@
 import Options from './Options'
 import { orderNames, invariant } from './utils'
 
-export interface IOption {
+export interface ICommandOptions {
   desc: string
   alias?: string | string[]
   examples?: string[]
   [k: string]: any
 }
 
-export interface ICommand extends IOption {
+export interface ICommand extends ICommandOptions {
   name: string
   desc: string
   names: string[]
 }
 
-export type Handler = (input: string[], flags: {[k: string]: any}) => any | Promise<any>
+export type CommandHandler = (input: string[], flags: {[k: string]: any}) => any | Promise<any>
 
 export default class Command {
   command: ICommand
   options: Options
-  handler?: Handler
+  handler?: CommandHandler
   option: Options['add']
 
-  constructor(name: string, opt: IOption | string, handler?: Handler) {
+  constructor(name: string, opt: ICommandOptions | string, handler?: CommandHandler) {
     invariant(typeof name === 'string', 'Expect command name to be a string')
 
     let names = [name]

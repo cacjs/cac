@@ -1,31 +1,29 @@
 import chalk from 'chalk'
 import { orderNames, textTable, prefixOption } from './utils'
 
-export interface IOptionInput {
+export interface IOptionsInput {
   desc: string
   alias?: string | string[]
   default?: any
   type?: string
-  choices?: string[]
+  choices?: any[]
   required?: boolean
   [k: string]: any
 }
 
-export interface IOption extends IOptionInput {
+export interface IOptions extends IOptionsInput {
   name: string
   names: string[]
 }
 
-export type IOptions = IOption[]
-
 export default class Options {
-  options: IOptions
+  options: IOptions[]
 
   constructor() {
     this.options = []
   }
 
-  add(name: string, opt: IOptionInput | string) {
+  add(name: string, opt: IOptionsInput | string) {
     let names = [name]
     if (typeof opt === 'string') {
       opt = { desc: opt }

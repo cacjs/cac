@@ -1,5 +1,8 @@
 {
   "input": "src/index.ts",
   "js": "typescript2",
-  "filename": "cac.js"
+  "filename": "cac.js",
+  "typescript2": {
+    "useTsconfigDeclarationDir": true
+  }
 }
