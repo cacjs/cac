@@ -23,67 +23,37 @@
     "node": ">=6"
   },
   "scripts": {
-    "test": "npm run lint && ava",
-    "lint": "xo",
-    "build": "bili src/index.ts --js typescript2 --filename cac.js",
-    "prepublishOnly": "npm run build",
-    "toc": "markdown-toc -i README.md"
+    "test": "yarn lint && yarn integration",
+    "integration": "yarn build && jest",
+    "build": "bili",
+    "prepublishOnly": "yarn build",
+    "toc": "markdown-toc -i README.md",
+    "lint": "echo lint"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.3.2",
     "minimost": "^1.1.0",
-    "read-pkg-up": "^2.0.0",
-    "redent": "^2.0.0",
-    "string-width": "^2.1.1",
-    "text-table": "^0.2.0"
+    "read-pkg-up": "^2.0.0"
   },
   "devDependencies": {
+    "@types/execa": "^0.9.0",
+    "@types/jest": "^22.2.3",
     "@types/minimist": "^1.2.0",
     "@types/node": "^9.6.5",
     "@types/read-pkg-up": "^3.0.1",
-    "ava": "^0.25.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-register": "^6.24.1",
     "bili": "^3.1.0",
     "eslint-config-rem": "^3.0.0",
     "execa": "^0.9.0",
+    "jest": "^22.4.3",
     "markdown-toc": "^1.1.0",
+    "redent": "^2.0.0",
     "rollup-plugin-typescript2": "^0.13.0",
+    "string-width": "^2.1.1",
+    "text-table": "^0.2.0",
+    "ts-jest": "^22.4.3",
     "typedoc": "^0.11.1",
-    "typescript": "^2.8.1",
-    "xo": "^0.18.0"
-  },
-  "ava": {
-    "babel": "inherit",
-    "require": [
-      "babel-register"
-    ]
-  },
-  "xo": {
-    "extends": "rem/prettier",
-    "ignores": [
-      "examples/**"
-    ],
-    "rules": {
-      "unicorn/filename-case": 0
-    }
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
+    "typescript": "^2.8.1"
   }
 }
