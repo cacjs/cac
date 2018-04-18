@@ -2,6 +2,9 @@ module.exports = {
   title: 'CAC',
   description: 'The queen for command-line applications.',
   themeConfig: {
+    repo: 'cacjs/cac',
+    editLinks: true,
+    docsDir: 'docs',
     nav: [
       {
         text: 'Guide',
