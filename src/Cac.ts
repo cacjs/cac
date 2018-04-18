@@ -168,7 +168,7 @@ class Cac extends EventEmitter {
   command(
     name: string,
     opt: ICommandOptions | string,
-    handler: CommandHandler
+    handler?: CommandHandler
   ) {
     const command = new Command(name, opt, handler)
     this.commands.push(command)
