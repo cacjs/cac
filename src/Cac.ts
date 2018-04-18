@@ -3,10 +3,7 @@ import EventEmitter from 'events'
 import chalk from 'chalk'
 import minimost from 'minimost'
 import readPkg from 'read-pkg-up'
-import Command, {
-  ICommandOptions,
-  CommandHandler
-} from './Command'
+import Command, { ICommandOptions, CommandHandler } from './Command'
 import Options, { IOptionsInput } from './Options'
 import Help from './Help'
 import examplesPlugin from './plugins/command-examples'
@@ -168,7 +165,11 @@ class Cac extends EventEmitter {
   /**
    * Add a sub command
    */
-  command(name: string, opt: ICommandOptions | string, handler: CommandHandler) {
+  command(
+    name: string,
+    opt: ICommandOptions | string,
+    handler: CommandHandler
+  ) {
     const command = new Command(name, opt, handler)
     this.commands.push(command)
     return command

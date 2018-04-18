@@ -2,7 +2,9 @@
 
 exports[`help message for sub command: node src/__test__/fixtures/help-message/sub-command.js sub --help 1`] = `
 "
-  sub-command.js 0.0.0
+  sub-command.js sub 0.0.0
+
+  sub command
 
   USAGE
 

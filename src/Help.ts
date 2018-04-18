@@ -16,12 +16,17 @@ export default class Help {
     help += chalk.cyan(this.root.bin)
 
     if (this.root.pkg.version) {
+      if (!this.opts.displayCommands && this.command) {
+        help += ` ${this.command.command.name}`
+      }
       help += ` ${this.root.pkg.version}`
     }
 
     help += '\n\n'
 
-    if (this.root.pkg.description) {
+    if (!this.opts.displayCommands && this.command) {
+      help += `${chalk.dim.italic(this.command.command.desc)}\n\n`
+    } else if (this.root.pkg.description) {
       help += `${chalk.dim.italic(this.root.pkg.description)}\n\n`
     }
 
