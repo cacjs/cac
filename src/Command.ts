@@ -1,4 +1,4 @@
-import Options from './Options'
+import Options, { IOptionsInput } from './Options'
 import { orderNames, invariant } from './utils'
 
 export interface ICommandOptions {
@@ -20,7 +20,6 @@ export default class Command {
   command: ICommand
   options: Options
   handler?: CommandHandler
-  option: Options['add']
 
   constructor(name: string, opt: ICommandOptions | string, handler?: CommandHandler) {
     invariant(typeof name === 'string', 'Expect command name to be a string')
@@ -43,7 +42,11 @@ export default class Command {
     this.command = command
     this.options = new Options()
     this.handler = handler
+  }
 
-    this.option = this.options.add.bind(this.options)
+  option(name: string, opt: string | IOptionsInput) {
+    this.options.add(name, opt)
+
+    return this
   }
 }
