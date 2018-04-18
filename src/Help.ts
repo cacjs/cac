@@ -53,7 +53,7 @@ export default class Help {
       })
     }
 
-    if (this.command && !this.command.options.isEmpty()) {
+    if (!this.opts.displayCommands && this.command && !this.command.options.isEmpty()) {
       help += formatSection({
         title: 'COMMAND OPTIONS',
         body: this.command.options.toString()

@@ -9,7 +9,7 @@ import Help from './Help'
 import examplesPlugin from './plugins/command-examples'
 import optionChoicesPlugin from './plugins/option-choices'
 import requiredOptionPlugin from './plugins/required-option'
-import { textTable, isExplictCommand } from './utils'
+import { textTable } from './utils'
 
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename]
@@ -96,7 +96,7 @@ class Cac extends EventEmitter {
    * The CLI has parsed once
    */
   started: boolean
-  firstArg: string | null
+  commandName: string
   matchedCommand: Command | null
 
   constructor({ bin, pkg, defaultOpts }: ICacOptions = {}) {
@@ -201,8 +201,7 @@ class Cac extends EventEmitter {
   /**
    * Find command by command name, alias or addtionalMatch
    */
-  findCommand(name: string | null) {
-    name = name || '*'
+  findCommand(name: string) {
     for (const command of this.commands) {
       const { names, match } = command.command
       if (names.includes(name)) {
@@ -230,8 +229,8 @@ class Cac extends EventEmitter {
     }
 
     // Do not display `<command>` in help if it's a sub command
-    const displayCommands = !// This matches a sub command
-    (this.matchedCommand && isExplictCommand(this.firstArg))
+    // This matches a sub command
+    const displayCommands = this.commandName === '*'
     const help = new Help(this, this.matchedCommand, {
       displayCommands
     })
@@ -260,14 +259,21 @@ class Cac extends EventEmitter {
    * @param argv Default to `process.argv.slice(2)`
    * @param opts
    */
-  parse(argv?: string[] | null, opts: ParseOpts = {}): { input: string[], flags: Flags } {
+  parse(
+    argv?: string[] | null,
+    opts: ParseOpts = {}
+  ): { input: string[]; flags: Flags } {
     const { run = true, showHelp } = opts
     this.started = true
     argv = argv || process.argv.slice(2)
-    this.firstArg = argv[0] || ''
-    // Ensure that first arg is not a flag
-    this.firstArg = this.firstArg.startsWith('-') ? null : this.firstArg
-    const { command, sliceFirstArg } = this.findCommand(this.firstArg)
+    // Ensure that command name is not a flag
+    if (argv[0] && !argv[0].startsWith('-')) {
+      this.commandName = argv[0]
+    } else {
+      this.commandName = '*'
+    }
+
+    const { command, sliceFirstArg } = this.findCommand(this.commandName)
     this.matchedCommand = command
 
     let { input, flags } = minimost(argv, {
@@ -307,9 +313,11 @@ class Cac extends EventEmitter {
     } else if (command && command.handler) {
       try {
         let res = command.handler(input, flags)
-        Promise.resolve(res).then(() => {
-          this.emit('executed', command, input, flags)
-        }).catch(this.handleError)
+        Promise.resolve(res)
+          .then(() => {
+            this.emit('executed', command, input, flags)
+          })
+          .catch(this.handleError)
       } catch (err) {
         this.handleError(err)
       }

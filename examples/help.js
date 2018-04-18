@@ -2,9 +2,9 @@ const cac = require('../')
 
 const cli = cac()
 
-cli.command('*', {
+cli.command('dev', {
   desc: 'default command',
-  alias: 'dev'
+  alias: '*'
 }, (input, flags) => {
   console.log(flags)
 })
