@@ -260,7 +260,7 @@ class Cac extends EventEmitter {
    * @param argv Default to `process.argv.slice(2)`
    * @param opts
    */
-  parse(argv?: string[] | null, opts: ParseOpts = {}) {
+  parse(argv?: string[] | null, opts: ParseOpts = {}): { input: string[], flags: Flags } {
     const { run = true, showHelp } = opts
     this.started = true
     argv = argv || process.argv.slice(2)
@@ -307,15 +307,15 @@ class Cac extends EventEmitter {
     } else if (command && command.handler) {
       try {
         let res = command.handler(input, flags)
-        if (res && res.catch) {
-          res = res.catch((err: Error) => this.handleError(err))
-        }
-        this.emit('executed', command, input, flags)
-        return res
+        Promise.resolve(res).then(() => {
+          this.emit('executed', command, input, flags)
+        }).catch(this.handleError)
       } catch (err) {
         this.handleError(err)
       }
     }
+
+    return { input, flags }
   }
 
   handleError(err: Error) {

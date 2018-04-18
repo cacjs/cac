@@ -46,7 +46,9 @@ export default class Options {
         return typeof option.default !== 'undefined'
       })
       .reduce((res: {[k:string]: any}, next) => {
-        res[next.name] = next.default
+        if (next.default !== undefined) {
+          res[next.name] = next.default
+        }
         return res
       }, {})
   }
@@ -61,7 +63,9 @@ export default class Options {
 
   getAliasMap() {
     return this.options.reduce((res: {[k: string]: any}, next) => {
-      res[next.name] = next.alias
+      if (next.alias !== undefined) {
+        res[next.name] = next.alias
+      }
       return res
     }, {})
   }

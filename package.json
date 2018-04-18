@@ -32,7 +32,10 @@
     "prepublishOnly": "yarn build",
     "toc": "markdown-toc -i README.md",
     "lint": "echo lint",
-    "docs": "typedoc src/index.ts --mode file --out docs --readme none --hideGenerator"
+    "api": "typedoc src/index.ts --mode file --out .vuepress/public/api --readme none --hideGenerator",
+    "build:docs": "vuepress build docs",
+    "dev:docs": "vuepress dev docs",
+    "prebuild:docs": "yarn api"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
@@ -60,6 +63,7 @@
     "text-table": "^0.2.0",
     "ts-jest": "^22.4.3",
     "typedoc": "^0.11.1",
-    "typescript": "^2.8.1"
+    "typescript": "^2.8.1",
+    "vuepress": "^0.5.1"
   }
 }

@@ -1,4 +1,5 @@
 node_modules
 dist
 .rpt2_cache
-docs
+.vuepress/public/api
+.vuepress/dist
