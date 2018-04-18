@@ -4,5 +4,6 @@
   "filename": "cac.js",
   "typescript2": {
     "useTsconfigDeclarationDir": true
-  }
+  },
+  "externals": ["string-width", "text-table", "redent"]
 }
