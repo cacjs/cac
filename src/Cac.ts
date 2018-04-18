@@ -14,7 +14,7 @@ import { textTable, isExplictCommand } from './utils'
 // Prevent caching of this module so module.parent is always accurate
 delete require.cache[__filename]
 let parentDir: string
-if (module.parent) {
+if (module.parent && module.parent.filename) {
   parentDir = path.dirname(module.parent.filename)
 } else {
   parentDir = process.cwd()
