@@ -201,7 +201,8 @@ class Cac extends EventEmitter {
   /**
    * Find command by command name, alias or addtionalMatch
    */
-  findCommand(name: string) {
+  findCommand(name: string): { sliceFirstArg: boolean, command: Command | null } {
+    // Try to find command by command name
     for (const command of this.commands) {
       const { names, match } = command.command
       if (names.includes(name)) {
@@ -212,7 +213,7 @@ class Cac extends EventEmitter {
       }
     }
     return {
-      command: null,
+      command: name === '*' ? null : this.findCommand('*').command,
       sliceFirstArg: false
     }
   }
