@@ -32,10 +32,10 @@
     "prepublishOnly": "yarn build",
     "toc": "markdown-toc -i README.md",
     "lint": "echo lint",
-    "api": "typedoc src/index.ts --mode file --out .vuepress/public/api --readme none --hideGenerator",
+    "api": "typedoc src/index.ts --mode file --out docs/.vuepress/dist/api --readme none --hideGenerator",
     "build:docs": "vuepress build docs",
     "dev:docs": "vuepress dev docs",
-    "prebuild:docs": "yarn api"
+    "postbuild:docs": "yarn api"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
