@@ -13,6 +13,10 @@ namespace cac {
   }
 }
 
-module.exports = cac
-module.exports.default = module.exports // For TypeScript
+export default cac
+export { Cac }
 
+// For CommonJS default export support
+module.exports = cac
+module.exports.default = cac
+module.exports.Cac = Cac
