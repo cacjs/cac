@@ -14,3 +14,5 @@ namespace cac {
 }
 
 export default cac
+
+module.exports.default = module.exports // For TypeScript
