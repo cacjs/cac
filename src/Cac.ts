@@ -314,7 +314,7 @@ class Cac extends EventEmitter {
     } else if (command && command.handler) {
       try {
         let res = command.handler(input, flags)
-        if (res.then) {
+        if (res && res.then) {
           res.then(() => {
             this.emit('executed', command, input, flags);
           }).catch((err: Error) => this.handleError(err))
