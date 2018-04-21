@@ -318,7 +318,7 @@ class Cac extends EventEmitter {
           .then(() => {
             this.emit('executed', command, input, flags)
           })
-          .catch(this.handleError)
+          .catch(err => this.handleError(err))
       } catch (err) {
         this.handleError(err)
       }
