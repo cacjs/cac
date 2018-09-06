@@ -89,6 +89,7 @@ And the **Help Documentation** is ready out of the box:
 Projects that use **CAC**:
 
 - [SAO](https://github.com/egoist/sao): ⚔️ Futuristic scaffolding tool.
+- [DocPad](https://github.com/docpad/docpad): 🏹 Powerful Static Site Generator.
 - [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
 - [bili](https://github.com/egoist/bili): 🥂 Schweizer Armeemesser for bundling JavaScript libraries.
 - [lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
