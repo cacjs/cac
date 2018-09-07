@@ -31,11 +31,7 @@
     "postbuild": "rm -rf dist/__test__",
     "prepublishOnly": "yarn build",
     "toc": "markdown-toc -i README.md",
-    "lint": "echo lint",
-    "api": "typedoc src/index.ts --mode file --out docs/.vuepress/dist/api --readme none --hideGenerator",
-    "build:docs": "vuepress build docs",
-    "dev:docs": "vuepress dev docs",
-    "postbuild:docs": "yarn api"
+    "lint": "echo lint"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
@@ -62,8 +58,6 @@
     "rollup-plugin-typescript2": "^0.13.0",
     "strip-ansi": "^4.0.0",
     "ts-jest": "^22.4.3",
-    "typedoc": "^0.11.1",
-    "typescript": "^2.8.1",
-    "vuepress": "^0.5.1"
+    "typescript": "^2.8.1"
   }
 }
