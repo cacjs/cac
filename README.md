@@ -20,6 +20,7 @@ yarn add cac
 - [Usage](#usage)
 - [Friends](#friends)
 - [Documentation](#documentation)
+- [CLI instance](#cli-instance)
   * [cli.option(name, [option])](#clioptionname-option)
   * [cli.command(name, [option], [handler])](#clicommandname-option-handler)
     + [command](#command)
@@ -84,6 +85,8 @@ And the **Help Documentation** is ready out of the box:
 
 <img width="600" alt="2017-07-26 4 29 36" src="https://ooo.0o0.ooo/2017/07/26/5978a121886c4.png">
 
+The Help Documentation will be command-specific when you are using `--help` with a sub command.
+
 ## Friends
 
 Projects that use **CAC**:
@@ -96,6 +99,21 @@ Projects that use **CAC**:
 - Feel free to add yours here...
 
 ## Documentation
+
+## CLI instance
+
+You can create a CLI instance as follows:
+
+```js
+const cli = cac(options)
+```
+
+`options` argument is optional here:
+
+- `options.bin`: The CLI bin name to show in help message when `--help` flag is used.
+- `options.defaultOpts`: By default we add serveral global command options like `--help` and `--version`, however you can disable them all by setting it to `false` or configure them individually as follow:
+  - `options.defaultOpts.help`: `true` Show help message when `--help` flag is used, alias flag `-h`.
+  - `options.defaultOpts.version`: `true` Show version number when `--version` flag is used, alias flag `-v`.
 
 ### cli.option(name, [option])
 
