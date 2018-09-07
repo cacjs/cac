@@ -26,7 +26,7 @@
   },
   "scripts": {
     "test": "yarn lint && yarn integration",
-    "integration": "yarn build && jest",
+    "integration": "yarn build && jest --env node",
     "build": "bili",
     "postbuild": "rm -rf dist/__test__",
     "prepublishOnly": "yarn build",
