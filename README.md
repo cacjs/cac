@@ -83,9 +83,11 @@ Then run it:
 
 And the **Help Documentation** is ready out of the box:
 
-<img width="600" alt="2017-07-26 4 29 36" src="https://ooo.0o0.ooo/2017/07/26/5978a121886c4.png">
+<img width="600" alt="cli help" src="https://i.loli.net/2018/09/07/5b92344112d40.png">
 
-The Help Documentation will be command-specific when you are using `--help` with a sub command.
+The Help Documentation will be command-specific when you are using `--help` with a sub command, like below:
+
+<img width="600" alt="sub command help" src="https://i.loli.net/2018/09/07/5b92344116b8c.png">
 
 ## Friends
 

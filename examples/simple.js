@@ -15,9 +15,13 @@ cli.command('*', {
 
 // Add a sub command
 cli.command('bob', {
-  desc: 'Command for bob'
-}, () => {
-  console.log('This is a command dedicated to bob!')
+  desc: 'Command for Bob'
+}, (input, flags) => {
+  console.log(`This is a command dedicated to Bob${flags.junior ? ' Jr' : ''}!`)
+}).option('junior', {
+  desc: 'Is this command for Bob Jr',
+  type: 'boolean',
+  default: false
 })
 
 cli.parse()
