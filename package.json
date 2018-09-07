@@ -37,8 +37,8 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.3.2",
+    "joycon": "^2.1.1",
     "minimost": "^1.1.0",
-    "read-pkg-up": "^2.0.0",
     "redent": "^2.0.0",
     "string-width": "^2.1.1",
     "text-table": "^0.2.0"

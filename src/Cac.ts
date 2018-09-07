@@ -2,7 +2,7 @@ import path from 'path'
 import EventEmitter from 'events'
 import chalk from 'chalk'
 import minimost from 'minimost'
-import readPkg from 'read-pkg-up'
+import JoyCon from 'joycon'
 import Command, { ICommandOptions, CommandHandler } from './Command'
 import Options, { IOptionsInput } from './Options'
 import Help from './Help'
@@ -117,7 +117,7 @@ class Cac extends EventEmitter {
 
     this.pkg = Object.assign(
       {},
-      pkg || readPkg.sync({ cwd: parentDir, normalize: false }).pkg
+      pkg || new JoyCon({ files: ['package.json'], cwd: parentDir }).loadSync().data
     )
 
     if (this.versionOpt) {

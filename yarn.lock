@@ -3062,6 +3062,10 @@ jest@^22.4.3:
     import-local "^1.0.0"
     jest-cli "^22.4.4"
 
+joycon@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/joycon/-/joycon-2.1.1.tgz#33598832f85cf5d7a4c2815f84eb03ae69295c5d"
+
 js-base64@^2.1.9:
   version "2.4.9"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.9.tgz#748911fb04f48a60c4771b375cac45a80df11c03"
