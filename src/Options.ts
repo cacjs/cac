@@ -1,6 +1,9 @@
 import chalk from 'chalk'
 import { orderNames, textTable, prefixOption } from './utils'
 
+const REVERSE_OPTION_MATCH = /^no\-[a-z]/i
+const REVERSE_OPTION_PREFIX = /^no\-/i
+
 export interface IOptionsInput {
   desc: string
   alias?: string | string[]
@@ -58,7 +61,12 @@ export default class Options {
   }
 
   getOptionNamesByType(type: string) {
-    return this.getOptionsByType(type).map(option => option.name)
+    return this.getOptionsByType(type).map(option => {
+      if (REVERSE_OPTION_MATCH.test(option.name)) {
+        return option.name.replace(REVERSE_OPTION_PREFIX, '')
+      }
+      return option.name
+    })
   }
 
   getAliasMap() {
