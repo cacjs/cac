@@ -223,27 +223,14 @@ class Cac extends EventEmitter {
   }
 
   showHelp() {
-    if (!this.started) {
-      throw new Error(
-        '[cac] You have to call .parse() before running .showHelp()'
-      )
-    }
-
-    // Do not display `<command>` in help if it's a sub command
-    // This matches a sub command
-    const displayCommands = this.commandName === '*'
-    const help = new Help(this, this.matchedCommand, {
-      displayCommands
-    })
-
-    help.output()
+    process.stdout.write(this.getHelp())
     return this
   }
 
   getHelp() {
     if (!this.started) {
       throw new Error(
-        '[cac] You have to call .parse() before running .getHelp()'
+        '[cac] You have to call .parse() first!'
       )
     }
 
