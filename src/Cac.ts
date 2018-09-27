@@ -223,9 +223,14 @@ class Cac extends EventEmitter {
   }
 
   showHelp() {
+    process.stdout.write(this.getHelp())
+    return this
+  }
+
+  getHelp() {
     if (!this.started) {
       throw new Error(
-        '[cac] You have to call .parse() before running .showHelp()'
+        '[cac] You have to call .parse() first!'
       )
     }
 
@@ -236,8 +241,7 @@ class Cac extends EventEmitter {
       displayCommands
     })
 
-    help.output()
-    return this
+    return help.getHelp()
   }
 
   /**
