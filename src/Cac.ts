@@ -1,5 +1,5 @@
 import path from 'path'
-import EventEmitter from 'events'
+import { EventEmitter } from 'events'
 import chalk from 'chalk'
 import minimost from 'minimost'
 import JoyCon from 'joycon'
