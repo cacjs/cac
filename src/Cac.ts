@@ -102,7 +102,7 @@ class Cac extends EventEmitter {
   constructor({ bin, pkg, defaultOpts }: ICacOptions = {}) {
     super()
     defaultOpts = defaultOpts || true
-    this.bin = bin || process.argv[1] ? path.basename(process.argv[1]) : 'cli'
+    this.bin = bin || (process.argv[1] ? path.basename(process.argv[1]) : 'cli')
     this.commands = []
     this.options = new Options()
     this.extraHelps = []
