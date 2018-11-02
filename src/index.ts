@@ -1,7 +1,6 @@
 /// <reference path="../declarations.d.ts" />
-import minimost from 'minimost'
+import minimost, { Opts } from 'minimost'
 import Cac, { ICacOptions } from './Cac'
-import { Opts } from 'minimist'
 
 function cac(opts?: ICacOptions) {
   return new Cac(opts)

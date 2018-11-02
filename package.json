@@ -36,9 +36,9 @@
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^2.3.2",
-    "joycon": "^2.1.1",
-    "minimost": "^1.1.0",
+    "chalk": "^2.4.1",
+    "joycon": "^2.1.2",
+    "minimost": "^1.2.0",
     "redent": "^2.0.0",
     "string-width": "^2.1.1",
     "text-table": "^0.2.0"
@@ -46,18 +46,16 @@
   "devDependencies": {
     "@types/execa": "^0.9.0",
     "@types/jest": "^22.2.3",
-    "@types/minimist": "^1.2.0",
     "@types/node": "^9.6.5",
-    "@types/read-pkg-up": "^3.0.1",
     "@types/strip-ansi": "^3.0.0",
-    "bili": "^3.1.0",
+    "bili": "^3.3.0",
     "eslint-config-rem": "^3.0.0",
     "execa": "^0.9.0",
     "jest": "^22.4.3",
     "markdown-toc": "^1.1.0",
-    "rollup-plugin-typescript2": "^0.13.0",
+    "rollup-plugin-typescript2": "^0.17.2",
     "strip-ansi": "^4.0.0",
-    "ts-jest": "^22.4.3",
-    "typescript": "^2.8.1"
+    "ts-jest": "^23.10.4",
+    "typescript": "^3.1.6"
   }
 }
