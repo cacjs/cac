@@ -4,6 +4,9 @@ export default () => (cli: Cac) => {
   cli.on('parsed', (command, _, flags) => {
     if (!command) return
 
+    // The presence of help trumps required option processing
+    if (flags.help) return
+
     const missingRequiredOptions = command.options.options.filter(option => {
       const isRequired = option.required
       const isMissing = typeof flags[option.name] === 'undefined'
