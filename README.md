@@ -20,6 +20,7 @@
   - [Dot-nested Options](#dot-nested-options)
   - [Default Command](#default-command)
   - [With TypeScript](#with-typescript)
+- [Projects Using CAC](#projects-using-cac)
 - [References](#references)
   - [CLI Instance](#cli-instance)
     - [cli.command(name, description)](#clicommandname-description)
@@ -212,6 +213,17 @@ const cac = require('cac')
 // OR ES modules
 import cac from 'cac'
 ```
+
+## Projects Using CAC
+
+Projects that use **CAC**:
+
+- [SAO](https://github.com/egoist/sao): ⚔️ Futuristic scaffolding tool.
+- [DocPad](https://github.com/docpad/docpad): 🏹 Powerful Static Site Generator.
+- [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
+- [bili](https://github.com/egoist/bili): 🥂 Schweizer Armeemesser for bundling JavaScript libraries.
+- [lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
+- Feel free to add yours here...
 
 ## References
 
