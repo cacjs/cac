@@ -6,14 +6,16 @@
     "url": "egoist/cac",
     "type": "git"
   },
-  "main": "dist/cac.cjs.js",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "files": [
     "dist",
+    "types",
     "!**/__test__/**"
   ],
   "scripts": {
     "test": "jest",
-    "build": "bili",
+    "build": "tsc",
     "toc": "markdown-toc -i README.md",
     "prepublishOnly": "npm run build"
   },
@@ -22,7 +24,6 @@
   "devDependencies": {
     "@types/execa": "^0.9.0",
     "@types/jest": "^23.3.9",
-    "bili": "^3.4.2",
     "cz-conventional-changelog": "^2.1.0",
     "eslint-config-rem": "^3.0.0",
     "execa": "^1.0.0",
@@ -31,7 +32,6 @@
     "lint-staged": "^8.1.0",
     "markdown-toc": "^1.2.0",
     "prettier": "^1.15.2",
-    "rollup-plugin-typescript2": "^0.18.0",
     "semantic-release": "^15.12.1",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
@@ -54,7 +54,7 @@
       "git add"
     ],
     "*.md": [
-      "yarn toc",
+      "markdown-toc -i",
       "prettier --write",
       "git add"
     ]

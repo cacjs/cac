@@ -1,5 +1,5 @@
 require('ts-node/register')
-const cli = require('../src/index').default()
+const cli = require('../src/index')()
 
 cli
   .command('deploy [path]', 'Deploy to AWS')

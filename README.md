@@ -12,31 +12,31 @@
 
 - [Install](#install)
 - [Usage](#usage)
-  * [Simple Parsing](#simple-parsing)
-  * [Display Help Message and Version](#display-help-message-and-version)
-  * [Command-specific Options](#command-specific-options)
-  * [Brackets](#brackets)
-  * [Variadic Arguments](#variadic-arguments)
-  * [Dot-nested Options](#dot-nested-options)
-  * [Default Command](#default-command)
-  * [With TypeScript](#with-typescript)
+  - [Simple Parsing](#simple-parsing)
+  - [Display Help Message and Version](#display-help-message-and-version)
+  - [Command-specific Options](#command-specific-options)
+  - [Brackets](#brackets)
+  - [Variadic Arguments](#variadic-arguments)
+  - [Dot-nested Options](#dot-nested-options)
+  - [Default Command](#default-command)
+  - [With TypeScript](#with-typescript)
 - [References](#references)
-  * [CLI Instance](#cli-instance)
-    + [cli.command(name, description)](#clicommandname-description)
-    + [cli.option(name, description, config?)](#clioptionname-description-config)
-    + [cli.parse(argv?)](#cliparseargv)
-    + [cli.version(version)](#cliversionversion)
-    + [cli.help(callback?)](#clihelpcallback)
-    + [cli.outputHelp()](#clioutputhelp)
-  * [Command Instance](#command-instance)
-    + [command.option()](#commandoption)
-    + [command.action(callback)](#commandactioncallback)
-    + [command.alias(name)](#commandaliasname)
-    + [command.allowUnknownOptions()](#commandallowunknownoptions)
-    + [command.example(example)](#commandexampleexample)
-  * [Events](#events)
+  - [CLI Instance](#cli-instance)
+    - [cli.command(name, description)](#clicommandname-description)
+    - [cli.option(name, description, config?)](#clioptionname-description-config)
+    - [cli.parse(argv?)](#cliparseargv)
+    - [cli.version(version)](#cliversionversion)
+    - [cli.help(callback?)](#clihelpcallback)
+    - [cli.outputHelp()](#clioutputhelp)
+  - [Command Instance](#command-instance)
+    - [command.option()](#commandoption)
+    - [command.action(callback)](#commandactioncallback)
+    - [command.alias(name)](#commandaliasname)
+    - [command.allowUnknownOptions()](#commandallowunknownoptions)
+    - [command.example(example)](#commandexampleexample)
+  - [Events](#events)
 - [FAQ](#faq)
-  * [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
+  - [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
 - [Contributing](#contributing)
 - [Author](#author)
 
@@ -205,17 +205,13 @@ First you need `@types/node` to be installed as a dev dependency in your project
 yarn add @types/node --dev
 ```
 
-To make our own type definitions work with commonjs modules, use the default export:
+Then everything just works out of the box:
 
 ```js
-const cac = require('cac').default
-
-const cli = cac()
-
-//...
+const cac = require('cac')
+// OR ES modules
+import cac from 'cac'
 ```
-
-For ES modules, it works out of the box.
 
 ## References
 

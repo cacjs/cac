@@ -218,6 +218,4 @@ class CAC extends EventEmitter {
 
 const cac = () => new CAC()
 
-export default cac
-module.exports = cac
-module.exports.default = cac
+export = cac

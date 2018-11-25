@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2015",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "types",
     "esModuleInterop": true,
     "pretty": true,
     "moduleResolution": "node",
@@ -17,7 +17,9 @@
     "noFallthroughCasesInSwitch": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "module": "commonjs",
+    "outDir": "dist"
   },
   "include": ["src"]
 }

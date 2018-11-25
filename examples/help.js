@@ -1,5 +1,5 @@
 require('ts-node/register')
-const cli = require('../src/index').default()
+const cli = require('../src/index')()
 
 cli.option('--type [type]', 'Choose a project type', {
   default: 'node'
