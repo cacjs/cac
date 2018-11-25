@@ -12,29 +12,31 @@
 
 - [Install](#install)
 - [Usage](#usage)
-  - [Simple Parsing](#simple-parsing)
-  - [Display Help Message and Version](#display-help-message-and-version)
-  - [Command-specific Options](#command-specific-options)
-  - [Brackets](#brackets)
-  - [Variadic Arguments](#variadic-arguments)
-  - [Dot-nested Options](#dot-nested-options)
-  - [With TypeScript](#with-typescript)
+  * [Simple Parsing](#simple-parsing)
+  * [Display Help Message and Version](#display-help-message-and-version)
+  * [Command-specific Options](#command-specific-options)
+  * [Brackets](#brackets)
+  * [Variadic Arguments](#variadic-arguments)
+  * [Dot-nested Options](#dot-nested-options)
+  * [Default Command](#default-command)
+  * [With TypeScript](#with-typescript)
 - [References](#references)
-  - [CLI Instance](#cli-instance)
-    - [cli.command(name, description)](#clicommandname-description)
-    - [cli.option(name, description, config?)](#clioptionname-description-config)
-    - [cli.parse(argv?)](#cliparseargv)
-    - [cli.version(version)](#cliversionversion)
-    - [cli.help(callback?)](#clihelpcallback)
-    - [cli.outputHelp()](#clioutputhelp)
-  - [Command Instance](#command-instance)
-    - [command.option()](#commandoption)
-    - [command.alias(name)](#commandaliasname)
-    - [command.allowUnknownOptions()](#commandallowunknownoptions)
-    - [command.example(example)](#commandexampleexample)
-  - [Events](#events)
+  * [CLI Instance](#cli-instance)
+    + [cli.command(name, description)](#clicommandname-description)
+    + [cli.option(name, description, config?)](#clioptionname-description-config)
+    + [cli.parse(argv?)](#cliparseargv)
+    + [cli.version(version)](#cliversionversion)
+    + [cli.help(callback?)](#clihelpcallback)
+    + [cli.outputHelp()](#clioutputhelp)
+  * [Command Instance](#command-instance)
+    + [command.option()](#commandoption)
+    + [command.action(callback)](#commandactioncallback)
+    + [command.alias(name)](#commandaliasname)
+    + [command.allowUnknownOptions()](#commandallowunknownoptions)
+    + [command.example(example)](#commandexampleexample)
+  * [Events](#events)
 - [FAQ](#faq)
-  - [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
+  * [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
 - [Contributing](#contributing)
 - [Author](#author)
 
@@ -175,6 +177,25 @@ cli.parse()
 ```
 
 <img width="500" alt="2018-11-25 9 37 53" src="https://user-images.githubusercontent.com/8784712/48979771-6ada9400-f0fa-11e8-8192-e541b2cfd9da.png">
+
+### Default Command
+
+Register a command that will be used when no other command is matched.
+
+```js
+const cli = require('cac')()
+
+cli
+  // Simply omit the command name, just brackets
+  .command('[...files]', 'Build files')
+  .option('--minimize', 'Minimize output')
+  .action((files, options) => {
+    console.log(files)
+    console.log(options.minimize)
+  })
+
+cli.parse()
+```
 
 ### With TypeScript
 
