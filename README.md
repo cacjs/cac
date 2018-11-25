@@ -68,7 +68,7 @@ const parsed = cli.parse()
 console.log(JSON.stringify(parsed, null, 2))
 ```
 
-<img width="500" alt="2018-11-25 3 17 56" src="https://user-images.githubusercontent.com/8784712/48976608-57610600-f0c5-11e8-924c-8da6a5fbfbb0.png">
+<img width="500" alt="2018-11-26 12 28 03" src="https://user-images.githubusercontent.com/8784712/48981576-2a871000-f112-11e8-8151-80f61e9b9908.png">
 
 ### Display Help Message and Version
 
