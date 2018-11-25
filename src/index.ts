@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import path from 'path'
 import minimost, { Opts as MinimostOpts } from 'minimost'
-import Command, { HelpCallback } from './Command'
+import Command, { HelpCallback, CommandExample } from './Command'
 import { OptionConfig } from './Option'
 import { getMinimostOptions } from './utils'
 
@@ -73,7 +73,7 @@ class CAC extends EventEmitter {
    * Add a global example
    * @param example
    */
-  example(example: string) {
+  example(example: CommandExample) {
     this.globalCommand.example(example)
     return this
   }

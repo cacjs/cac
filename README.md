@@ -343,9 +343,13 @@ Allow unknown options in this command, by default CAC will log an error when unk
 
 #### command.example(example)
 
-- Type: `(example: string) => Command`
+- Type: `(example: CommandExample) => Command`
 
 Add an example which will be displayed at the end of help message.
+
+```ts
+type CommandExample = ((bin: string) => string) | string
+```
 
 ### Events
 

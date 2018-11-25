@@ -25,6 +25,8 @@ interface CommandConfig {
 
 type HelpCallback = (sections: HelpSection[]) => void
 
+type CommandExample = ((bin: string) => string) | string
+
 export default class Command {
   options: Option[]
   aliasNames: string[]
@@ -34,7 +36,7 @@ export default class Command {
   commandAction?: (...args: any[]) => any
   usageText?: string
   versionNumber?: string
-  examples: string[]
+  examples: CommandExample[]
   config: CommandConfig
   helpCallback?: HelpCallback
 
@@ -63,8 +65,8 @@ export default class Command {
     return this
   }
 
-  example(text: string) {
-    this.examples.push(text)
+  example(example: CommandExample) {
+    this.examples.push(example)
     return this
   }
 
@@ -173,7 +175,14 @@ export default class Command {
     if (this.examples.length > 0) {
       sections.push({
         title: 'Examples',
-        body: this.examples.map(v => `  ${config.bin} ${v}`).join('\n')
+        body: this.examples
+          .map(example => {
+            if (typeof example === 'function') {
+              return example(config.bin)
+            }
+            return example
+          })
+          .join('\n')
       })
     }
 
@@ -225,4 +234,4 @@ export default class Command {
   }
 }
 
-export { HelpCallback }
+export { HelpCallback, CommandExample }
