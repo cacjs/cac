@@ -115,9 +115,11 @@ export default class Command {
   outputHelp(config: HelpConfig) {
     const version = this.versionNumber || config.versionNumber
 
-    const sections: HelpSection[] = [{
-      body: `${config.bin}${version ? ` v${version}` : ''}`
-    }]
+    const sections: HelpSection[] = [
+      {
+        body: `${config.bin}${version ? ` v${version}` : ''}`
+      }
+    ]
 
     sections.push({
       title: 'Usage',
@@ -141,11 +143,13 @@ export default class Command {
       })
       sections.push({
         title: `For more info, run any command with the \`--help\` flag`,
-        body: config.subCommands.map(command => `  $ ${config.bin} ${command.name} --help`).join('\n')
+        body: config.subCommands
+          .map(command => `  $ ${config.bin} ${command.name} --help`)
+          .join('\n')
       })
     }
 
-    const options = [...this.options, ... (config.globalOptions || [])]
+    const options = [...this.options, ...(config.globalOptions || [])]
     if (options.length > 0) {
       const longestOptionName = findLongest(
         options.map(option => option.rawName)
@@ -180,7 +184,9 @@ export default class Command {
     console.log(
       sections
         .map(section => {
-          return section.title ? `${section.title}:\n${section.body}` : section.body
+          return section.title
+            ? `${section.title}:\n${section.body}`
+            : section.body
         })
         .join('\n\n')
     )
@@ -188,16 +194,28 @@ export default class Command {
 
   outputVersion(bin: string) {
     if (this.versionNumber) {
-      console.log(`${bin}/${this.versionNumber} ${process.platform}-${process.arch} node-${process.version}`)
+      console.log(
+        `${bin}/${this.versionNumber} ${process.platform}-${
+          process.arch
+        } node-${process.version}`
+      )
     }
     return this
   }
 
-  checkUnknownOptions(options: {[k:string]: any}, globalCommand: Command) {
+  checkUnknownOptions(options: { [k: string]: any }, globalCommand: Command) {
     if (!this.config.allowUnknownOptions) {
       for (const name of Object.keys(options)) {
-        if (name !== '--' && !this.hasOption(name) && !globalCommand.hasOption(name)) {
-          console.error(`error: Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``)
+        if (
+          name !== '--' &&
+          !this.hasOption(name) &&
+          !globalCommand.hasOption(name)
+        ) {
+          console.error(
+            `error: Unknown option \`${
+              name.length > 1 ? `--${name}` : `-${name}`
+            }\``
+          )
           process.exitCode = 1
           return true
         }
@@ -207,6 +225,4 @@ export default class Command {
   }
 }
 
-export {
-  HelpCallback
-}
+export { HelpCallback }

@@ -11,7 +11,11 @@ export default class Option {
   required: boolean
   config: OptionConfig
 
-  constructor(public rawName: string, public description: string, config?: OptionConfig) {
+  constructor(
+    public rawName: string,
+    public description: string,
+    config?: OptionConfig
+  ) {
     this.config = Object.assign({}, config)
 
     let negated = false
@@ -40,6 +44,4 @@ export default class Option {
   }
 }
 
-export {
-  OptionConfig
-}
+export { OptionConfig }

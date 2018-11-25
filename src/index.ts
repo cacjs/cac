@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import path from 'path'
-import minimost, {Opts as MinimostOpts} from 'minimost'
+import minimost, { Opts as MinimostOpts } from 'minimost'
 import Command, { HelpCallback } from './Command'
 import { OptionConfig } from './Option'
 import { getMinimostOptions } from './utils'
@@ -30,12 +30,15 @@ class CAC extends EventEmitter {
   /**
    * Parsed CLI options
    */
-  options: {[k: string]: any}
+  options: { [k: string]: any }
 
   constructor() {
     super()
     this.commands = []
-    this.globalCommand = new Command(NAME_OF_GLOBAL_COMMAND, 'The global command')
+    this.globalCommand = new Command(
+      NAME_OF_GLOBAL_COMMAND,
+      'The global command'
+    )
     this.globalCommand.usage('<command> [options]')
   }
 
@@ -79,7 +82,8 @@ class CAC extends EventEmitter {
     if (this.matchedCommand) {
       this.matchedCommand.outputHelp({
         bin: this.bin,
-        subCommands: this.matchedCommand.name === '' ? this.commands : undefined,
+        subCommands:
+          this.matchedCommand.name === '' ? this.commands : undefined,
         versionNumber: this.globalCommand.versionNumber,
         globalOptions: this.globalCommand.options
       })
@@ -102,7 +106,10 @@ class CAC extends EventEmitter {
     this.bin = argv[1] ? path.basename(argv[1]) : 'cli'
 
     for (const command of this.commands) {
-      const minimostOptions = getMinimostOptions([...this.globalCommand.options, ...command.options])
+      const minimostOptions = getMinimostOptions([
+        ...this.globalCommand.options,
+        ...command.options
+      ])
       const parsed = this.minimost(argv.slice(2), minimostOptions)
       if (command.isMatched(parsed.args[0])) {
         this.matchedCommand = command
@@ -117,7 +124,10 @@ class CAC extends EventEmitter {
     // Try the default command
     for (const command of this.commands) {
       if (command.name === '') {
-        const minimostOptions = getMinimostOptions([...this.globalCommand.options, ...command.options])
+        const minimostOptions = getMinimostOptions([
+          ...this.globalCommand.options,
+          ...command.options
+        ])
         const parsed = this.minimost(argv.slice(2), minimostOptions)
         this.args = parsed.args
         this.options = parsed.options
@@ -127,7 +137,6 @@ class CAC extends EventEmitter {
         return parsed
       }
     }
-
 
     const globalMinimostOptions = getMinimostOptions(this.globalCommand.options)
     const parsed = this.minimost(argv.slice(2), globalMinimostOptions)
@@ -139,7 +148,11 @@ class CAC extends EventEmitter {
       return parsed
     }
 
-    if (parsed.options.version && this.globalCommand.hasOption('version') && this.globalCommand.versionNumber) {
+    if (
+      parsed.options.version &&
+      this.globalCommand.hasOption('version') &&
+      this.globalCommand.versionNumber
+    ) {
       this.outputVersion()
       return parsed
     }
@@ -158,7 +171,11 @@ class CAC extends EventEmitter {
     }
   }
 
-  runCommandAction(command: Command, globalCommand: Command, { args, options }: ParsedArgv) {
+  runCommandAction(
+    command: Command,
+    globalCommand: Command,
+    { args, options }: ParsedArgv
+  ) {
     if (options.help && globalCommand.hasOption('help')) {
       return this.outputHelp()
     }
@@ -179,7 +196,9 @@ class CAC extends EventEmitter {
     const minimalArgsCount = command.args.filter(arg => arg.required).length
 
     if (args.length < minimalArgsCount) {
-      console.error(`error: missing required args for command "${command.rawName}"`)
+      console.error(
+        `error: missing required args for command "${command.rawName}"`
+      )
       process.exitCode = 1
       return
     }

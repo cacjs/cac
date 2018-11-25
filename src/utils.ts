@@ -23,12 +23,12 @@ export const findAllBrackets = (v: string) => {
   }
 
   let angledMatch
-  while (angledMatch = ANGLED_BRACKET_RE_GLOBAL.exec(v)) {
+  while ((angledMatch = ANGLED_BRACKET_RE_GLOBAL.exec(v))) {
     res.push(parse(angledMatch))
   }
 
   let squareMatch
-  while (squareMatch = SQUARE_BRACKET_RE_GLOBAL.exec(v)) {
+  while ((squareMatch = SQUARE_BRACKET_RE_GLOBAL.exec(v))) {
     res.push(parse(squareMatch))
   }
 
@@ -37,7 +37,7 @@ export const findAllBrackets = (v: string) => {
 
 export const getMinimostOptions = (options: Option[]) => {
   return {
-    default: options.reduce((res: {[k: string]: any}, option) => {
+    default: options.reduce((res: { [k: string]: any }, option) => {
       if (option.config.default !== undefined) {
         // Only need to set the default value of the first name
         // Since minimist will automatically do the rest for alias names
@@ -45,10 +45,12 @@ export const getMinimostOptions = (options: Option[]) => {
       }
       return res
     }, {}),
-    boolean: options.filter(option => option.isBoolean).reduce((res: string[], option) => {
-      return res.concat(option.names)
-    }, []),
-    alias: options.reduce((res: {[k: string]: string[]}, option) => {
+    boolean: options
+      .filter(option => option.isBoolean)
+      .reduce((res: string[], option) => {
+        return res.concat(option.names)
+      }, []),
+    alias: options.reduce((res: { [k: string]: string[] }, option) => {
       if (option.names.length > 1) {
         res[option.names[0]] = option.names.slice(1)
       }

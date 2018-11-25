@@ -1,9 +1,11 @@
-
 import path from 'path'
 import execa from 'execa'
 
 function fixture(file: string) {
-  return path.relative(process.cwd(), path.join(__dirname, '../../examples', file))
+  return path.relative(
+    process.cwd(),
+    path.join(__dirname, '../../examples', file)
+  )
 }
 
 function snapshotOutput({
@@ -11,15 +13,12 @@ function snapshotOutput({
   file,
   args
 }: {
-  title: string,
-  file: string,
+  title: string
+  file: string
   args?: string[]
 }) {
   test(title, async () => {
-    const { stdout } = await execa('node', [
-      fixture(file),
-      ...(args || [])
-    ])
+    const { stdout } = await execa('node', [fixture(file), ...(args || [])])
     expect(stdout).toMatchSnapshot(title)
   })
 }
