@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic-usage: basic-usage 1`] = `
+"{
+  \\"args\\": [
+    \\"foo\\",
+    \\"bar\\",
+    \\"command\\"
+  ],
+  \\"options\\": {
+    \\"type\\": \\"ok\\",
+    \\"--\\": []
+  }
+}"
+`;
+
+exports[`help: help 1`] = `
+"help.js v0.0.0
+
+Usage:
+  $ help.js <command> [options]
+
+Commands:
+  lint [...files]  Lint files
+
+For more info, run any command with the \`--help\` flag:
+  $ help.js lint --help
+
+Options:
+  --type [type]  Choose a project type (default: node)
+  --name <name>  Provide your name 
+  -h, --help     Display this message 
+  -v, --version  Display version number "
+`;
+
+exports[`variadic-arguments: variadic-arguments 1`] = `
+"a
+[ 'b', 'c', 'd' ]
+{ h: false, help: false, foo: true, '--': [] }"
+`;
