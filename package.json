@@ -1,6 +1,6 @@
 {
   "name": "cac",
-  "version": "0.0.0",
+  "version": "6.0.0",
   "description": "Simple yet powerful framework for building command-line apps.",
   "repository": {
     "url": "egoist/cac",
