@@ -21,6 +21,7 @@ interface HelpSection {
 
 interface CommandConfig {
   allowUnknownOptions?: boolean
+  ignoreOptionDefaultValue?: boolean
 }
 
 type HelpCallback = (sections: HelpSection[]) => void
@@ -37,16 +38,18 @@ export default class Command {
   usageText?: string
   versionNumber?: string
   examples: CommandExample[]
-  config: CommandConfig
   helpCallback?: HelpCallback
 
-  constructor(public rawName: string, public description: string) {
+  constructor(
+    public rawName: string,
+    public description: string,
+    public config: CommandConfig = {}
+  ) {
     this.options = []
     this.aliasNames = []
     this.name = removeBrackets(rawName)
     this.args = findAllBrackets(rawName)
     this.examples = []
-    this.config = {}
   }
 
   usage(text: string) {
@@ -56,6 +59,11 @@ export default class Command {
 
   allowUnknownOptions() {
     this.config.allowUnknownOptions = true
+    return this
+  }
+
+  ignoreOptionDefaultValue() {
+    this.config.ignoreOptionDefaultValue = true
     return this
   }
 
@@ -240,4 +248,4 @@ export default class Command {
   }
 }
 
-export { HelpCallback, CommandExample }
+export { HelpCallback, CommandExample, CommandConfig }

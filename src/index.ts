@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import path from 'path'
 import minimist, { Opts as MinimistOpts } from 'minimist'
-import Command, { HelpCallback, CommandExample } from './Command'
+import Command, { CommandConfig, HelpCallback, CommandExample } from './Command'
 import { OptionConfig } from './Option'
 import { getMinimistOptions, camelcase } from './utils'
 
@@ -57,8 +57,8 @@ class CAC extends EventEmitter {
     return this
   }
 
-  command(rawName: string, description: string) {
-    const command = new Command(rawName, description)
+  command(rawName: string, description: string, config?: CommandConfig) {
+    const command = new Command(rawName, description, config)
     this.commands.push(command)
     return command
   }
@@ -117,10 +117,7 @@ class CAC extends EventEmitter {
 
     // Search sub-commands
     for (const command of this.commands) {
-      const minimistOptions = getMinimistOptions([
-        ...this.globalCommand.options,
-        ...command.options
-      ])
+      const minimistOptions = getMinimistOptions(this.globalCommand, command)
       const { args, options, originalOptions } = this.minimist(
         argv.slice(2),
         minimistOptions
@@ -143,10 +140,7 @@ class CAC extends EventEmitter {
     // Search the default command
     for (const command of this.commands) {
       if (command.name === '') {
-        const minimistOptions = getMinimistOptions([
-          ...this.globalCommand.options,
-          ...command.options
-        ])
+        const minimistOptions = getMinimistOptions(this.globalCommand, command)
         const { args, options, originalOptions } = this.minimist(
           argv.slice(2),
           minimistOptions
@@ -164,7 +158,7 @@ class CAC extends EventEmitter {
       }
     }
 
-    const globalMinimistOptions = getMinimistOptions(this.globalCommand.options)
+    const globalMinimistOptions = getMinimistOptions(this.globalCommand)
     const { args, options } = this.minimist(
       argv.slice(2),
       globalMinimistOptions

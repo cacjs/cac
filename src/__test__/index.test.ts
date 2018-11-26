@@ -40,3 +40,9 @@ snapshotOutput({
   file: 'variadic-arguments.js',
   args: ['--foo', 'build', 'a', 'b', 'c', 'd']
 })
+
+snapshotOutput({
+  title: 'ignore-default-value',
+  file: 'ignore-default-value.js',
+  args: ['build']
+})

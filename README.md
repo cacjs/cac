@@ -23,7 +23,7 @@
 - [Projects Using CAC](#projects-using-cac)
 - [References](#references)
   - [CLI Instance](#cli-instance)
-    - [cli.command(name, description)](#clicommandname-description)
+    - [cli.command(name, description, config?)](#clicommandname-description-config)
     - [cli.option(name, description, config?)](#clioptionname-description-config)
     - [cli.parse(argv?)](#cliparseargv)
     - [cli.version(version, customFlags?)](#cliversionversion-customflags)
@@ -236,11 +236,16 @@ const cac = require('cac')
 const cli = cac()
 ```
 
-#### cli.command(name, description)
+#### cli.command(name, description, config?)
 
 - Type: `(name: string, description: string) => Command`
 
 Create a command instance.
+
+The option also accepts a third argument `config` for addtional command config:
+
+- `config.allowUnknownOptions`: `boolean` Allow unknown options in this command.
+- `config.ignoreOptionDefaultValue`: `boolean` Don't use the options's default value in parsed options, only display them in help message.
 
 #### cli.option(name, description, config?)
 
@@ -248,7 +253,7 @@ Create a command instance.
 
 Add a global option.
 
-The option also accepts a third argument `config` for addtional config:
+The option also accepts a third argument `config` for addtional option config:
 
 - `config.default`: Default value for the option.
 - `config.coerce`: `(value: any) => newValue` A function to process the option value.

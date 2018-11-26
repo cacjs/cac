@@ -1,4 +1,4 @@
-import Option from './Option'
+import Command from './Command'
 
 export const removeBrackets = (v: string) => v.replace(/[<[].+/, '').trim()
 
@@ -35,16 +35,29 @@ export const findAllBrackets = (v: string) => {
   return res
 }
 
-export const getMinimistOptions = (options: Option[]) => {
+export const getMinimistOptions = (
+  globalCommand: Command,
+  subCommand?: Command
+) => {
+  const options = [
+    ...globalCommand.options,
+    ...(subCommand ? subCommand.options : [])
+  ]
+  const ignoreDefault =
+    subCommand && subCommand.config.ignoreOptionDefaultValue
+      ? subCommand.config.ignoreOptionDefaultValue
+      : globalCommand.config.ignoreOptionDefaultValue
   return {
-    default: options.reduce((res: { [k: string]: any }, option) => {
-      if (option.config.default !== undefined) {
-        // Only need to set the default value of the first name
-        // Since minimist will automatically do the rest for alias names
-        res[option.names[0]] = option.config.default
-      }
-      return res
-    }, {}),
+    default: ignoreDefault
+      ? {}
+      : options.reduce((res: { [k: string]: any }, option) => {
+          if (option.config.default !== undefined) {
+            // Only need to set the default value of the first name
+            // Since minimist will automatically do the rest for alias names
+            res[option.names[0]] = option.config.default
+          }
+          return res
+        }, {}),
     boolean: options
       .filter(option => option.isBoolean)
       .reduce((res: string[], option) => {
