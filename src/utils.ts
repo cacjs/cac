@@ -35,10 +35,7 @@ export const findAllBrackets = (v: string) => {
   return res
 }
 
-export const getMinimistOptions = (
-  globalCommand: Command,
-  subCommand?: Command
-) => {
+export const getMriOptions = (globalCommand: Command, subCommand?: Command) => {
   const options = [
     ...globalCommand.options,
     ...(subCommand ? subCommand.options : [])
@@ -53,7 +50,7 @@ export const getMinimistOptions = (
       : options.reduce((res: { [k: string]: any }, option) => {
           if (option.config.default !== undefined) {
             // Only need to set the default value of the first name
-            // Since minimist will automatically do the rest for alias names
+            // Since mri will automatically do the rest for alias names
             res[option.names[0]] = option.config.default
           }
           return res

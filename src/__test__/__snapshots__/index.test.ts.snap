@@ -8,8 +8,8 @@ exports[`basic-usage: basic-usage 1`] = `
     \\"command\\"
   ],
   \\"options\\": {
-    \\"type\\": \\"ok\\",
-    \\"--\\": []
+    \\"--\\": [],
+    \\"type\\": \\"ok\\"
   }
 }"
 `;
@@ -45,5 +45,5 @@ exports[`ignore-default-value: ignore-default-value 1`] = `
 exports[`variadic-arguments: variadic-arguments 1`] = `
 "a
 [ 'b', 'c', 'd' ]
-{ h: false, help: false, foo: true, '--': [] }"
+{ '--': [], foo: true }"
 `;

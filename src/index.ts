@@ -1,22 +1,18 @@
 import { EventEmitter } from 'events'
 import path from 'path'
-import minimist, { Opts as MinimistOpts } from 'minimist'
+import mri, { Options as MriOpts } from 'mri'
 import Command, { CommandConfig, HelpCallback, CommandExample } from './Command'
 import { OptionConfig } from './Option'
-import { getMinimistOptions, camelcase } from './utils'
+import { getMriOptions, camelcase } from './utils'
 
 interface ParsedArgv {
-  args: string[]
+  args: ReadonlyArray<string>
   options: {
     [k: string]: any
   }
 }
 
-interface MinimistResult extends ParsedArgv {
-  args: string[]
-  options: {
-    [k: string]: any
-  }
+interface MriResult extends ParsedArgv {
   originalOptions: {
     [k: string]: any
   }
@@ -36,7 +32,7 @@ class CAC extends EventEmitter {
   /**
    * Parsed CLI arguments
    */
-  args: string[]
+  args: ReadonlyArray<string>
   /**
    * Parsed CLI options, camelCased
    */
@@ -117,10 +113,10 @@ class CAC extends EventEmitter {
 
     // Search sub-commands
     for (const command of this.commands) {
-      const minimistOptions = getMinimistOptions(this.globalCommand, command)
-      const { args, options, originalOptions } = this.minimist(
+      const mriOptions = getMriOptions(this.globalCommand, command)
+      const { args, options, originalOptions } = this.mri(
         argv.slice(2),
-        minimistOptions
+        mriOptions
       )
       const commandName = args[0]
       if (command.isMatched(commandName)) {
@@ -140,10 +136,10 @@ class CAC extends EventEmitter {
     // Search the default command
     for (const command of this.commands) {
       if (command.name === '') {
-        const minimistOptions = getMinimistOptions(this.globalCommand, command)
-        const { args, options, originalOptions } = this.minimist(
+        const mriOptions = getMriOptions(this.globalCommand, command)
+        const { args, options, originalOptions } = this.mri(
           argv.slice(2),
-          minimistOptions
+          mriOptions
         )
         this.matchedCommand = command
         this.args = args
@@ -158,11 +154,8 @@ class CAC extends EventEmitter {
       }
     }
 
-    const globalMinimistOptions = getMinimistOptions(this.globalCommand)
-    const { args, options } = this.minimist(
-      argv.slice(2),
-      globalMinimistOptions
-    )
+    const globalMriOptions = getMriOptions(this.globalCommand)
+    const { args, options } = this.mri(argv.slice(2), globalMriOptions)
     this.args = args
     this.options = options
 
@@ -183,24 +176,21 @@ class CAC extends EventEmitter {
     return { args, options }
   }
 
-  private minimist(
-    argv: string[],
-    minimistOptions: MinimistOpts
-  ): MinimistResult {
-    const parsed = minimist(
-      argv,
-      Object.assign(
-        {
-          '--': true
-        },
-        minimistOptions
-      )
-    )
+  private mri(argv: string[], mriOptions: MriOpts): MriResult {
+    let argsAfterDoubleDashes: string[] = []
+    const doubleDashesIndex = argv.indexOf('--')
+    if (doubleDashesIndex > -1) {
+      argsAfterDoubleDashes = argv.slice(0, doubleDashesIndex)
+      argv = argv.slice(doubleDashesIndex + 1)
+    }
+    const parsed = mri(argv, mriOptions)
 
     const args = parsed._
     delete parsed._
 
-    const options: { [k: string]: any } = {}
+    const options: { [k: string]: any } = {
+      '--': argsAfterDoubleDashes
+    }
     for (const key of Object.keys(parsed)) {
       options[camelcase(key)] = parsed[key]
     }
@@ -215,7 +205,7 @@ class CAC extends EventEmitter {
   private runCommandAction(
     command: Command,
     globalCommand: Command,
-    { args, options, originalOptions }: MinimistResult
+    { args, options, originalOptions }: MriResult
   ) {
     if (options.help && globalCommand.hasOption('help')) {
       return this.outputHelp(true)
