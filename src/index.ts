@@ -64,8 +64,8 @@ class CAC extends EventEmitter {
     return this
   }
 
-  version(version: string) {
-    this.globalCommand.version(version)
+  version(version: string, customFlags = '-v, --version') {
+    this.globalCommand.version(version, customFlags)
     return this
   }
 

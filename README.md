@@ -26,7 +26,7 @@
     - [cli.command(name, description)](#clicommandname-description)
     - [cli.option(name, description, config?)](#clioptionname-description-config)
     - [cli.parse(argv?)](#cliparseargv)
-    - [cli.version(version)](#cliversionversion)
+    - [cli.version(version, customFlags?)](#cliversionversion-customflags)
     - [cli.help(callback?)](#clihelpcallback)
     - [cli.outputHelp(subCommand?)](#clioutputhelpsubcommand)
   - [Command Instance](#command-instance)
@@ -268,9 +268,9 @@ interface ParsedArgv {
 
 When this method is called, `cli.rawArgs` `cli.args` `cli.options` `cli.matchedCommand` will also be available.
 
-#### cli.version(version)
+#### cli.version(version, customFlags?)
 
-- Type: `(version: string) => CLI`
+- Type: `(version: string, customFlags = '-v, --version') => CLI`
 
 Output version number when `-v, --version` flag appears.
 

@@ -59,9 +59,9 @@ export default class Command {
     return this
   }
 
-  version(version: string) {
+  version(version: string, customFlags = '-v, --version') {
     this.versionNumber = version
-    this.option('-v, --version', 'Display version number')
+    this.option(customFlags, 'Display version number')
     return this
   }
 
