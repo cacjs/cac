@@ -154,7 +154,12 @@ export default class Command {
       sections.push({
         title: `For more info, run any command with the \`--help\` flag`,
         body: config.subCommands
-          .map(command => `  $ ${config.bin} ${command.name} --help`)
+          .map(
+            command =>
+              `  $ ${config.bin}${
+                command.name === '' ? '' : ` ${command.name}`
+              } --help`
+          )
           .join('\n')
       })
     }
