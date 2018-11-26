@@ -227,6 +227,10 @@ Projects that use **CAC**:
 
 ## References
 
+**💁 Check out [the generated docs](https://cac-api-doc.egoist.sh/modules/_index_.html) from source code if you want a more in-depth API references.**
+
+Below is a brief overview.
+
 ### CLI Instance
 
 CLI instance is created by invoking the `cac` function:
