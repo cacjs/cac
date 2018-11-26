@@ -78,8 +78,8 @@ class CAC extends EventEmitter {
     return this
   }
 
-  outputHelp() {
-    if (this.matchedCommand) {
+  outputHelp(subCommand?: boolean) {
+    if (subCommand && this.matchedCommand) {
       this.matchedCommand.outputHelp({
         bin: this.bin,
         subCommands:
@@ -177,7 +177,7 @@ class CAC extends EventEmitter {
     { args, options }: ParsedArgv
   ) {
     if (options.help && globalCommand.hasOption('help')) {
-      return this.outputHelp()
+      return this.outputHelp(true)
     }
 
     if (options.version && globalCommand.hasOption('version')) {
