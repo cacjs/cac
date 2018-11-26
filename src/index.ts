@@ -229,6 +229,8 @@ class CAC extends EventEmitter {
 
     command.checkUnknownOptions(originalOptions, globalCommand)
 
+    command.checkRequiredOptions(originalOptions, globalCommand)
+
     const minimalArgsCount = command.args.filter(arg => arg.required).length
 
     if (args.length < minimalArgsCount) {

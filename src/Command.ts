@@ -251,6 +251,24 @@ export default class Command {
       }
     }
   }
+
+  /**
+   * Check if the required string-type options exist
+   * @param values
+   * @param globalCommand
+   */
+  checkRequiredOptions(values: { [k: string]: any }, globalCommand: Command) {
+    const requiredOptions = [...globalCommand.options, ...this.options].filter(
+      option => option.required
+    )
+    for (const option of requiredOptions) {
+      const value = values[option.names[0]]
+      if (value === undefined || typeof value === 'boolean') {
+        console.error(`error: option \`${option.rawName}\` argument is missing`)
+        process.exit(1)
+      }
+    }
+  }
 }
 
 export { HelpCallback, CommandExample, CommandConfig }
