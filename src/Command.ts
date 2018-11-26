@@ -1,3 +1,4 @@
+import CAC from './CAC'
 import Option, { OptionConfig } from './Option'
 import { removeBrackets, findAllBrackets, findLongest, padRight } from './utils'
 
@@ -5,13 +6,6 @@ interface CommandArg {
   required: boolean
   value: string
   variadic: boolean
-}
-
-interface HelpConfig {
-  bin: string
-  subCommands?: Command[]
-  versionNumber?: string
-  globalOptions?: Option[]
 }
 
 interface HelpSection {
@@ -28,7 +22,7 @@ type HelpCallback = (sections: HelpSection[]) => void
 
 type CommandExample = ((bin: string) => string) | string
 
-export default class Command {
+class Command {
   options: Option[]
   aliasNames: string[]
   /* Parsed command name */
@@ -39,11 +33,13 @@ export default class Command {
   versionNumber?: string
   examples: CommandExample[]
   helpCallback?: HelpCallback
+  globalCommand?: GlobalCommand
 
   constructor(
     public rawName: string,
     public description: string,
-    public config: CommandConfig = {}
+    public config: CommandConfig = {},
+    public cli: CAC
   ) {
     this.options = []
     this.aliasNames = []
@@ -112,6 +108,10 @@ export default class Command {
     return this.name === '' || this.aliasNames.includes('!')
   }
 
+  get isGlobalCommand() {
+    return this instanceof GlobalCommand
+  }
+
   /**
    * Check if an option is registered in this command
    * @param name Option name
@@ -123,27 +123,31 @@ export default class Command {
     })
   }
 
-  outputHelp(config: HelpConfig) {
-    const version = this.versionNumber || config.versionNumber
+  outputHelp() {
+    const { bin, commands } = this.cli
+    const { versionNumber, options: globalOptions } = this.cli.globalCommand
 
     const sections: HelpSection[] = [
       {
-        body: `${config.bin}${version ? ` v${version}` : ''}`
+        body: `${bin}${versionNumber ? ` v${versionNumber}` : ''}`
       }
     ]
 
     sections.push({
       title: 'Usage',
-      body: `  $ ${config.bin} ${this.usageText || this.rawName}`
+      body: `  $ ${bin} ${this.usageText || this.rawName}`
     })
 
-    if (config.subCommands && config.subCommands.length > 0) {
+    const showCommands =
+      (this.isGlobalCommand || this.isDefaultCommand) && commands.length > 0
+
+    if (showCommands) {
       const longestCommandName = findLongest(
-        config.subCommands.map(command => command.rawName)
+        commands.map(command => command.rawName)
       )
       sections.push({
         title: 'Commands',
-        body: config.subCommands
+        body: commands
           .map(command => {
             return `  ${padRight(
               command.rawName,
@@ -154,10 +158,10 @@ export default class Command {
       })
       sections.push({
         title: `For more info, run any command with the \`--help\` flag`,
-        body: config.subCommands
+        body: commands
           .map(
             command =>
-              `  $ ${config.bin}${
+              `  $ ${bin}${
                 command.name === '' ? '' : ` ${command.name}`
               } --help`
           )
@@ -165,7 +169,9 @@ export default class Command {
       })
     }
 
-    const options = [...this.options, ...(config.globalOptions || [])]
+    const options = this.isGlobalCommand
+      ? globalOptions
+      : [...this.options, ...(globalOptions || [])]
     if (options.length > 0) {
       const longestOptionName = findLongest(
         options.map(option => option.rawName)
@@ -192,7 +198,7 @@ export default class Command {
         body: this.examples
           .map(example => {
             if (typeof example === 'function') {
-              return example(config.bin)
+              return example(bin)
             }
             return example
           })
@@ -217,26 +223,28 @@ export default class Command {
     process.exit(0)
   }
 
-  outputVersion(bin: string) {
-    if (this.versionNumber) {
+  outputVersion() {
+    const { bin } = this.cli
+    const { versionNumber } = this.cli.globalCommand
+    if (versionNumber) {
       console.log(
-        `${bin}/${this.versionNumber} ${process.platform}-${
-          process.arch
-        } node-${process.version}`
+        `${bin}/${versionNumber} ${process.platform}-${process.arch} node-${
+          process.version
+        }`
       )
-      process.exit(0)
     }
+    process.exit(0)
   }
 
   /**
    * Check if the parsed options contain any unknown options
+   *
    * Exit and output error when true
-   * @param options Original options, i.e. not camelCased one
-   * @param globalCommand
    */
-  checkUnknownOptions(options: { [k: string]: any }, globalCommand: Command) {
+  checkUnknownOptions() {
+    const { rawOptions, globalCommand } = this.cli
     if (!this.config.allowUnknownOptions) {
-      for (const name of Object.keys(options)) {
+      for (const name of Object.keys(rawOptions)) {
         if (
           name !== '--' &&
           !this.hasOption(name) &&
@@ -255,15 +263,14 @@ export default class Command {
 
   /**
    * Check if the required string-type options exist
-   * @param values
-   * @param globalCommand
    */
-  checkRequiredOptions(values: { [k: string]: any }, globalCommand: Command) {
+  checkRequiredOptions() {
+    const { rawOptions, globalCommand } = this.cli
     const requiredOptions = [...globalCommand.options, ...this.options].filter(
       option => option.required
     )
     for (const option of requiredOptions) {
-      const value = values[option.names[0].split('.')[0]]
+      const value = rawOptions[option.names[0].split('.')[0]]
       if (typeof value === 'boolean') {
         console.error(`error: option \`${option.rawName}\` argument is missing`)
         process.exit(1)
@@ -272,4 +279,12 @@ export default class Command {
   }
 }
 
-export { HelpCallback, CommandExample, CommandConfig }
+class GlobalCommand extends Command {
+  constructor(cli: CAC) {
+    super('@@global@@', '', {}, cli)
+  }
+}
+
+export { HelpCallback, CommandExample, CommandConfig, GlobalCommand }
+
+export default Command
