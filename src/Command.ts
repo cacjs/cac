@@ -117,6 +117,7 @@ export default class Command {
    * @param name Option name
    */
   hasOption(name: string) {
+    name = name.split('.')[0]
     return this.options.find(option => {
       return option.names.includes(name)
     })
@@ -262,7 +263,7 @@ export default class Command {
       option => option.required
     )
     for (const option of requiredOptions) {
-      const value = values[option.names[0]]
+      const value = values[option.names[0].split('.')[0]]
       if (typeof value === 'boolean') {
         console.error(`error: option \`${option.rawName}\` argument is missing`)
         process.exit(1)
