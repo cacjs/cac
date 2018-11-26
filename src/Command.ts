@@ -125,7 +125,11 @@ class Command {
 
   outputHelp() {
     const { bin, commands } = this.cli
-    const { versionNumber, options: globalOptions } = this.cli.globalCommand
+    const {
+      versionNumber,
+      options: globalOptions,
+      helpCallback
+    } = this.cli.globalCommand
 
     const sections: HelpSection[] = [
       {
@@ -206,8 +210,8 @@ class Command {
       })
     }
 
-    if (this.helpCallback) {
-      this.helpCallback(sections)
+    if (helpCallback) {
+      helpCallback(sections)
     }
 
     console.log(
