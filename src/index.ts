@@ -3,7 +3,7 @@ import path from 'path'
 import mri, { Options as MriOpts } from 'mri'
 import Command, { CommandConfig, HelpCallback, CommandExample } from './Command'
 import { OptionConfig } from './Option'
-import { getMriOptions, camelcase } from './utils'
+import { getMriOptions, camelcase, setDotProp } from './utils'
 
 interface ParsedArgv {
   args: ReadonlyArray<string>
@@ -192,7 +192,10 @@ class CAC extends EventEmitter {
       '--': argsAfterDoubleDashes
     }
     for (const key of Object.keys(parsed)) {
-      options[camelcase(key)] = parsed[key]
+      const keys = key.split('.').map((v, i) => {
+        return i === 0 ? camelcase(v) : v
+      })
+      setDotProp(options, keys, parsed[key])
     }
 
     return {

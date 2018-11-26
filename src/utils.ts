@@ -84,3 +84,25 @@ export const camelcase = (input: string) => {
     return p1 + p2.toUpperCase()
   })
 }
+
+export const setDotProp = (
+  obj: { [k: string]: any },
+  keys: string[],
+  val: any
+) => {
+  let i = 0
+  let length = keys.length
+  let t = obj
+  let x
+  for (; i < length; ++i) {
+    x = t[keys[i]]
+    t = t[keys[i]] =
+      i === length - 1
+        ? val
+        : x != null
+        ? x
+        : !!~keys[i + 1].indexOf('.') || !(+keys[i + 1] > -1)
+        ? {}
+        : []
+  }
+}
