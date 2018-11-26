@@ -199,6 +199,8 @@ export default class Command {
         })
         .join('\n\n')
     )
+
+    process.exit(0)
   }
 
   outputVersion(bin: string) {
@@ -208,8 +210,8 @@ export default class Command {
           process.arch
         } node-${process.version}`
       )
+      process.exit(0)
     }
-    return this
   }
 
   /**

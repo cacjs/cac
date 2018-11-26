@@ -115,6 +115,7 @@ class CAC extends EventEmitter {
     this.rawArgs = argv
     this.bin = argv[1] ? path.basename(argv[1]) : 'cli'
 
+    // Search sub-commands
     for (const command of this.commands) {
       const minimistOptions = getMinimistOptions([
         ...this.globalCommand.options,
@@ -124,21 +125,22 @@ class CAC extends EventEmitter {
         argv.slice(2),
         minimistOptions
       )
-      if (command.isMatched(args[0])) {
+      const commandName = args[0]
+      if (command.isMatched(commandName)) {
         this.matchedCommand = command
-        this.args = args
+        this.args = args.slice(1)
         this.options = options
-        this.emit(`command:${args[0]}`, command)
+        this.emit(`command:${commandName}`, command)
         this.runCommandAction(command, this.globalCommand, {
-          args,
+          args: this.args,
           options,
           originalOptions
         })
-        return { args, options }
+        return { args: this.args, options }
       }
     }
 
-    // Try the default command
+    // Search the default command
     for (const command of this.commands) {
       if (command.name === '') {
         const minimistOptions = getMinimistOptions([
@@ -233,16 +235,11 @@ class CAC extends EventEmitter {
 
     command.checkUnknownOptions(originalOptions, globalCommand)
 
-    // The first one is command name
-    if (!command.isDefaultCommand) {
-      args = args.slice(1)
-    }
-
     const minimalArgsCount = command.args.filter(arg => arg.required).length
 
-    if (args.length < minimalArgsCount) {
+    if (command.args.length < minimalArgsCount) {
       console.error(
-        `error: missing required args for command "${command.rawName}"`
+        `error: missing required args for command \`${command.rawName}\``
       )
       process.exit(1)
     }
