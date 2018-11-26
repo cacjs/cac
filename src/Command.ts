@@ -263,7 +263,7 @@ export default class Command {
     )
     for (const option of requiredOptions) {
       const value = values[option.names[0]]
-      if (value === undefined || typeof value === 'boolean') {
+      if (typeof value === 'boolean') {
         console.error(`error: option \`${option.rawName}\` argument is missing`)
         process.exit(1)
       }
