@@ -35,7 +35,7 @@ export const findAllBrackets = (v: string) => {
   return res
 }
 
-export const getMinimostOptions = (options: Option[]) => {
+export const getMinimistOptions = (options: Option[]) => {
   return {
     default: options.reduce((res: { [k: string]: any }, option) => {
       if (option.config.default !== undefined) {
@@ -67,4 +67,10 @@ export const findLongest = (arr: string[]) => {
 
 export const padRight = (str: string, length: number) => {
   return str.length >= length ? str : `${str}${' '.repeat(length - str.length)}`
+}
+
+export const camelcase = (input: string) => {
+  return input.replace(/([a-z])-([a-z])/g, (_, p1, p2) => {
+    return p1 + p2.toUpperCase()
+  })
 }

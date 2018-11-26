@@ -1,13 +1,23 @@
 import { EventEmitter } from 'events'
 import path from 'path'
-import minimost, { Opts as MinimostOpts } from 'minimost'
+import minimist, { Opts as MinimistOpts } from 'minimist'
 import Command, { HelpCallback, CommandExample } from './Command'
 import { OptionConfig } from './Option'
-import { getMinimostOptions } from './utils'
+import { getMinimistOptions, camelcase } from './utils'
 
 interface ParsedArgv {
   args: string[]
   options: {
+    [k: string]: any
+  }
+}
+
+interface MinimistResult extends ParsedArgv {
+  args: string[]
+  options: {
+    [k: string]: any
+  }
+  originalOptions: {
     [k: string]: any
   }
 }
@@ -28,7 +38,7 @@ class CAC extends EventEmitter {
    */
   args: string[]
   /**
-   * Parsed CLI options
+   * Parsed CLI options, camelCased
    */
   options: { [k: string]: any }
 
@@ -106,75 +116,110 @@ class CAC extends EventEmitter {
     this.bin = argv[1] ? path.basename(argv[1]) : 'cli'
 
     for (const command of this.commands) {
-      const minimostOptions = getMinimostOptions([
+      const minimistOptions = getMinimistOptions([
         ...this.globalCommand.options,
         ...command.options
       ])
-      const parsed = this.minimost(argv.slice(2), minimostOptions)
-      if (command.isMatched(parsed.args[0])) {
+      const { args, options, originalOptions } = this.minimist(
+        argv.slice(2),
+        minimistOptions
+      )
+      if (command.isMatched(args[0])) {
         this.matchedCommand = command
-        this.args = parsed.args
-        this.options = parsed.options
-        this.emit(`command:${parsed.args[0]}`, command)
-        this.runCommandAction(command, this.globalCommand, parsed)
-        return parsed
+        this.args = args
+        this.options = options
+        this.emit(`command:${args[0]}`, command)
+        this.runCommandAction(command, this.globalCommand, {
+          args,
+          options,
+          originalOptions
+        })
+        return { args, options }
       }
     }
 
     // Try the default command
     for (const command of this.commands) {
       if (command.name === '') {
-        const minimostOptions = getMinimostOptions([
+        const minimistOptions = getMinimistOptions([
           ...this.globalCommand.options,
           ...command.options
         ])
-        const parsed = this.minimost(argv.slice(2), minimostOptions)
-        this.args = parsed.args
-        this.options = parsed.options
+        const { args, options, originalOptions } = this.minimist(
+          argv.slice(2),
+          minimistOptions
+        )
         this.matchedCommand = command
+        this.args = args
+        this.options = options
         this.emit(`command:!`, command)
-        this.runCommandAction(command, this.globalCommand, parsed)
-        return parsed
+        this.runCommandAction(command, this.globalCommand, {
+          args,
+          options,
+          originalOptions
+        })
+        return { args, options }
       }
     }
 
-    const globalMinimostOptions = getMinimostOptions(this.globalCommand.options)
-    const parsed = this.minimost(argv.slice(2), globalMinimostOptions)
-    this.args = parsed.args
-    this.options = parsed.options
+    const globalMinimistOptions = getMinimistOptions(this.globalCommand.options)
+    const { args, options } = this.minimist(
+      argv.slice(2),
+      globalMinimistOptions
+    )
+    this.args = args
+    this.options = options
 
-    if (parsed.options.help && this.globalCommand.hasOption('help')) {
+    if (options.help && this.globalCommand.hasOption('help')) {
       this.outputHelp()
-      return parsed
     }
 
     if (
-      parsed.options.version &&
+      options.version &&
       this.globalCommand.hasOption('version') &&
       this.globalCommand.versionNumber
     ) {
       this.outputVersion()
-      return parsed
     }
 
     this.emit('command:*')
 
-    return parsed
+    return { args, options }
   }
 
-  minimost(argv: string[], minimostOptions: MinimostOpts) {
-    const { input: args, flags: options } = minimost(argv, minimostOptions)
+  private minimist(
+    argv: string[],
+    minimistOptions: MinimistOpts
+  ): MinimistResult {
+    const parsed = minimist(
+      argv,
+      Object.assign(
+        {
+          '--': true
+        },
+        minimistOptions
+      )
+    )
+
+    const args = parsed._
+    delete parsed._
+
+    const options: { [k: string]: any } = {}
+    for (const key of Object.keys(parsed)) {
+      options[camelcase(key)] = parsed[key]
+    }
 
     return {
       args,
-      options
+      options,
+      originalOptions: parsed
     }
   }
 
-  runCommandAction(
+  private runCommandAction(
     command: Command,
     globalCommand: Command,
-    { args, options }: ParsedArgv
+    { args, options, originalOptions }: MinimistResult
   ) {
     if (options.help && globalCommand.hasOption('help')) {
       return this.outputHelp(true)
@@ -186,7 +231,7 @@ class CAC extends EventEmitter {
 
     if (!command.commandAction) return
 
-    if (command.checkUnknownOptions(options, globalCommand)) return
+    command.checkUnknownOptions(originalOptions, globalCommand)
 
     // The first one is command name
     if (!command.isDefaultCommand) {
@@ -199,8 +244,7 @@ class CAC extends EventEmitter {
       console.error(
         `error: missing required args for command "${command.rawName}"`
       )
-      process.exitCode = 1
-      return
+      process.exit(1)
     }
 
     const actionArgs: any[] = []

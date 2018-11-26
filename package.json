@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/execa": "^0.9.0",
     "@types/jest": "^23.3.9",
+    "@types/minimist": "^1.2.0",
     "cz-conventional-changelog": "^2.1.0",
     "eslint-config-rem": "^3.0.0",
     "execa": "^1.0.0",
@@ -38,7 +39,7 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "minimost": "^1.2.0"
+    "minimist": "^1.2.0"
   },
   "release": {
     "branch": "master"

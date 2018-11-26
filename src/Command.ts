@@ -212,6 +212,12 @@ export default class Command {
     return this
   }
 
+  /**
+   * Check if the parsed options contain any unknown options
+   * Exit and output error when true
+   * @param options Original options, i.e. not camelCased one
+   * @param globalCommand
+   */
   checkUnknownOptions(options: { [k: string]: any }, globalCommand: Command) {
     if (!this.config.allowUnknownOptions) {
       for (const name of Object.keys(options)) {
@@ -225,12 +231,10 @@ export default class Command {
               name.length > 1 ? `--${name}` : `-${name}`
             }\``
           )
-          process.exitCode = 1
-          return true
+          process.exit(1)
         }
       }
     }
-    return false
   }
 }
 
