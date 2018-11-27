@@ -17,7 +17,8 @@
     "test": "jest",
     "build": "tsc && bili",
     "toc": "markdown-toc -i README.md",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "docs:api": "typedoc --out api-doc --readme none --exclude \"**/__test__/**\" --theme minimal"
   },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
@@ -38,6 +39,7 @@
     "semantic-release": "^15.12.1",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
+    "typedoc": "^0.13.0",
     "typescript": "^3.1.6"
   },
   "dependencies": {},
