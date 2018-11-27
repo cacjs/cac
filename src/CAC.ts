@@ -209,7 +209,7 @@ class CAC extends EventEmitter {
 
     if (this.matchedCommand) {
       this.runCommandAction(this.matchedCommand, parsedArgv)
-    } else {
+    } else if (this.args[0]) {
       this.emit('command:*')
     }
 
