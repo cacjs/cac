@@ -112,12 +112,18 @@ class CAC extends EventEmitter {
   }
 
   /**
-   * Output the global help message
+   * Output the corresponding help message
+   * When a sub-command is matched, output the help message for the command
+   * Otherwise output the global one.
    *
    * This will also call `process.exit(0)` to quit the process.
    */
   outputHelp() {
-    this.globalCommand.outputHelp()
+    if (this.matchedCommand) {
+      this.matchedCommand.outputHelp()
+    } else {
+      this.globalCommand.outputHelp()
+    }
   }
 
   /**
