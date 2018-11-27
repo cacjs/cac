@@ -230,6 +230,7 @@ import cac from 'cac'
 
 Projects that use **CAC**:
 
+- [VuePress](https://github.com/vuejs/vuepress): :memo: Minimalistic Vue-powered static site generator.
 - [SAO](https://github.com/egoist/sao): ⚔️ Futuristic scaffolding tool.
 - [DocPad](https://github.com/docpad/docpad): 🏹 Powerful Static Site Generator.
 - [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
