@@ -6,6 +6,13 @@
 
 **C**ommand **A**nd **C**onquer is a JavaScript library for building CLI apps.
 
+## Features
+
+- **Super light-weight**: No dependency, just a single file.
+- **Easy to learn**. There're only 4 APIs you need to learn for building simple CLIs: `cli.option` `cli.version` `cli.help` `cli.parse`.
+- **Yet so powerful**. Enable features like default command, git-like subcommands, validation for required arguments and options, variadic arguments, dot-nested options, automated help message generation and so on.
+- **Developer friendly**. Written in TypeScript.
+
 ## Table of Contents
 
 <!-- toc -->
@@ -38,6 +45,7 @@
   - [Events](#events)
 - [FAQ](#faq)
   - [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
+  - [Why not use Commander.js?](#why-not-use-commanderjs)
 - [Contributing](#contributing)
 - [Author](#author)
 
@@ -103,7 +111,7 @@ You can attach options to a command.
 const cli = require('cac')()
 
 cli
-  .command('rm <dir>')
+  .command('rm <dir>', 'Remove a dir')
   .option('-r, --recursive', 'Remove recursively')
   .action((dir, options) => {
     console.log('remove ' + dir + (options.recursive ? ' recursively' : ''))
@@ -391,6 +399,14 @@ CAC, or cac, pronounced `C-A-C`.
 This project is dedicated to our lovely C.C. sama. Maybe CAC stands for C&C as well :P
 
 <img src="http://i.giphy.com/v3FeH4swox9mg.gif" width="400"/>
+
+### Why not use Commander.js?
+
+CAC is very similar to Commander.js, while the latter does not support dot nested options, i.e. something like `--env.API_SECRET foo`. Besides, you can't use unknown options in Commander.js either.
+
+_And maybe more..._
+
+Basically I made CAC to fulfill my own needs for building CLI apps like [Poi](https://poi.js.org), [SAO](https://saojs.org) and all my CLI apps. It's small, simple but powerful :P
 
 ## Contributing
 
