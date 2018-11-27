@@ -117,10 +117,14 @@ cli
     console.log('remove ' + dir + (options.recursive ? ' recursively' : ''))
   })
 
+cli.help()
+
 cli.parse()
 ```
 
 A command's options are validated when the command is used. Any unknown options will be reported as an error. However, if an action-based command does not define an action, then the options are not validated. If you really want to use unknown options, use [`command.allowUnknownOptions`](#commandallowunknownoptions).
+
+<img alt="command options" width="500" src="https://user-images.githubusercontent.com/8784712/49065552-49dc8500-f259-11e8-9c7b-a7c32d70920e.png">
 
 ### Brackets
 
