@@ -19,7 +19,7 @@
     "strictFunctionTypes": true,
     "alwaysStrict": true,
     "module": "commonjs",
-    "outDir": "dist"
+    "outDir": "lib"
   },
   "include": ["src", "declarations.d.ts"]
 }
