@@ -65,8 +65,8 @@ class CAC extends EventEmitter {
   /**
    * Add a sub-command
    */
-  command(rawName: string, description: string, config?: CommandConfig) {
-    const command = new Command(rawName, description, config, this)
+  command(rawName: string, description?: string, config?: CommandConfig) {
+    const command = new Command(rawName, description || '', config, this)
     command.globalCommand = this.globalCommand
     this.commands.push(command)
     return command
