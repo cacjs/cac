@@ -149,9 +149,15 @@ class CAC extends EventEmitter {
   }
 
   /**
-   * Parse argv and run command action if found.
+   * Parse argv
    */
-  parse(argv = process.argv): ParsedArgv {
+  parse(
+    argv = process.argv,
+    {
+      /** Whether to run the action for matched command */
+      run = true
+    } = {}
+  ): ParsedArgv {
     this.rawArgs = argv
     this.bin = argv[1] ? path.basename(argv[1]) : 'cli'
 
@@ -207,9 +213,11 @@ class CAC extends EventEmitter {
 
     const parsedArgv = { args: this.args, options: this.options }
 
-    if (this.matchedCommand) {
-      this.runCommandAction(this.matchedCommand, parsedArgv)
-    } else if (this.args[0]) {
+    if (run) {
+      this.runMatchedCommand()
+    }
+
+    if (!this.matchedCommand && this.args[0]) {
       this.emit('command:*')
     }
 
@@ -245,8 +253,10 @@ class CAC extends EventEmitter {
     }
   }
 
-  private runCommandAction(command: Command, { args, options }: ParsedArgv) {
-    if (!command.commandAction) return
+  runMatchedCommand() {
+    const { args, options, matchedCommand: command } = this
+
+    if (!command || !command.commandAction) return
 
     command.checkUnknownOptions()
 
