@@ -268,16 +268,17 @@ class Command {
   /**
    * Check if the required string-type options exist
    */
-  checkRequiredOptions() {
+  checkOptionValue() {
     const { rawOptions, globalCommand } = this.cli
-    const requiredOptions = [...globalCommand.options, ...this.options].filter(
-      option => option.required
-    )
-    for (const option of requiredOptions) {
+    const options = [...globalCommand.options, ...this.options]
+    for (const option of options) {
       const value = rawOptions[option.names[0].split('.')[0]]
-      if (typeof value === 'boolean') {
-        console.error(`error: option \`${option.rawName}\` argument is missing`)
-        process.exit(1)
+      // Check required option value
+      if (option.required) {
+        if (typeof value === 'boolean') {
+          console.error(`error: option \`${option.rawName}\` value is missing`)
+          process.exit(1)
+        }
       }
     }
   }
