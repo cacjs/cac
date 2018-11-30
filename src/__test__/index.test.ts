@@ -1,5 +1,6 @@
 import path from 'path'
 import execa from 'execa'
+import cac from '..'
 
 function fixture(file: string) {
   return path.relative(
@@ -45,4 +46,19 @@ snapshotOutput({
   title: 'ignore-default-value',
   file: 'ignore-default-value.js',
   args: ['build']
+})
+
+test('negated option', () => {
+  const cli = cac()
+
+  cli.option('--foo [foo]', 'Set foo').option('--no-foo', 'Disable foo')
+
+  cli.option('--no-bar', 'Disable bar')
+
+  const { options } = cli.parse(['node', 'bin', '--foo', 'foo'])
+  expect(options).toEqual({
+    '--': [],
+    foo: 'foo',
+    bar: true
+  })
 })

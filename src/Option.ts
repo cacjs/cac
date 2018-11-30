@@ -7,8 +7,9 @@ interface OptionConfig {
 
 export default class Option {
   names: string[]
-  isBoolean: boolean
-  required: boolean
+  isBoolean?: boolean
+  // `required` will be a boolean for options with brackets
+  required?: boolean
   config: OptionConfig
 
   constructor(

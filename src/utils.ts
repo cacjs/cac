@@ -65,7 +65,12 @@ export const getMriOptions = (globalCommand: Command, subCommand?: Command) => {
         res[option.names[0]] = option.names.slice(1)
       }
       return res
-    }, {})
+    }, {}),
+    string: options
+      .filter(option => typeof option.required === 'boolean')
+      .reduce((res: string[], option) => {
+        return res.concat(option.names)
+      }, [])
   }
 }
 
