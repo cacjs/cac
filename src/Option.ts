@@ -11,6 +11,7 @@ export default class Option {
   // `required` will be a boolean for options with brackets
   required?: boolean
   config: OptionConfig
+  negated?: boolean
 
   constructor(
     public rawName: string,
@@ -19,18 +20,18 @@ export default class Option {
   ) {
     this.config = Object.assign({}, config)
 
-    let negated = false
     this.names = removeBrackets(rawName)
       .split(',')
       .map((v: string) => {
         let name = v.trim().replace(/^-{1,2}/, '')
         if (name.startsWith('no-')) {
-          negated = true
+          this.negated = true
           name = name.replace(/^no-/, '')
         }
         return name
       })
-    if (negated) {
+
+    if (this.negated) {
       this.config.default = true
     }
 

@@ -53,9 +53,9 @@ test('negated option', () => {
 
   cli.option('--foo [foo]', 'Set foo').option('--no-foo', 'Disable foo')
 
-  cli.option('--no-bar', 'Disable bar')
+  cli.option('--bar [bar]', 'Set bar').option('--no-bar', 'Disable bar')
 
-  const { options } = cli.parse(['node', 'bin', '--foo', 'foo'])
+  const { options } = cli.parse(['node', 'bin', '--foo', 'foo', '--bar'])
   expect(options).toEqual({
     '--': [],
     foo: 'foo',

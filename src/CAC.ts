@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import path from 'path'
-import mri, { Options as MriOpts } from 'mri'
+import mri from 'mri'
 import Command, {
   GlobalCommand,
   CommandConfig,
@@ -165,8 +165,7 @@ class CAC extends EventEmitter {
 
     // Search sub-commands
     for (const command of this.commands) {
-      const mriOptions = getMriOptions(this.globalCommand, command)
-      const mriResult = this.mri(argv.slice(2), mriOptions)
+      const mriResult = this.mri(argv.slice(2), command)
 
       const commandName = mriResult.args[0]
       if (command.isMatched(commandName)) {
@@ -185,8 +184,7 @@ class CAC extends EventEmitter {
       for (const command of this.commands) {
         if (command.name === '') {
           shouldParse = false
-          const mriOptions = getMriOptions(this.globalCommand, command)
-          const mriResult = this.mri(argv.slice(2), mriOptions)
+          const mriResult = this.mri(argv.slice(2), command)
           this.setParsedInfo(mriResult, command)
           this.emit(`command:!`, command)
         }
@@ -194,8 +192,7 @@ class CAC extends EventEmitter {
     }
 
     if (shouldParse) {
-      const globalMriOptions = getMriOptions(this.globalCommand)
-      const mriResult = this.mri(argv.slice(2), globalMriOptions)
+      const mriResult = this.mri(argv.slice(2))
       this.setParsedInfo(mriResult)
     }
 
@@ -224,13 +221,25 @@ class CAC extends EventEmitter {
     return parsedArgv
   }
 
-  private mri(argv: string[], mriOptions: MriOpts): MriResult {
+  private mri(
+    argv: string[],
+    /** Matched command */ command?: Command
+  ): MriResult {
+    // All added options
+    const cliOptions = [
+      ...this.globalCommand.options,
+      ...(command ? command.options : [])
+    ]
+    const mriOptions = getMriOptions(cliOptions)
+
+    // Extract everything after `--` since mri doesn't support it
     let argsAfterDoubleDashes: string[] = []
     const doubleDashesIndex = argv.indexOf('--')
     if (doubleDashesIndex > -1) {
       argsAfterDoubleDashes = argv.slice(0, doubleDashesIndex)
       argv = argv.slice(doubleDashesIndex + 1)
     }
+
     const parsed = mri(argv, mriOptions)
 
     const args = parsed._
@@ -239,6 +248,24 @@ class CAC extends EventEmitter {
     const options: { [k: string]: any } = {
       '--': argsAfterDoubleDashes
     }
+
+    // Set option default value
+    const ignoreDefault =
+      command && command.config.ignoreOptionDefaultValue
+        ? command.config.ignoreOptionDefaultValue
+        : this.globalCommand.config.ignoreOptionDefaultValue
+
+    if (!ignoreDefault) {
+      for (const cliOption of cliOptions) {
+        if (cliOption.config.default !== undefined) {
+          for (const name of cliOption.names) {
+            options[name] = cliOption.config.default
+          }
+        }
+      }
+    }
+
+    // Camelcase option names and set dot nested option values
     for (const key of Object.keys(parsed)) {
       const keys = key.split('.').map((v, i) => {
         return i === 0 ? camelcase(v) : v
