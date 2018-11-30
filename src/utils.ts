@@ -1,4 +1,4 @@
-import Command from './Command'
+import Option from './Option'
 
 export const removeBrackets = (v: string) => v.replace(/[<[].+/, '').trim()
 
@@ -35,38 +35,47 @@ export const findAllBrackets = (v: string) => {
   return res
 }
 
-export const getMriOptions = (globalCommand: Command, subCommand?: Command) => {
-  const options = [
-    ...globalCommand.options,
-    ...(subCommand ? subCommand.options : [])
-  ]
-  const ignoreDefault =
-    subCommand && subCommand.config.ignoreOptionDefaultValue
-      ? subCommand.config.ignoreOptionDefaultValue
-      : globalCommand.config.ignoreOptionDefaultValue
-  return {
-    default: ignoreDefault
-      ? {}
-      : options.reduce((res: { [k: string]: any }, option) => {
-          if (option.config.default !== undefined) {
-            // Only need to set the default value of the first name
-            // Since mri will automatically do the rest for alias names
-            res[option.names[0]] = option.config.default
-          }
-          return res
-        }, {}),
-    boolean: options
-      .filter(option => option.isBoolean)
-      .reduce((res: string[], option) => {
-        return res.concat(option.names)
-      }, []),
-    alias: options.reduce((res: { [k: string]: string[] }, option) => {
-      if (option.names.length > 1) {
-        res[option.names[0]] = option.names.slice(1)
-      }
-      return res
-    }, {})
+interface MriOptions {
+  alias: {
+    [k: string]: string[]
   }
+  boolean: string[]
+}
+
+export const getMriOptions = (options: Option[]) => {
+  const result: MriOptions = { alias: {}, boolean: [] }
+
+  for (const [index, option] of options.entries()) {
+    // We do not set default values in mri options
+    // Since its type (typeof) will be used to cast parsed arguments.
+    // Which mean `--foo foo` will be parsed as `{foo: true}` if we have `{default:{foo: true}}`
+
+    // Set alias
+    if (option.names.length > 1) {
+      result.alias[option.names[0]] = option.names.slice(1)
+    }
+    // Set boolean
+    if (option.isBoolean) {
+      if (option.negated) {
+        // For negated option
+        // We only set it to `boolean` type when there's no string-type option with the same name
+        const hasStringTypeOption = options.some((o, i) => {
+          return (
+            i !== index &&
+            o.names.some(name => option.names.includes(name)) &&
+            typeof o.required === 'boolean'
+          )
+        })
+        if (!hasStringTypeOption) {
+          result.boolean.push(option.names[0])
+        }
+      } else {
+        result.boolean.push(option.names[0])
+      }
+    }
+  }
+
+  return result
 }
 
 export const findLongest = (arr: string[]) => {
