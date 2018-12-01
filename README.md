@@ -30,6 +30,7 @@
 - [Projects Using CAC](#projects-using-cac)
 - [References](#references)
   - [CLI Instance](#cli-instance)
+    - [cac(name?)](#cacname)
     - [cli.command(name, description, config?)](#clicommandname-description-config)
     - [cli.option(name, description, config?)](#clioptionname-description-config)
     - [cli.parse(argv?)](#cliparseargv)
@@ -253,6 +254,10 @@ const cac = require('cac')
 const cli = cac()
 ```
 
+#### cac(name?)
+
+Create a CLI instance, optionally specify the program name which will be used to display in help and version message. When not set we use the basename of `argv[1]`.
+
 #### cli.command(name, description, config?)
 
 - Type: `(name: string, description: string) => Command`
@@ -370,7 +375,7 @@ Allow unknown options in this command, by default CAC will log an error when unk
 Add an example which will be displayed at the end of help message.
 
 ```ts
-type CommandExample = ((bin: string) => string) | string
+type CommandExample = ((name: string) => string) | string
 ```
 
 ### Events

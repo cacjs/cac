@@ -24,7 +24,8 @@ interface MriResult extends ParsedArgv {
 }
 
 class CAC extends EventEmitter {
-  bin: string
+  /** The program name to display in help and version message */
+  name: string
   commands: Command[]
   globalCommand: GlobalCommand
   matchedCommand: Command
@@ -45,8 +46,12 @@ class CAC extends EventEmitter {
    */
   rawOptions: MriResult['rawOptions']
 
-  constructor() {
+  /**
+   * @param name The program name to display in help and version message
+   */
+  constructor(name = '') {
     super()
+    this.name = name
     this.commands = []
     this.globalCommand = new GlobalCommand(this)
     this.globalCommand.usage('<command> [options]')
@@ -159,7 +164,9 @@ class CAC extends EventEmitter {
     } = {}
   ): ParsedArgv {
     this.rawArgs = argv
-    this.bin = argv[1] ? path.basename(argv[1]) : 'cli'
+    if (!this.name) {
+      this.name = argv[1] ? path.basename(argv[1]) : 'cli'
+    }
 
     let shouldParse = true
 

@@ -124,7 +124,7 @@ class Command {
   }
 
   outputHelp() {
-    const { bin, commands } = this.cli
+    const { name, commands } = this.cli
     const {
       versionNumber,
       options: globalOptions,
@@ -133,13 +133,13 @@ class Command {
 
     const sections: HelpSection[] = [
       {
-        body: `${bin}${versionNumber ? ` v${versionNumber}` : ''}`
+        body: `${name}${versionNumber ? ` v${versionNumber}` : ''}`
       }
     ]
 
     sections.push({
       title: 'Usage',
-      body: `  $ ${bin} ${this.usageText || this.rawName}`
+      body: `  $ ${name} ${this.usageText || this.rawName}`
     })
 
     const showCommands =
@@ -165,7 +165,7 @@ class Command {
         body: commands
           .map(
             command =>
-              `  $ ${bin}${
+              `  $ ${name}${
                 command.name === '' ? '' : ` ${command.name}`
               } --help`
           )
@@ -202,7 +202,7 @@ class Command {
         body: this.examples
           .map(example => {
             if (typeof example === 'function') {
-              return example(bin)
+              return example(name)
             }
             return example
           })
@@ -228,11 +228,11 @@ class Command {
   }
 
   outputVersion() {
-    const { bin } = this.cli
+    const { name } = this.cli
     const { versionNumber } = this.cli.globalCommand
     if (versionNumber) {
       console.log(
-        `${bin}/${versionNumber} ${process.platform}-${process.arch} node-${
+        `${name}/${versionNumber} ${process.platform}-${process.arch} node-${
           process.version
         }`
       )
