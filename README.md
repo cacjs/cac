@@ -224,7 +224,7 @@ Then everything just works out of the box:
 ```js
 const cac = require('cac')
 // OR ES modules
-import cac from 'cac'
+import * as cac from 'cac'
 ```
 
 ## Projects Using CAC
