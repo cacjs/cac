@@ -1,5 +1,8 @@
 import CAC from './CAC'
 
-const cac = () => new CAC()
+/**
+ * @param name The program name to display in help and version message
+ */
+const cac = (name = '') => new CAC(name)
 
 export = cac
