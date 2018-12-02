@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "test": "jest",
+    "test:cov": "jest --coverage",
     "build": "tsc && bili",
     "toc": "markdown-toc -i README.md",
     "prepublishOnly": "npm run build",

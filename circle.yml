@@ -20,7 +20,10 @@ jobs:
             - ./node_modules
       - run:
           name: test
-          command: yarn test
+          command: yarn test:cov
+      - run:
+          name: upload coverage
+          command: bash <(curl -s https://codecov.io/bash)
       - run:
           name: Release
           command: yarn semantic-release
