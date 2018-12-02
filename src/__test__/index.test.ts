@@ -62,3 +62,20 @@ test('negated option', () => {
     bar: true
   })
 })
+
+test('double dashes', () => {
+  const cli = cac()
+
+  const { args, options } = cli.parse([
+    'node',
+    'bin',
+    'foo',
+    'bar',
+    '--',
+    'npm',
+    'test'
+  ])
+
+  expect(args).toEqual(['foo', 'bar'])
+  expect(options['--']).toEqual(['npm', 'test'])
+})

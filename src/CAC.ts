@@ -243,8 +243,8 @@ class CAC extends EventEmitter {
     let argsAfterDoubleDashes: string[] = []
     const doubleDashesIndex = argv.indexOf('--')
     if (doubleDashesIndex > -1) {
-      argsAfterDoubleDashes = argv.slice(0, doubleDashesIndex)
-      argv = argv.slice(doubleDashesIndex + 1)
+      argsAfterDoubleDashes = argv.slice(doubleDashesIndex + 1)
+      argv = argv.slice(0, doubleDashesIndex)
     }
 
     const parsed = mri(argv, mriOptions)
