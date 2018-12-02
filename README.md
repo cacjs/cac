@@ -26,6 +26,7 @@
   - [Variadic Arguments](#variadic-arguments)
   - [Dot-nested Options](#dot-nested-options)
   - [Default Command](#default-command)
+  - [Supply an array as option value](#supply-an-array-as-option-value)
   - [With TypeScript](#with-typescript)
 - [Projects Using CAC](#projects-using-cac)
 - [References](#references)
@@ -209,6 +210,18 @@ cli
   })
 
 cli.parse()
+```
+
+### Supply an array as option value
+
+```bash
+node cli.js --include project-a
+# The parsed options will be:
+# { include: 'project-a' }
+
+node cli.js --include project-a --include project-b
+# The parsed options will be:
+# { include: ['project-a', 'project-b'] }
 ```
 
 ### With TypeScript
