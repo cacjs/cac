@@ -250,6 +250,7 @@ Projects that use **CAC**:
 - [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
 - [bili](https://github.com/egoist/bili): 🥂 Schweizer Armeemesser for bundling JavaScript libraries.
 - [lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
+- [Foy](https://github.com/zaaack/foy): 🏗 A lightweight and modern task runner and build tool for general purpose.
 - Feel free to add yours here...
 
 ## References
