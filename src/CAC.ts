@@ -145,7 +145,7 @@ class CAC extends EventEmitter {
     this.globalCommand.outputVersion()
   }
 
-  setParsedInfo(
+  private setParsedInfo(
     { args, options, rawOptions }: MriResult,
     matchedCommand?: Command
   ) {
