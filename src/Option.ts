@@ -2,7 +2,6 @@ import { removeBrackets } from './utils'
 
 interface OptionConfig {
   default?: any
-  coerce?: (v: any) => any
 }
 
 export default class Option {

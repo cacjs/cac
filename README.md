@@ -292,7 +292,6 @@ Add a global option.
 The option also accepts a third argument `config` for addtional option config:
 
 - `config.default`: Default value for the option.
-- `config.coerce`: `(value: any) => newValue` A function to process the option value.
 
 #### cli.parse(argv?)
 
