@@ -46,6 +46,9 @@ class CAC extends EventEmitter {
    */
   rawOptions: MriResult['rawOptions']
 
+  private showHelpOnExit: boolean
+  private showVersionOnExit: boolean
+
   /**
    * @param name The program name to display in help and version message
    */
@@ -94,6 +97,7 @@ class CAC extends EventEmitter {
   help(callback?: HelpCallback) {
     this.globalCommand.option('-h, --help', 'Display this message')
     this.globalCommand.helpCallback = callback
+    this.showHelpOnExit = true
     return this
   }
 
@@ -103,6 +107,7 @@ class CAC extends EventEmitter {
    */
   version(version: string, customFlags = '-v, --version') {
     this.globalCommand.version(version, customFlags)
+    this.showVersionOnExit = true
     return this
   }
 
@@ -203,15 +208,11 @@ class CAC extends EventEmitter {
       this.setParsedInfo(mriResult)
     }
 
-    if (this.options.help && this.globalCommand.hasOption('help')) {
+    if (this.options.help && this.showHelpOnExit) {
       this.outputHelp()
     }
 
-    if (
-      this.options.version &&
-      this.globalCommand.hasOption('version') &&
-      this.globalCommand.versionNumber
-    ) {
+    if (this.options.version && this.showVersionOnExit) {
       this.outputVersion()
     }
 
