@@ -29,6 +29,7 @@ export default class Option {
         }
         return name
       })
+      .sort((a, b) => (a.length > b.length ? 1 : -1)) // Sort names
 
     if (this.negated) {
       this.config.default = true
