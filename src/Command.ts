@@ -283,10 +283,13 @@ class Command {
     const { rawOptions, globalCommand } = this.cli
     const options = [...globalCommand.options, ...this.options]
     for (const option of options) {
-      const value = rawOptions[option.names[0].split('.')[0]]
+      const value = rawOptions[option.name.split('.')[0]]
       // Check required option value
       if (option.required) {
-        if (typeof value === 'boolean') {
+        const hasNegated = this.options.some(
+          o => o.negated && o.names.includes(option.name)
+        )
+        if (value === true || (value === false && !hasNegated)) {
           console.error(`error: option \`${option.rawName}\` value is missing`)
           process.exit(1)
         }

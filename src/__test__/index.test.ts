@@ -79,3 +79,15 @@ test('double dashes', () => {
   expect(args).toEqual(['foo', 'bar'])
   expect(options['--']).toEqual(['npm', 'test'])
 })
+
+test('negated optional validation', () => {
+  const cli = cac()
+
+  cli.option('--config <config>', 'config file')
+  cli.option('--no-config', 'no config file')
+
+  const { options } = cli.parse(`node bin --no-config`.split(' '))
+
+  cli.globalCommand.checkOptionValue()
+  expect(options.config).toBe(false)
+})
