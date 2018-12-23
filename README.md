@@ -69,7 +69,7 @@ Use CAC as simple argument parser:
 // examples/basic-usage.js
 const cli = require('cac')()
 
-cli.option('--type [type]', 'Choose a project type', {
+cli.option('--type <type>', 'Choose a project type', {
   default: 'node'
 })
 
@@ -86,8 +86,8 @@ console.log(JSON.stringify(parsed, null, 2))
 // examples/help.js
 const cli = require('cac')()
 
-cli.option('--type [type]', 'Choose a project type', {
-  default: 'node'
+cli.option('--eslint [config]', 'Choose an ESLint config', {
+  default: 'standard'
 })
 cli.option('--name <name>', 'Provide your name')
 
@@ -132,7 +132,7 @@ A command's options are validated when the command is used. Any unknown options 
 
 When using brackets in command name, angled brackets indicate required command arguments, while sqaure bracket indicate optional arguments.
 
-When using brackets in option name, angled brackets indicate that the option value is required, while sqaure bracket indicate that the value is optional.
+When using brackets in option name, angled brackets indicate that a string / number value is required, while sqaure bracket indicate that the value can also be `true`.
 
 ```js
 const cli = require('cac')()
@@ -141,12 +141,29 @@ cli
   .command('deploy <folder>', 'Deploy a folder to AWS')
   .option('--scale [level]', 'Scaling level')
   .action((folder, options) => {
-    console.log(folder)
-    console.log(options)
+    // ...
+  })
+
+cli
+  .command('build [project]', 'Build a project')
+  .option('--out <dir>', 'Output directory')
+  .action((folder, options) => {
+    // ...
   })
 
 cli.parse()
 ```
+
+To allow an option whose value is `false`, you need to manually speicfy a negated option:
+
+```js
+cli
+  .command('build [project]', 'Build a project')
+  .option('--no-config', 'Disable config file')
+  .option('--config <path>', 'Use a custom config file')
+```
+
+This will let CAC set the default value of `config` to true, and you can use `--no-config` flag to set it to `false`.
 
 ### Variadic Arguments
 
