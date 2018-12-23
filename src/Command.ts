@@ -240,6 +240,17 @@ class Command {
     process.exit(0)
   }
 
+  checkRequiredArgs() {
+    const minimalArgsCount = this.args.filter(arg => arg.required).length
+
+    if (this.cli.args.length < minimalArgsCount) {
+      console.error(
+        `error: missing required args for command \`${this.rawName}\``
+      )
+      process.exit(1)
+    }
+  }
+
   /**
    * Check if the parsed options contain any unknown options
    *

@@ -297,14 +297,7 @@ class CAC extends EventEmitter {
 
     command.checkOptionValue()
 
-    const minimalArgsCount = command.args.filter(arg => arg.required).length
-
-    if (args.length < minimalArgsCount) {
-      console.error(
-        `error: missing required args for command \`${command.rawName}\``
-      )
-      process.exit(1)
-    }
+    command.checkRequiredArgs()
 
     const actionArgs: any[] = []
     command.args.forEach((arg, index) => {
