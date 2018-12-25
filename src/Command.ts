@@ -286,7 +286,7 @@ class Command {
       const value = rawOptions[option.name.split('.')[0]]
       // Check required option value
       if (option.required) {
-        const hasNegated = this.options.some(
+        const hasNegated = options.some(
           o => o.negated && o.names.includes(option.name)
         )
         if (value === true || (value === false && !hasNegated)) {
