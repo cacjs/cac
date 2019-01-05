@@ -131,9 +131,9 @@ A command's options are validated when the command is used. Any unknown options 
 
 ### Brackets
 
-When using brackets in command name, angled brackets indicate required command arguments, while sqaure bracket indicate optional arguments.
+When using brackets in command name, angled brackets indicate required command arguments, while square bracket indicate optional arguments.
 
-When using brackets in option name, angled brackets indicate that a string / number value is required, while sqaure bracket indicate that the value can also be `true`.
+When using brackets in option name, angled brackets indicate that a string / number value is required, while square bracket indicate that the value can also be `true`.
 
 ```js
 const cli = require('cac')()
