@@ -95,18 +95,21 @@ test('negated optional validation', () => {
 test('array types without transformFunction', () => {
   const cli = cac()
 
-  cli.option(
-    '--externals <external>',
-    'Add externals(can be used for multiple times',
-    {
-      type: []
-    }
-  )
+  cli
+    .option(
+      '--externals <external>',
+      'Add externals(can be used for multiple times',
+      {
+        type: []
+      }
+    )
+    .option('--scale [level]', 'Scaling level')
 
   const { options: options1 } = cli.parse(
-    `node bin --externals.env foo`.split(' ')
+    `node bin --externals.env.prod production --scale`.split(' ')
   )
-  expect(options1.externals.env).toEqual(['foo'])
+  expect(options1.externals).toEqual([{ env: { prod: 'production' } }])
+  expect(options1.scale).toEqual(true)
 
   const { options: options2 } = cli.parse(
     `node bin --externals foo --externals bar`.split(' ')
@@ -116,7 +119,7 @@ test('array types without transformFunction', () => {
   const { options: options3 } = cli.parse(
     `node bin --externals.env foo --externals.env bar`.split(' ')
   )
-  expect(options3.externals.env).toEqual(['foo', 'bar'])
+  expect(options3.externals).toEqual([{ env: ['foo', 'bar'] }])
 })
 
 test('array types with transformFunction', () => {
@@ -133,5 +136,5 @@ test('array types with transformFunction', () => {
     `node bin build app.js --config config.js --scale`.split(' ')
   )
   expect(options.config).toEqual(['config.js'])
-  expect(options.scale).toEqual(['true'])
+  expect(options.scale).toEqual(true)
 })

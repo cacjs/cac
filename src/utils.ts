@@ -116,17 +116,19 @@ export const setDotProp = (
   }
 }
 
-export const transformByType = (
-  val: any,
-  shouldTransform?: Boolean,
-  transformFunction?: Function
+export const setByType = (
+  obj: { [k: string]: any },
+  transforms: { [k: string]: any }
 ) => {
-  if (shouldTransform) {
-    val = Array.prototype.concat.call([], val)
+  for (const key of Object.keys(transforms)) {
+    const transform = transforms[key]
 
-    if (transformFunction && typeof transformFunction === 'function') {
-      val = val.map(transformFunction)
+    if (transform.shouldTransform) {
+      obj[key] = Array.prototype.concat.call([], obj[key])
+
+      if (typeof transform.transformFunction === 'function') {
+        obj[key] = obj[key].map(transform.transformFunction)
+      }
     }
   }
-  return val
 }
