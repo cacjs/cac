@@ -115,3 +115,18 @@ export const setDotProp = (
         : []
   }
 }
+
+export const transformByType = (
+  val: any,
+  shouldTransform?: Boolean,
+  transformFunction?: Function
+) => {
+  if (shouldTransform) {
+    val = Array.prototype.concat.call([], val)
+
+    if (transformFunction) {
+      val = val.map(transformFunction)
+    }
+  }
+  return val
+}

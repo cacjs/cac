@@ -8,7 +8,7 @@ import Command, {
   CommandExample
 } from './Command'
 import { OptionConfig } from './Option'
-import { getMriOptions, camelcase, setDotProp } from './utils'
+import { getMriOptions, camelcase, setDotProp, transformByType } from './utils'
 
 interface ParsedArgv {
   args: ReadonlyArray<string>
@@ -263,13 +263,19 @@ class CAC extends EventEmitter {
         ? command.config.ignoreOptionDefaultValue
         : this.globalCommand.config.ignoreOptionDefaultValue
 
-    if (!ignoreDefault) {
-      for (const cliOption of cliOptions) {
-        if (cliOption.config.default !== undefined) {
-          for (const name of cliOption.names) {
-            options[name] = cliOption.config.default
-          }
+    let shouldTransfrom
+    let transformFunction
+    for (const cliOption of cliOptions) {
+      if (!ignoreDefault && cliOption.config.default !== undefined) {
+        for (const name of cliOption.names) {
+          options[name] = cliOption.config.default
         }
+      }
+
+      // If options type is defined
+      if (Array.isArray(cliOption.config.type)) {
+        shouldTransfrom = true
+        transformFunction = cliOption.config.type[0]
       }
     }
 
@@ -278,7 +284,12 @@ class CAC extends EventEmitter {
       const keys = key.split('.').map((v, i) => {
         return i === 0 ? camelcase(v) : v
       })
-      setDotProp(options, keys, parsed[key])
+
+      setDotProp(
+        options,
+        keys,
+        transformByType(parsed[key], shouldTransfrom, transformFunction)
+      )
     }
 
     return {
