@@ -124,7 +124,7 @@ export const transformByType = (
   if (shouldTransform) {
     val = Array.prototype.concat.call([], val)
 
-    if (transformFunction) {
+    if (transformFunction && typeof transformFunction === 'function') {
       val = val.map(transformFunction)
     }
   }
