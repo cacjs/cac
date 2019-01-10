@@ -2,6 +2,7 @@ import { removeBrackets } from './utils'
 
 interface OptionConfig {
   default?: any
+  type?: any[]
 }
 
 export default class Option {

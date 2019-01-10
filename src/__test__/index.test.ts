@@ -91,3 +91,50 @@ test('negated optional validation', () => {
   cli.globalCommand.checkOptionValue()
   expect(options.config).toBe(false)
 })
+
+test('array types without transformFunction', () => {
+  const cli = cac()
+
+  cli
+    .option(
+      '--externals <external>',
+      'Add externals(can be used for multiple times',
+      {
+        type: []
+      }
+    )
+    .option('--scale [level]', 'Scaling level')
+
+  const { options: options1 } = cli.parse(
+    `node bin --externals.env.prod production --scale`.split(' ')
+  )
+  expect(options1.externals).toEqual([{ env: { prod: 'production' } }])
+  expect(options1.scale).toEqual(true)
+
+  const { options: options2 } = cli.parse(
+    `node bin --externals foo --externals bar`.split(' ')
+  )
+  expect(options2.externals).toEqual(['foo', 'bar'])
+
+  const { options: options3 } = cli.parse(
+    `node bin --externals.env foo --externals.env bar`.split(' ')
+  )
+  expect(options3.externals).toEqual([{ env: ['foo', 'bar'] }])
+})
+
+test('array types with transformFunction', () => {
+  const cli = cac()
+
+  cli
+    .command('build [entry]', 'Build your app')
+    .option('--config <configFlie>', 'Use config file for building', {
+      type: [String]
+    })
+    .option('--scale [level]', 'Scaling level')
+
+  const { options } = cli.parse(
+    `node bin build app.js --config config.js --scale`.split(' ')
+  )
+  expect(options.config).toEqual(['config.js'])
+  expect(options.scale).toEqual(true)
+})

@@ -310,6 +310,7 @@ Add a global option.
 The option also accepts a third argument `config` for addtional option config:
 
 - `config.default`: Default value for the option.
+- `config.type`: `any[]` When set to `[]`, the option value returns an array type. You can also use a conversion function such as `[String]`, which will invoke the option value with `String`.
 
 #### cli.parse(argv?)
 
