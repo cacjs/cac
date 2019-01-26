@@ -23,6 +23,9 @@ export default class Option {
   ) {
     this.config = Object.assign({}, config)
 
+    // You may use cli.option('--env.* [value]', 'desc') to denote a dot-nested option
+    rawName = rawName.replace(/\.\*/, '')
+
     this.negated = false
     this.names = removeBrackets(rawName)
       .split(',')
