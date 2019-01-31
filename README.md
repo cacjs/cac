@@ -296,7 +296,7 @@ Create a CLI instance, optionally specify the program name which will be used to
 
 Create a command instance.
 
-The option also accepts a third argument `config` for addtional command config:
+The option also accepts a third argument `config` for additional command config:
 
 - `config.allowUnknownOptions`: `boolean` Allow unknown options in this command.
 - `config.ignoreOptionDefaultValue`: `boolean` Don't use the options's default value in parsed options, only display them in help message.
@@ -307,7 +307,7 @@ The option also accepts a third argument `config` for addtional command config:
 
 Add a global option.
 
-The option also accepts a third argument `config` for addtional option config:
+The option also accepts a third argument `config` for additional option config:
 
 - `config.default`: Default value for the option.
 - `config.type`: `any[]` When set to `[]`, the option value returns an array type. You can also use a conversion function such as `[String]`, which will invoke the option value with `String`.
