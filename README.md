@@ -86,8 +86,8 @@ console.log(JSON.stringify(parsed, null, 2))
 // examples/help.js
 const cli = require('cac')()
 
-cli.option('--eslint [config]', 'Choose an ESLint config', {
-  default: 'standard'
+cli.option('--type [type]', 'Choose a project type', {
+  default: 'node'
 })
 cli.option('--name <name>', 'Provide your name')
 
