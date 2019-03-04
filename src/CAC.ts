@@ -126,7 +126,9 @@ class CAC extends EventEmitter {
    * When a sub-command is matched, output the help message for the command
    * Otherwise output the global one.
    *
-   * This will also call `process.exit(0)` to quit the process.
+   * This will also call `process.exit(<exitCode>)` to quit the process.
+   *
+   * @param exitCode defaults to 0
    */
   outputHelp(exitCode: number = 0) {
     if (this.matchedCommand) {
@@ -139,7 +141,9 @@ class CAC extends EventEmitter {
   /**
    * Output the version number.
    *
-   * This will also call `process.exit(0)` to quit the process.
+   * This will also call `process.exit(<exitCode>)` to quit the process.
+   *
+   * @param exitCode defaults to 0
    */
   outputVersion(exitCode: number = 0) {
     this.globalCommand.outputVersion(exitCode)
