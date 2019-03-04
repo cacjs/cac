@@ -123,7 +123,7 @@ class Command {
     })
   }
 
-  outputHelp() {
+  outputHelp(exitCode: number = 0) {
     const { name, commands } = this.cli
     const {
       versionNumber,
@@ -224,10 +224,10 @@ class Command {
         .join('\n\n')
     )
 
-    process.exit(0)
+    process.exit(exitCode)
   }
 
-  outputVersion() {
+  outputVersion(exitCode: number = 0) {
     const { name } = this.cli
     const { versionNumber } = this.cli.globalCommand
     if (versionNumber) {
@@ -237,7 +237,7 @@ class Command {
         }`
       )
     }
-    process.exit(0)
+    process.exit(exitCode)
   }
 
   checkRequiredArgs() {

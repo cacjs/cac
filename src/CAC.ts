@@ -128,11 +128,11 @@ class CAC extends EventEmitter {
    *
    * This will also call `process.exit(0)` to quit the process.
    */
-  outputHelp() {
+  outputHelp(exitCode: number = 0) {
     if (this.matchedCommand) {
-      this.matchedCommand.outputHelp()
+      this.matchedCommand.outputHelp(exitCode)
     } else {
-      this.globalCommand.outputHelp()
+      this.globalCommand.outputHelp(exitCode)
     }
   }
 
@@ -141,8 +141,8 @@ class CAC extends EventEmitter {
    *
    * This will also call `process.exit(0)` to quit the process.
    */
-  outputVersion() {
-    this.globalCommand.outputVersion()
+  outputVersion(exitCode: number = 0) {
+    this.globalCommand.outputVersion(exitCode)
   }
 
   private setParsedInfo(
