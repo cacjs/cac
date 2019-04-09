@@ -28,7 +28,8 @@ class CAC extends EventEmitter {
   name: string
   commands: Command[]
   globalCommand: GlobalCommand
-  matchedCommand: Command
+  matchedCommand?: Command
+  matchedCommandName?: string
   /**
    * Raw CLI arguments
    */
@@ -147,13 +148,17 @@ class CAC extends EventEmitter {
 
   private setParsedInfo(
     { args, options, rawOptions }: MriResult,
-    matchedCommand?: Command
+    matchedCommand?: Command,
+    matchedCommandName?: string
   ) {
     this.args = args
     this.options = options
     this.rawOptions = rawOptions
     if (matchedCommand) {
       this.matchedCommand = matchedCommand
+    }
+    if (matchedCommandName) {
+      this.matchedCommandName = matchedCommandName
     }
     return this
   }
@@ -186,7 +191,7 @@ class CAC extends EventEmitter {
           ...mriResult,
           args: mriResult.args.slice(1)
         }
-        this.setParsedInfo(parsedInfo, command)
+        this.setParsedInfo(parsedInfo, command, commandName)
         this.emit(`command:${commandName}`, command)
       }
     }
