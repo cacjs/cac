@@ -11,7 +11,8 @@
   "files": [
     "dist",
     "types",
-    "!**/__test__/**"
+    "!**/__test__/**",
+    "/mod.js"
   ],
   "scripts": {
     "test": "jest",
