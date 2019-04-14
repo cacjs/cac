@@ -28,6 +28,7 @@
   - [Default Command](#default-command)
   - [Supply an array as option value](#supply-an-array-as-option-value)
   - [With TypeScript](#with-typescript)
+  - [With Deno](#with-deno)
 - [Projects Using CAC](#projects-using-cac)
 - [References](#references)
   - [CLI Instance](#cli-instance)
@@ -253,9 +254,17 @@ yarn add @types/node --dev
 Then everything just works out of the box:
 
 ```js
-const cac = require('cac')
+const { cac } = require('cac')
 // OR ES modules
-import * as cac from 'cac'
+import { cac } from 'cac'
+```
+
+### With Deno
+
+```ts
+import { cac } from 'https://unpkg.com/cac/mod.js'
+
+// ...
 ```
 
 ## Projects Using CAC
@@ -282,7 +291,7 @@ Below is a brief overview.
 CLI instance is created by invoking the `cac` function:
 
 ```js
-const cac = require('cac')
+const { cac } = require('cac')
 const cli = cac()
 ```
 

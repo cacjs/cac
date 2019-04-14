@@ -1,6 +1,7 @@
 import CAC from './CAC'
 import Option, { OptionConfig } from './Option'
 import { removeBrackets, findAllBrackets, findLongest, padRight } from './utils'
+import { exit, platformInfo } from './node'
 
 interface CommandArg {
   required: boolean
@@ -224,20 +225,16 @@ class Command {
         .join('\n\n')
     )
 
-    process.exit(0)
+    exit(0)
   }
 
   outputVersion() {
     const { name } = this.cli
     const { versionNumber } = this.cli.globalCommand
     if (versionNumber) {
-      console.log(
-        `${name}/${versionNumber} ${process.platform}-${process.arch} node-${
-          process.version
-        }`
-      )
+      console.log(`${name}/${versionNumber} ${platformInfo}`)
     }
-    process.exit(0)
+    exit(0)
   }
 
   checkRequiredArgs() {
@@ -247,7 +244,7 @@ class Command {
       console.error(
         `error: missing required args for command \`${this.rawName}\``
       )
-      process.exit(1)
+      exit(1)
     }
   }
 
@@ -270,7 +267,7 @@ class Command {
               name.length > 1 ? `--${name}` : `-${name}`
             }\``
           )
-          process.exit(1)
+          exit(1)
         }
       }
     }
@@ -291,7 +288,7 @@ class Command {
         )
         if (value === true || (value === false && !hasNegated)) {
           console.error(`error: option \`${option.rawName}\` value is missing`)
-          process.exit(1)
+          exit(1)
         }
       }
     }

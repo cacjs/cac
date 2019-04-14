@@ -1,9 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var events = require('events');
-var path = _interopDefault(require('path'));
+var EventEmitter = _interopDefault(require('events'));
 
 function toArr(any) {
 	return any == null ? [] : Array.isArray(any) ? any : [any];
@@ -217,6 +218,10 @@ const setByType = (obj, transforms) => {
         }
     }
 };
+const getFileName = (input) => {
+    const m = /([^\\\/]+)$/.exec(input);
+    return m ? m[1] : '';
+};
 
 class Option {
     constructor(rawName, description, config) {
@@ -254,6 +259,13 @@ class Option {
         }
     }
 }
+
+const deno = typeof window !== 'undefined' && window.Deno;
+const exit = (code) => {
+    return deno ? Deno.exit(code) : process.exit(code);
+};
+const processArgs = deno ? ['deno'].concat(Deno.args) : process.argv;
+const platformInfo = deno ? `${Deno.platform.os}-${Deno.platform.arch} deno-${Deno.version.deno}` : `${process.platform}-${process.arch} node-${process.version}`;
 
 class Command {
     constructor(rawName, description, config = {}, cli) {
@@ -399,21 +411,21 @@ class Command {
                 : section.body;
         })
             .join('\n\n'));
-        process.exit(0);
+        exit(0);
     }
     outputVersion() {
         const { name } = this.cli;
         const { versionNumber } = this.cli.globalCommand;
         if (versionNumber) {
-            console.log(`${name}/${versionNumber} ${process.platform}-${process.arch} node-${process.version}`);
+            console.log(`${name}/${versionNumber} ${platformInfo}`);
         }
-        process.exit(0);
+        exit(0);
     }
     checkRequiredArgs() {
         const minimalArgsCount = this.args.filter(arg => arg.required).length;
         if (this.cli.args.length < minimalArgsCount) {
             console.error(`error: missing required args for command \`${this.rawName}\``);
-            process.exit(1);
+            exit(1);
         }
     }
     /**
@@ -429,7 +441,7 @@ class Command {
                     !this.hasOption(name) &&
                     !globalCommand.hasOption(name)) {
                     console.error(`error: Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
-                    process.exit(1);
+                    exit(1);
                 }
             }
         }
@@ -447,7 +459,7 @@ class Command {
                 const hasNegated = options.some(o => o.negated && o.names.includes(option.name));
                 if (value === true || (value === false && !hasNegated)) {
                     console.error(`error: option \`${option.rawName}\` value is missing`);
-                    process.exit(1);
+                    exit(1);
                 }
             }
         }
@@ -459,7 +471,7 @@ class GlobalCommand extends Command {
     }
 }
 
-class CAC extends events.EventEmitter {
+class CAC extends EventEmitter {
     /**
      * @param name The program name to display in help and version message
      */
@@ -563,12 +575,12 @@ class CAC extends events.EventEmitter {
     /**
      * Parse argv
      */
-    parse(argv = process.argv, { 
+    parse(argv = processArgs, { 
     /** Whether to run the action for matched command */
     run = true } = {}) {
         this.rawArgs = argv;
         if (!this.name) {
-            this.name = argv[1] ? path.basename(argv[1]) : 'cli';
+            this.name = argv[1] ? getFileName(argv[1]) : 'cli';
         }
         let shouldParse = true;
         // Search sub-commands
@@ -696,6 +708,8 @@ const cac = (name = '') => new CAC(name);
 if (typeof module !== 'undefined') {
     module.exports = cac;
     module.exports.default = cac;
+    module.exports.cac = cac;
 }
 
-module.exports = cac;
+exports.cac = cac;
+exports.default = cac;

@@ -6,8 +6,10 @@ import CAC from './CAC'
 const cac = (name = '') => new CAC(name)
 
 export default cac
+export { cac }
 
 if (typeof module !== 'undefined') {
   module.exports = cac
   module.exports.default = cac
+  module.exports.cac = cac
 }

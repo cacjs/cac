@@ -132,3 +132,8 @@ export const setByType = (
     }
   }
 }
+
+export const getFileName = (input: string) => {
+  const m = /([^\\\/]+)$/.exec(input)
+  return m ? m[1] : ''
+}

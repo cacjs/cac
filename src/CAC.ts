@@ -1,5 +1,4 @@
-import { EventEmitter } from 'events'
-import path from 'path'
+import EventEmitter from 'events'
 import mri from 'mri'
 import Command, {
   GlobalCommand,
@@ -8,7 +7,14 @@ import Command, {
   CommandExample
 } from './Command'
 import { OptionConfig } from './Option'
-import { getMriOptions, camelcase, setDotProp, setByType } from './utils'
+import {
+  getMriOptions,
+  camelcase,
+  setDotProp,
+  setByType,
+  getFileName
+} from './utils'
+import { processArgs } from './node'
 
 interface ParsedArgv {
   args: ReadonlyArray<string>
@@ -167,7 +173,7 @@ class CAC extends EventEmitter {
    * Parse argv
    */
   parse(
-    argv = process.argv,
+    argv = processArgs,
     {
       /** Whether to run the action for matched command */
       run = true
@@ -175,7 +181,7 @@ class CAC extends EventEmitter {
   ): ParsedArgv {
     this.rawArgs = argv
     if (!this.name) {
-      this.name = argv[1] ? path.basename(argv[1]) : 'cli'
+      this.name = argv[1] ? getFileName(argv[1]) : 'cli'
     }
 
     let shouldParse = true
