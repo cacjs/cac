@@ -3,5 +3,3 @@ node_modules
 /types
 /api-doc
 coverage
-/mod.js
-/dist

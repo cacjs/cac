@@ -265,7 +265,9 @@ const exit = (code) => {
     return deno ? Deno.exit(code) : process.exit(code);
 };
 const processArgs = deno ? ['deno'].concat(Deno.args) : process.argv;
-const platformInfo = deno ? `${Deno.platform.os}-${Deno.platform.arch} deno-${Deno.version.deno}` : `${process.platform}-${process.arch} node-${process.version}`;
+const platformInfo = deno
+    ? `${Deno.platform.os}-${Deno.platform.arch} deno-${Deno.version.deno}`
+    : `${process.platform}-${process.arch} node-${process.version}`;
 
 class Command {
     constructor(rawName, description, config = {}, cli) {
