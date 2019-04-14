@@ -16,7 +16,7 @@
   "scripts": {
     "test": "jest",
     "test:cov": "jest --coverage",
-    "build": "tsc && bili",
+    "build": "tsc -m ESNext && rollup -c",
     "toc": "markdown-toc -i README.md",
     "prepublishOnly": "npm run build",
     "docs:api": "typedoc --out api-doc --readme none --exclude \"**/__test__/**\" --theme minimal"
@@ -27,7 +27,6 @@
     "@types/execa": "^0.9.0",
     "@types/jest": "^23.3.9",
     "@types/mri": "^1.1.0",
-    "bili": "^3.4.2",
     "cz-conventional-changelog": "^2.1.0",
     "eslint-config-rem": "^3.0.0",
     "execa": "^1.0.0",
@@ -37,6 +36,9 @@
     "markdown-toc": "^1.2.0",
     "mri": "^1.1.1",
     "prettier": "^1.15.2",
+    "rollup": "^1.10.0",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.3",
     "semantic-release": "^15.12.1",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
@@ -55,14 +57,19 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,ts}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.md": [
-      "markdown-toc -i",
-      "prettier --write",
-      "git add"
+    "linters": {
+      "*.{js,json,ts}": [
+        "prettier --write",
+        "git add"
+      ],
+      "*.md": [
+        "markdown-toc -i",
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "dist/**"
     ]
   },
   "husky": {

@@ -5,4 +5,9 @@ import CAC from './CAC'
  */
 const cac = (name = '') => new CAC(name)
 
-export = cac
+export default cac
+
+if (typeof module !== 'undefined') {
+  module.exports = cac
+  module.exports.default = cac
+}
