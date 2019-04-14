@@ -291,7 +291,7 @@ Below is a brief overview.
 CLI instance is created by invoking the `cac` function:
 
 ```js
-const { cac } = require('cac')
+const cac = require('cac')
 const cli = cac()
 ```
 
