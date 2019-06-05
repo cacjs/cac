@@ -71,7 +71,8 @@
       ]
     },
     "ignore": [
-      "dist/**"
+      "dist/**",
+      "mod.js"
     ]
   },
   "husky": {

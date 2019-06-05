@@ -2,9 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var EventEmitter = _interopDefault(require('events'));
+var events = require('events');
 
 function toArr(any) {
 	return any == null ? [] : Array.isArray(any) ? any : [any];
@@ -473,7 +471,7 @@ class GlobalCommand extends Command {
     }
 }
 
-class CAC extends EventEmitter {
+class CAC extends events.EventEmitter {
     /**
      * @param name The program name to display in help and version message
      */
