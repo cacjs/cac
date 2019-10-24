@@ -156,7 +156,7 @@ cli
 cli.parse()
 ```
 
-To allow an option whose value is `false`, you need to manually speicfy a negated option:
+To allow an option whose value is `false`, you need to manually specify a negated option:
 
 ```js
 cli
@@ -388,7 +388,7 @@ Use a callback function as the command action when the command matches user inpu
 ```ts
 type ActionCallback = (
   // Parsed CLI args
-  // The last arg will be an array if it's an varadic argument
+  // The last arg will be an array if it's a variadic argument
   ...args: string | string[] | number | number[]
   // Parsed CLI options
   options: Options
