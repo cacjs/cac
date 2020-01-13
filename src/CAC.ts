@@ -7,13 +7,7 @@ import Command, {
   CommandExample
 } from './Command'
 import { OptionConfig } from './Option'
-import {
-  getMriOptions,
-  camelcase,
-  setDotProp,
-  setByType,
-  getFileName
-} from './utils'
+import { getMriOptions, setDotProp, setByType, getFileName } from './utils'
 import { processArgs } from './node'
 
 interface ParsedArgv {
@@ -295,11 +289,9 @@ class CAC extends EventEmitter {
       }
     }
 
-    // Camelcase option names and set dot nested option values
+    // Set dot nested option values
     for (const key of Object.keys(parsed)) {
-      const keys = key.split('.').map((v, i) => {
-        return i === 0 ? camelcase(v) : v
-      })
+      const keys = key.split('.')
       setDotProp(options, keys, parsed[key])
       setByType(options, transforms)
     }

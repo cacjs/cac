@@ -1,4 +1,4 @@
-import { removeBrackets } from './utils'
+import { removeBrackets, camelcase } from './utils'
 
 interface OptionConfig {
   default?: any
@@ -39,7 +39,10 @@ export default class Option {
       })
       .sort((a, b) => (a.length > b.length ? 1 : -1)) // Sort names
 
-    // Use the longese name (last one) as actual option name
+    // Camelcase the option name
+    this.names[0] = camelcase(this.names[0])
+
+    // Use the longest name (last one) as actual option name
     this.name = this.names[this.names.length - 1]
 
     if (this.negated) {

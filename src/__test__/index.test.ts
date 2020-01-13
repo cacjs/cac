@@ -80,7 +80,7 @@ test('double dashes', () => {
   expect(options['--']).toEqual(['npm', 'test'])
 })
 
-test('negated optional validation', () => {
+test('negated option validation', () => {
   const cli = cac()
 
   cli.option('--config <config>', 'config file')
