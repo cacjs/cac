@@ -138,7 +138,7 @@ Options in kebab-case should be referenced in camelCase in your code:
 ```js
 cli
   .command('dev', 'Start dev server')
-  .option('--clear-screen', 'Clearn screen')
+  .option('--clear-screen', 'Clear screen')
   .action(options => {
     console.log(options.clearScreen)
   })
