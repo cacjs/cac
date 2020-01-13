@@ -80,6 +80,16 @@ test('double dashes', () => {
   expect(options['--']).toEqual(['npm', 'test'])
 })
 
+test('default value for negated option', () => {
+  const cli = cac()
+
+  cli.option('--no-clear-screen', 'no clear screen')
+
+  const { options } = cli.parse(`node bin`.split(' '))
+
+  expect(options).toEqual({ '--': [], clearScreen: true })
+})
+
 test('negated option validation', () => {
   const cli = cac()
 
