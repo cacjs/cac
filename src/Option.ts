@@ -35,12 +35,19 @@ export default class Option {
           this.negated = true
           name = name.replace(/^no-/, '')
         }
+
+        // Camelcase the option name
+        // Don't camelcase anything after the dot `.`
+        name = name
+          .split('.')
+          .map((v, i) => {
+            return i === 0 ? camelcase(v) : v
+          })
+          .join('.')
+
         return name
       })
       .sort((a, b) => (a.length > b.length ? 1 : -1)) // Sort names
-
-    // Camelcase the option name
-    this.names[0] = camelcase(this.names[0])
 
     // Use the longest name (last one) as actual option name
     this.name = this.names[this.names.length - 1]

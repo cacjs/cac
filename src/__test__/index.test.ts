@@ -84,10 +84,11 @@ test('default value for negated option', () => {
   const cli = cac()
 
   cli.option('--no-clear-screen', 'no clear screen')
+  cli.option('--no-a-b, --no-c-d', 'desc')
 
   const { options } = cli.parse(`node bin`.split(' '))
 
-  expect(options).toEqual({ '--': [], clearScreen: true })
+  expect(options).toEqual({ '--': [], clearScreen: true, aB: true, cD: true })
 })
 
 test('negated option validation', () => {
