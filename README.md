@@ -22,6 +22,7 @@
   - [Simple Parsing](#simple-parsing)
   - [Display Help Message and Version](#display-help-message-and-version)
   - [Command-specific Options](#command-specific-options)
+  - [Dash in option names](#dash-in-option-names)
   - [Brackets](#brackets)
   - [Variadic Arguments](#variadic-arguments)
   - [Dot-nested Options](#dot-nested-options)
@@ -129,6 +130,21 @@ cli.parse()
 A command's options are validated when the command is used. Any unknown options will be reported as an error. However, if an action-based command does not define an action, then the options are not validated. If you really want to use unknown options, use [`command.allowUnknownOptions`](#commandallowunknownoptions).
 
 <img alt="command options" width="500" src="https://user-images.githubusercontent.com/8784712/49065552-49dc8500-f259-11e8-9c7b-a7c32d70920e.png">
+
+### Dash in option names
+
+Options in kebab-case should be referenced in camelCase in your code:
+
+```js
+cli
+  .command('dev', 'Start dev server')
+  .option('--clear-screen', 'Clearn screen')
+  .action(options => {
+    console.log(options.clearScreen)
+  })
+```
+
+In fact `--clear-screen` and `--clearScreen` are both mapped to `options.clearScreen`.
 
 ### Brackets
 
