@@ -7,18 +7,18 @@ import Command, {
   CommandExample
 } from './Command'
 import { OptionConfig } from './Option'
-import { getMriOptions, setDotProp, setByType, getFileName } from './utils'
+import {
+  getMriOptions,
+  setDotProp,
+  setByType,
+  getFileName,
+  camelcaseOptionName
+} from './utils'
 import { processArgs } from './node'
 
 interface ParsedArgv {
   args: ReadonlyArray<string>
   options: {
-    [k: string]: any
-  }
-}
-
-interface MriResult extends ParsedArgv {
-  rawOptions: {
     [k: string]: any
   }
 }
@@ -37,15 +37,11 @@ class CAC extends EventEmitter {
   /**
    * Parsed CLI arguments
    */
-  args: MriResult['args']
+  args: ParsedArgv['args']
   /**
    * Parsed CLI options, camelCased
    */
-  options: MriResult['options']
-  /**
-   * Raw CLI options, i.e. not camelcased
-   */
-  rawOptions: MriResult['rawOptions']
+  options: ParsedArgv['options']
 
   private showHelpOnExit: boolean
   private showVersionOnExit: boolean
@@ -127,7 +123,6 @@ class CAC extends EventEmitter {
    * When a sub-command is matched, output the help message for the command
    * Otherwise output the global one.
    *
-   * This will also call `process.exit(0)` to quit the process.
    */
   outputHelp() {
     if (this.matchedCommand) {
@@ -140,20 +135,18 @@ class CAC extends EventEmitter {
   /**
    * Output the version number.
    *
-   * This will also call `process.exit(0)` to quit the process.
    */
   outputVersion() {
     this.globalCommand.outputVersion()
   }
 
   private setParsedInfo(
-    { args, options, rawOptions }: MriResult,
+    { args, options }: ParsedArgv,
     matchedCommand?: Command,
     matchedCommandName?: string
   ) {
     this.args = args
     this.options = options
-    this.rawOptions = rawOptions
     if (matchedCommand) {
       this.matchedCommand = matchedCommand
     }
@@ -182,14 +175,14 @@ class CAC extends EventEmitter {
 
     // Search sub-commands
     for (const command of this.commands) {
-      const mriResult = this.mri(argv.slice(2), command)
+      const parsed = this.mri(argv.slice(2), command)
 
-      const commandName = mriResult.args[0]
+      const commandName = parsed.args[0]
       if (command.isMatched(commandName)) {
         shouldParse = false
         const parsedInfo = {
-          ...mriResult,
-          args: mriResult.args.slice(1)
+          ...parsed,
+          args: parsed.args.slice(1)
         }
         this.setParsedInfo(parsedInfo, command, commandName)
         this.emit(`command:${commandName}`, command)
@@ -201,16 +194,16 @@ class CAC extends EventEmitter {
       for (const command of this.commands) {
         if (command.name === '') {
           shouldParse = false
-          const mriResult = this.mri(argv.slice(2), command)
-          this.setParsedInfo(mriResult, command)
+          const parsed = this.mri(argv.slice(2), command)
+          this.setParsedInfo(parsed, command)
           this.emit(`command:!`, command)
         }
       }
     }
 
     if (shouldParse) {
-      const mriResult = this.mri(argv.slice(2))
-      this.setParsedInfo(mriResult)
+      const parsed = this.mri(argv.slice(2))
+      this.setParsedInfo(parsed)
     }
 
     if (this.options.help && this.showHelpOnExit) {
@@ -237,7 +230,7 @@ class CAC extends EventEmitter {
   private mri(
     argv: string[],
     /** Matched command */ command?: Command
-  ): MriResult {
+  ): ParsedArgv {
     // All added options
     const cliOptions = [
       ...this.globalCommand.options,
@@ -253,7 +246,16 @@ class CAC extends EventEmitter {
       argv = argv.slice(0, doubleDashesIndex)
     }
 
-    const parsed = mri(argv, mriOptions)
+    let parsed = mri(argv, mriOptions)
+    parsed = Object.keys(parsed).reduce(
+      (res, name) => {
+        return {
+          ...res,
+          [camelcaseOptionName(name)]: parsed[name]
+        }
+      },
+      { _: [] }
+    )
 
     const args = parsed._
     delete parsed._
@@ -298,8 +300,7 @@ class CAC extends EventEmitter {
 
     return {
       args,
-      options,
-      rawOptions: parsed
+      options
     }
   }
 

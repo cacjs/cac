@@ -216,6 +216,28 @@ const getFileName = (input) => {
     const m = /([^\\\/]+)$/.exec(input);
     return m ? m[1] : '';
 };
+const camelcaseOptionName = (name) => {
+    // Camelcase the option name
+    // Don't camelcase anything after the dot `.`
+    return name
+        .split('.')
+        .map((v, i) => {
+        return i === 0 ? camelcase(v) : v;
+    })
+        .join('.');
+};
+class CACError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+        if (typeof Error.captureStackTrace === 'function') {
+            Error.captureStackTrace(this, this.constructor);
+        }
+        else {
+            this.stack = new Error(message).stack;
+        }
+    }
+}
 
 class Option {
     constructor(rawName, description, config) {
@@ -233,10 +255,10 @@ class Option {
                 this.negated = true;
                 name = name.replace(/^no-/, '');
             }
-            return name;
+            return camelcaseOptionName(name);
         })
             .sort((a, b) => (a.length > b.length ? 1 : -1)); // Sort names
-        // Use the longese name (last one) as actual option name
+        // Use the longest name (last one) as actual option name
         this.name = this.names[this.names.length - 1];
         if (this.negated) {
             this.config.default = true;
@@ -255,12 +277,9 @@ class Option {
 }
 
 const deno = typeof window !== 'undefined' && window.Deno;
-const exit = (code) => {
-    return deno ? Deno.exit(code) : process.exit(code);
-};
 const processArgs = deno ? ['deno'].concat(Deno.args) : process.argv;
 const platformInfo = deno
-    ? `${Deno.platform.os}-${Deno.platform.arch} deno-${Deno.version.deno}`
+    ? `${Deno.build.os}-${Deno.build.arch} deno-${Deno.version.deno}`
     : `${process.platform}-${process.arch} node-${process.version}`;
 
 class Command {
@@ -407,7 +426,6 @@ class Command {
                 : section.body;
         })
             .join('\n\n'));
-        exit(0);
     }
     outputVersion() {
         const { name } = this.cli;
@@ -415,13 +433,11 @@ class Command {
         if (versionNumber) {
             console.log(`${name}/${versionNumber} ${platformInfo}`);
         }
-        exit(0);
     }
     checkRequiredArgs() {
         const minimalArgsCount = this.args.filter(arg => arg.required).length;
         if (this.cli.args.length < minimalArgsCount) {
-            console.error(`error: missing required args for command \`${this.rawName}\``);
-            exit(1);
+            throw new CACError(`missing required args for command \`${this.rawName}\``);
         }
     }
     /**
@@ -430,14 +446,13 @@ class Command {
      * Exit and output error when true
      */
     checkUnknownOptions() {
-        const { rawOptions, globalCommand } = this.cli;
+        const { options, globalCommand } = this.cli;
         if (!this.config.allowUnknownOptions) {
-            for (const name of Object.keys(rawOptions)) {
+            for (const name of Object.keys(options)) {
                 if (name !== '--' &&
                     !this.hasOption(name) &&
                     !globalCommand.hasOption(name)) {
-                    console.error(`error: Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
-                    exit(1);
+                    throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
                 }
             }
         }
@@ -446,16 +461,15 @@ class Command {
      * Check if the required string-type options exist
      */
     checkOptionValue() {
-        const { rawOptions, globalCommand } = this.cli;
+        const { options: parsedOptions, globalCommand } = this.cli;
         const options = [...globalCommand.options, ...this.options];
         for (const option of options) {
-            const value = rawOptions[option.name.split('.')[0]];
+            const value = parsedOptions[option.name.split('.')[0]];
             // Check required option value
             if (option.required) {
                 const hasNegated = options.some(o => o.negated && o.names.includes(option.name));
                 if (value === true || (value === false && !hasNegated)) {
-                    console.error(`error: option \`${option.rawName}\` value is missing`);
-                    exit(1);
+                    throw new CACError(`option \`${option.rawName}\` value is missing`);
                 }
             }
         }
@@ -538,7 +552,6 @@ class CAC extends EventEmitter {
      * When a sub-command is matched, output the help message for the command
      * Otherwise output the global one.
      *
-     * This will also call `process.exit(0)` to quit the process.
      */
     outputHelp() {
         if (this.matchedCommand) {
@@ -551,15 +564,13 @@ class CAC extends EventEmitter {
     /**
      * Output the version number.
      *
-     * This will also call `process.exit(0)` to quit the process.
      */
     outputVersion() {
         this.globalCommand.outputVersion();
     }
-    setParsedInfo({ args, options, rawOptions }, matchedCommand, matchedCommandName) {
+    setParsedInfo({ args, options }, matchedCommand, matchedCommandName) {
         this.args = args;
         this.options = options;
-        this.rawOptions = rawOptions;
         if (matchedCommand) {
             this.matchedCommand = matchedCommand;
         }
@@ -581,11 +592,11 @@ class CAC extends EventEmitter {
         let shouldParse = true;
         // Search sub-commands
         for (const command of this.commands) {
-            const mriResult = this.mri(argv.slice(2), command);
-            const commandName = mriResult.args[0];
+            const parsed = this.mri(argv.slice(2), command);
+            const commandName = parsed.args[0];
             if (command.isMatched(commandName)) {
                 shouldParse = false;
-                const parsedInfo = Object.assign({}, mriResult, { args: mriResult.args.slice(1) });
+                const parsedInfo = Object.assign({}, parsed, { args: parsed.args.slice(1) });
                 this.setParsedInfo(parsedInfo, command, commandName);
                 this.emit(`command:${commandName}`, command);
             }
@@ -595,15 +606,15 @@ class CAC extends EventEmitter {
             for (const command of this.commands) {
                 if (command.name === '') {
                     shouldParse = false;
-                    const mriResult = this.mri(argv.slice(2), command);
-                    this.setParsedInfo(mriResult, command);
+                    const parsed = this.mri(argv.slice(2), command);
+                    this.setParsedInfo(parsed, command);
                     this.emit(`command:!`, command);
                 }
             }
         }
         if (shouldParse) {
-            const mriResult = this.mri(argv.slice(2));
-            this.setParsedInfo(mriResult);
+            const parsed = this.mri(argv.slice(2));
+            this.setParsedInfo(parsed);
         }
         if (this.options.help && this.showHelpOnExit) {
             this.outputHelp();
@@ -635,7 +646,10 @@ class CAC extends EventEmitter {
             argsAfterDoubleDashes = argv.slice(doubleDashesIndex + 1);
             argv = argv.slice(0, doubleDashesIndex);
         }
-        const parsed = lib(argv, mriOptions);
+        let parsed = lib(argv, mriOptions);
+        parsed = Object.keys(parsed).reduce((res, name) => {
+            return Object.assign({}, res, { [camelcaseOptionName(name)]: parsed[name] });
+        }, { _: [] });
         const args = parsed._;
         delete parsed._;
         const options = {
@@ -662,18 +676,15 @@ class CAC extends EventEmitter {
                 }
             }
         }
-        // Camelcase option names and set dot nested option values
+        // Set dot nested option values
         for (const key of Object.keys(parsed)) {
-            const keys = key.split('.').map((v, i) => {
-                return i === 0 ? camelcase(v) : v;
-            });
+            const keys = key.split('.');
             setDotProp(options, keys, parsed[key]);
             setByType(options, transforms);
         }
         return {
             args,
-            options,
-            rawOptions: parsed
+            options
         };
     }
     runMatchedCommand() {

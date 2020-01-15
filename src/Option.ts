@@ -1,4 +1,4 @@
-import { removeBrackets, camelcase } from './utils'
+import { removeBrackets, camelcaseOptionName } from './utils'
 
 interface OptionConfig {
   default?: any
@@ -36,16 +36,7 @@ export default class Option {
           name = name.replace(/^no-/, '')
         }
 
-        // Camelcase the option name
-        // Don't camelcase anything after the dot `.`
-        name = name
-          .split('.')
-          .map((v, i) => {
-            return i === 0 ? camelcase(v) : v
-          })
-          .join('.')
-
-        return name
+        return camelcaseOptionName(name)
       })
       .sort((a, b) => (a.length > b.length ? 1 : -1)) // Sort names
 

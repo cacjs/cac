@@ -137,3 +137,26 @@ export const getFileName = (input: string) => {
   const m = /([^\\\/]+)$/.exec(input)
   return m ? m[1] : ''
 }
+
+export const camelcaseOptionName = (name: string) => {
+  // Camelcase the option name
+  // Don't camelcase anything after the dot `.`
+  return name
+    .split('.')
+    .map((v, i) => {
+      return i === 0 ? camelcase(v) : v
+    })
+    .join('.')
+}
+
+export class CACError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = this.constructor.name
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, this.constructor)
+    } else {
+      this.stack = new Error(message).stack
+    }
+  }
+}

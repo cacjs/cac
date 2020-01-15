@@ -149,3 +149,17 @@ test('array types with transformFunction', () => {
   expect(options.config).toEqual(['config.js'])
   expect(options.scale).toEqual(true)
 })
+
+test('throw on unknown options', () => {
+  const cli = cac()
+
+  cli
+    .command('build [entry]', 'Build your app')
+    .option('--foo-bar', 'foo bar')
+    .option('--aB', 'ab')
+    .action(() => {})
+
+  expect(() => {
+    cli.parse(`node bin build app.js --fooBar --a-b --xx`.split(' '))
+  }).toThrowError('Unknown option `--xx`')
+})

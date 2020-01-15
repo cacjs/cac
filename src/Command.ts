@@ -1,7 +1,13 @@
 import CAC from './CAC'
 import Option, { OptionConfig } from './Option'
-import { removeBrackets, findAllBrackets, findLongest, padRight } from './utils'
-import { exit, platformInfo } from './node'
+import {
+  removeBrackets,
+  findAllBrackets,
+  findLongest,
+  padRight,
+  CACError
+} from './utils'
+import { platformInfo } from './node'
 
 interface CommandArg {
   required: boolean
@@ -224,8 +230,6 @@ class Command {
         })
         .join('\n\n')
     )
-
-    exit(0)
   }
 
   outputVersion() {
@@ -234,17 +238,15 @@ class Command {
     if (versionNumber) {
       console.log(`${name}/${versionNumber} ${platformInfo}`)
     }
-    exit(0)
   }
 
   checkRequiredArgs() {
     const minimalArgsCount = this.args.filter(arg => arg.required).length
 
     if (this.cli.args.length < minimalArgsCount) {
-      console.error(
-        `error: missing required args for command \`${this.rawName}\``
+      throw new CACError(
+        `missing required args for command \`${this.rawName}\``
       )
-      exit(1)
     }
   }
 
@@ -254,20 +256,18 @@ class Command {
    * Exit and output error when true
    */
   checkUnknownOptions() {
-    const { rawOptions, globalCommand } = this.cli
+    const { options, globalCommand } = this.cli
+
     if (!this.config.allowUnknownOptions) {
-      for (const name of Object.keys(rawOptions)) {
+      for (const name of Object.keys(options)) {
         if (
           name !== '--' &&
           !this.hasOption(name) &&
           !globalCommand.hasOption(name)
         ) {
-          console.error(
-            `error: Unknown option \`${
-              name.length > 1 ? `--${name}` : `-${name}`
-            }\``
+          throw new CACError(
+            `Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``
           )
-          exit(1)
         }
       }
     }
@@ -277,18 +277,17 @@ class Command {
    * Check if the required string-type options exist
    */
   checkOptionValue() {
-    const { rawOptions, globalCommand } = this.cli
+    const { options: parsedOptions, globalCommand } = this.cli
     const options = [...globalCommand.options, ...this.options]
     for (const option of options) {
-      const value = rawOptions[option.name.split('.')[0]]
+      const value = parsedOptions[option.name.split('.')[0]]
       // Check required option value
       if (option.required) {
         const hasNegated = options.some(
           o => o.negated && o.names.includes(option.name)
         )
         if (value === true || (value === false && !hasNegated)) {
-          console.error(`error: option \`${option.rawName}\` value is missing`)
-          exit(1)
+          throw new CACError(`option \`${option.rawName}\` value is missing`)
         }
       }
     }

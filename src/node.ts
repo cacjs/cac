@@ -3,10 +3,6 @@ declare let Deno: any
 
 const deno = typeof window !== 'undefined' && window.Deno
 
-export const exit = (code: number) => {
-  return deno ? Deno.exit(code) : process.exit(code)
-}
-
 export const processArgs = deno ? ['deno'].concat(Deno.args) : process.argv
 
 export const platformInfo = deno
