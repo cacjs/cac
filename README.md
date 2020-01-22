@@ -24,6 +24,7 @@
   - [Command-specific Options](#command-specific-options)
   - [Dash in option names](#dash-in-option-names)
   - [Brackets](#brackets)
+  - [Negated Options](#negated-options)
   - [Variadic Arguments](#variadic-arguments)
   - [Dot-nested Options](#dot-nested-options)
   - [Default Command](#default-command)
@@ -171,6 +172,8 @@ cli
 
 cli.parse()
 ```
+
+### Negated Options
 
 To allow an option whose value is `false`, you need to manually specify a negated option:
 
