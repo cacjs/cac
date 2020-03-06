@@ -1,3 +1,27 @@
+function convertDenoURLs(isDeno) {
+  if (!isDeno) {
+    return
+  }
+
+  return {
+    resolveId(name) {
+      if (name === 'events') {
+        return name
+      }
+      return null
+    },
+    load(id) {
+      if (id === 'events') {
+        return [
+          'export { default } from "https://deno.land/std/node/events.ts"',
+          'export * from "https://deno.land/std/node/events.ts"'
+        ].join('\n')
+      }
+      return null
+    }
+  }
+}
+
 function createConfig(target) {
   const deno = target === 'deno'
   return {
@@ -15,7 +39,8 @@ function createConfig(target) {
         namedExports: {
           path: ['basename']
         }
-      })
+      }),
+      convertDenoURLs(deno)
     ]
   }
 }
