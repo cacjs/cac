@@ -8,12 +8,13 @@ function createConfig(target) {
       exports: 'named'
     },
     plugins: [
-      require('rollup-plugin-node-resolve')({
+      require('@rollup/plugin-node-resolve')({
         preferBuiltins: !deno
       }),
-      require('rollup-plugin-commonjs')({
+      require('@rollup/plugin-commonjs')({
         namedExports: {
-          path: ['basename']
+          path: ['basename'],
+          events: ['EventEmitter']
         }
       })
     ]
