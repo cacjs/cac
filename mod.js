@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'https://deno.land/std/node/events.ts';
 
 function toArr(any) {
 	return any == null ? [] : Array.isArray(any) ? any : [any];
