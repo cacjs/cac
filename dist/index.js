@@ -622,9 +622,11 @@ class CAC extends events.EventEmitter {
         }
         if (this.options.help && this.showHelpOnExit) {
             this.outputHelp();
+            run = false;
         }
         if (this.options.version && this.showVersionOnExit) {
             this.outputVersion();
+            run = false;
         }
         const parsedArgv = { args: this.args, options: this.options };
         if (run) {
