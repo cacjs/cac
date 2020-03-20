@@ -281,7 +281,10 @@ class Option {
 }
 
 const deno = typeof window !== 'undefined' && window.Deno;
-const processArgs = deno ? ['deno'].concat(Deno.args) : process.argv;
+const denoScriptPath = deno && typeof window !== 'undefined' && window.location.pathname;
+// Adds deno executable and script path to processArgs as "compatibility" layer for node
+// See https://github.com/cacjs/cac/issues/69
+const processArgs = deno ? ['deno', denoScriptPath].concat(Deno.args) : process.argv;
 const platformInfo = deno
     ? `${Deno.build.os}-${Deno.build.arch} deno-${Deno.version.deno}`
     : `${process.platform}-${process.arch} node-${process.version}`;
