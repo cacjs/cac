@@ -457,7 +457,7 @@ cli.on('command:!', () => {
 
 // Listen to unknown commands
 cli.on('command:*', () => {
-  console.error('Invalid command: %', cli.args.join(' '))
+  console.error('Invalid command: %s', cli.args.join(' '))
   process.exit(1)
 })
 ```
