@@ -115,7 +115,7 @@ class Command {
     return this.name === '' || this.aliasNames.includes('!')
   }
 
-  get isGlobalCommand() {
+  get isGlobalCommand(): boolean {
     return this instanceof GlobalCommand
   }
 
