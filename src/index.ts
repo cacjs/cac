@@ -1,4 +1,5 @@
 import CAC from './CAC'
+import Command from './Command'
 
 /**
  * @param name The program name to display in help and version message
@@ -6,7 +7,7 @@ import CAC from './CAC'
 const cac = (name = '') => new CAC(name)
 
 export default cac
-export { cac }
+export { cac, CAC, Command }
 
 if (typeof module !== 'undefined') {
   module.exports = cac
