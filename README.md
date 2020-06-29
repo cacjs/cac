@@ -29,6 +29,7 @@
   - [Dot-nested Options](#dot-nested-options)
   - [Default Command](#default-command)
   - [Supply an array as option value](#supply-an-array-as-option-value)
+  - [Error Handling](#error-handling)
   - [With TypeScript](#with-typescript)
   - [With Deno](#with-deno)
 - [Projects Using CAC](#projects-using-cac)
@@ -260,6 +261,24 @@ node cli.js --include project-a
 node cli.js --include project-a --include project-b
 # The parsed options will be:
 # { include: ['project-a', 'project-b'] }
+```
+
+### Error Handling
+
+To handle command errors globally:
+
+```js
+try {
+  // Parse CLI args without running the command
+  cli.parse(process.argv, { run: false })
+  // Run the command yourself
+  await cli.runMatchedCommand()
+} catch (error) {
+  // Handle error here..
+  // e.g.
+  // console.error(error.stack)
+  // process.exit(1)
+}
 ```
 
 ### With TypeScript
