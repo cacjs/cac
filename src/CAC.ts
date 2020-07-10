@@ -155,6 +155,11 @@ class CAC extends EventEmitter {
     }
     return this
   }
+  
+  unsetMatchedCommand() {
+    this.matchedCommand = undefined
+    this.matchedCommandName = undefined
+  }
 
   /**
    * Parse argv
@@ -209,11 +214,13 @@ class CAC extends EventEmitter {
     if (this.options.help && this.showHelpOnExit) {
       this.outputHelp()
       run = false
+      this.unsetMatchedCommand()
     }
 
     if (this.options.version && this.showVersionOnExit) {
       this.outputVersion()
       run = false
+      this.unsetMatchedCommand()
     }
 
     const parsedArgv = { args: this.args, options: this.options }
