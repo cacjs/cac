@@ -43,8 +43,8 @@ class CAC extends EventEmitter {
    */
   options: ParsedArgv['options']
 
-  private showHelpOnExit: boolean
-  private showVersionOnExit: boolean
+  showHelpOnExit: boolean
+  showVersionOnExit: boolean
 
   /**
    * @param name The program name to display in help and version message
