@@ -25,7 +25,7 @@ interface CommandConfig {
   ignoreOptionDefaultValue?: boolean
 }
 
-type HelpCallback = (sections: HelpSection[]) => void
+type HelpCallback = (sections: HelpSection[]) => void | HelpSection[]
 
 type CommandExample = ((bin: string) => string) | string
 
