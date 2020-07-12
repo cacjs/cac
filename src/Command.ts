@@ -138,7 +138,7 @@ class Command {
       helpCallback
     } = this.cli.globalCommand
 
-    const sections: HelpSection[] = [
+    let sections: HelpSection[] = [
       {
         body: `${name}${versionNumber ? ` v${versionNumber}` : ''}`
       }
@@ -218,7 +218,7 @@ class Command {
     }
 
     if (helpCallback) {
-      helpCallback(sections)
+      sections = helpCallback(sections) || sections
     }
 
     console.log(
