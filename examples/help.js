@@ -12,7 +12,7 @@ cli.command('lint [...files]', 'Lint files').action((files, options) => {
 
 // Display help message when `-h` or `--help` appears
 cli.help()
-// Display version number when `-h` or `--help` appears
+// Display version number when `-v` or `--version` appears
 cli.version('0.0.0')
 
 cli.parse()
