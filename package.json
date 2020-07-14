@@ -7,11 +7,11 @@
     "type": "git"
   },
   "main": "dist/index.js",
-  "module": "dist/mod.js",
+  "module": "mod.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/mod.js",
+      "import": "./mod.js",
       "require": "./dist/index.js"
     },
     "./package.json": "./package.json",
