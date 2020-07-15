@@ -316,7 +316,8 @@ Projects that use **CAC**:
 - [DocPad](https://github.com/docpad/docpad): 🏹 Powerful Static Site Generator.
 - [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
 - [bili](https://github.com/egoist/bili): 🥂 Schweizer Armeemesser for bundling JavaScript libraries.
-- [lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
+- [Lad](https://github.com/ladjs/lad): 👦 Lad scaffolds a Koa webapp and API framework for Node.js.
+- [Lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
 - [Foy](https://github.com/zaaack/foy): 🏗 A lightweight and modern task runner and build tool for general purpose.
 - [Vuese](https://github.com/vuese/vuese): 🤗 One-stop solution for vue component documentation.
 - [NUT](https://github.com/nut-project/nut): 🌰 A framework born for microfrontends
