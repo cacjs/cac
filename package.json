@@ -7,11 +7,11 @@
     "type": "git"
   },
   "main": "dist/index.js",
-  "module": "mod.js",
+  "module": "mod.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./mod.js",
+      "import": "./mod.mjs",
       "require": "./dist/index.js"
     },
     "./package.json": "./package.json",
@@ -20,6 +20,7 @@
   "files": [
     "dist",
     "!**/__test__/**",
+    "/mod.mjs",
     "/mod.js",
     "/mod.d.ts"
   ],
@@ -28,7 +29,7 @@
     "test:cov": "jest --coverage",
     "build": "rollup -c",
     "toc": "markdown-toc -i README.md",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && cp mod.js mod.mjs",
     "docs:api": "typedoc --out api-doc --readme none --exclude \"**/__test__/**\" --theme minimal"
   },
   "author": "egoist <0x142857@gmail.com>",
