@@ -41,7 +41,7 @@
     - [cli.parse(argv?)](#cliparseargv)
     - [cli.version(version, customFlags?)](#cliversionversion-customflags)
     - [cli.help(callback?)](#clihelpcallback)
-    - [cli.outputHelp(subCommand?)](#clioutputhelpsubcommand)
+    - [cli.outputHelp()](#clioutputhelp)
   - [Command Instance](#command-instance)
     - [command.option()](#commandoption)
     - [command.action(callback)](#commandactioncallback)
@@ -402,11 +402,11 @@ interface HelpSection {
 }
 ```
 
-#### cli.outputHelp(subCommand?)
+#### cli.outputHelp()
 
-- Type: `(subCommand?: boolean) => CLI`
+- Type: `() => CLI`
 
-Output help message. Optional `subCommand` argument if you want to output the help message for the matched sub-command instead of the global help message.
+Output help message.
 
 ### Command Instance
 
