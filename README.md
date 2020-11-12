@@ -408,6 +408,12 @@ interface HelpSection {
 
 Output help message. Optional `subCommand` argument if you want to output the help message for the matched sub-command instead of the global help message.
 
+#### cli.usage(text)
+
+- Type: `(text: string) => CLI`
+
+Add a global usage text. This is not used by sub-commands.
+
 ### Command Instance
 
 Command instance is created by invoking the `cli.command` method:
@@ -461,6 +467,12 @@ Add an example which will be displayed at the end of help message.
 ```ts
 type CommandExample = ((name: string) => string) | string
 ```
+
+#### command.usage(text)
+
+- Type: `(text: string) => Command`
+
+Add a usage text for this command.
 
 ### Events
 
