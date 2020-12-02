@@ -140,7 +140,7 @@ class Command {
 
     let sections: HelpSection[] = [
       {
-        body: `${name}${versionNumber ? ` v${versionNumber}` : ''}`
+        body: `${name}${versionNumber ? `/${versionNumber}` : ''}`
       }
     ]
 
