@@ -15,7 +15,7 @@ exports[`basic-usage: basic-usage 1`] = `
 `;
 
 exports[`help: help 1`] = `
-"help.js v0.0.0
+"help.js/0.0.0
 
 Usage:
   $ help.js <command> [options]
