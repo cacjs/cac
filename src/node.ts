@@ -1,12 +1,3 @@
-declare let window: any
-declare let Deno: any
+export const processArgs = process.argv
 
-const deno = typeof window !== 'undefined' && window.Deno
-
-export const processArgs = deno
-  ? ['deno', 'cli'].concat(Deno.args)
-  : process.argv
-
-export const platformInfo = deno
-  ? `${Deno.build.os}-${Deno.build.arch} deno-${Deno.version.deno}`
-  : `${process.platform}-${process.arch} node-${process.version}`
+export const platformInfo = `${process.platform}-${process.arch} node-${process.version}`
