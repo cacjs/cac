@@ -21,7 +21,7 @@
     "dist",
     "!**/__test__/**",
     "/mod.js",
-    "/mode.ts",
+    "/mod.ts",
     "/deno"
   ],
   "scripts": {
