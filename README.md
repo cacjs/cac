@@ -42,12 +42,14 @@
     - [cli.version(version, customFlags?)](#cliversionversion-customflags)
     - [cli.help(callback?)](#clihelpcallback)
     - [cli.outputHelp()](#clioutputhelp)
+    - [cli.usage(text)](#cliusagetext)
   - [Command Instance](#command-instance)
     - [command.option()](#commandoption)
     - [command.action(callback)](#commandactioncallback)
     - [command.alias(name)](#commandaliasname)
     - [command.allowUnknownOptions()](#commandallowunknownoptions)
     - [command.example(example)](#commandexampleexample)
+    - [command.usage(text)](#commandusagetext)
   - [Events](#events)
 - [FAQ](#faq)
   - [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
@@ -74,7 +76,7 @@ Use CAC as simple argument parser:
 const cli = require('cac')()
 
 cli.option('--type <type>', 'Choose a project type', {
-  default: 'node',
+  default: 'node'
 })
 
 const parsed = cli.parse()
@@ -91,7 +93,7 @@ console.log(JSON.stringify(parsed, null, 2))
 const cli = require('cac')()
 
 cli.option('--type [type]', 'Choose a project type', {
-  default: 'node',
+  default: 'node'
 })
 cli.option('--name <name>', 'Provide your name')
 
@@ -141,7 +143,7 @@ Options in kebab-case should be referenced in camelCase in your code:
 cli
   .command('dev', 'Start dev server')
   .option('--clear-screen', 'Clear screen')
-  .action((options) => {
+  .action(options => {
     console.log(options.clearScreen)
   })
 ```
@@ -221,7 +223,7 @@ cli
   .command('build', 'desc')
   .option('--env <env>', 'Set envs')
   .example('--env.API_SECRET xxx')
-  .action((options) => {
+  .action(options => {
     console.log(options)
   })
 
@@ -407,6 +409,12 @@ interface HelpSection {
 
 Output help message.
 
+#### cli.usage(text)
+
+- Type: `(text: string) => CLI`
+
+Add a global usage text. This is not used by sub-commands.
+
 ### Command Instance
 
 Command instance is created by invoking the `cli.command` method:
@@ -460,6 +468,12 @@ Add an example which will be displayed at the end of help message.
 ```ts
 type CommandExample = ((name: string) => string) | string
 ```
+
+#### command.usage(text)
+
+- Type: `(text: string) => Command`
+
+Add a usage text for this command.
 
 ### Events
 
