@@ -4,7 +4,7 @@ import Command, {
   GlobalCommand,
   CommandConfig,
   HelpCallback,
-  CommandExample
+  CommandExample,
 } from './Command'
 import { OptionConfig } from './Option'
 import {
@@ -12,7 +12,7 @@ import {
   setDotProp,
   setByType,
   getFileName,
-  camelcaseOptionName
+  camelcaseOptionName,
 } from './utils'
 import { processArgs } from './node'
 
@@ -43,8 +43,8 @@ class CAC extends EventEmitter {
    */
   options: ParsedArgv['options']
 
-  showHelpOnExit: boolean
-  showVersionOnExit: boolean
+  showHelpOnExit?: boolean
+  showVersionOnExit?: boolean
 
   /**
    * @param name The program name to display in help and version message
@@ -53,6 +53,9 @@ class CAC extends EventEmitter {
     super()
     this.name = name
     this.commands = []
+    this.rawArgs = []
+    this.args = []
+    this.options = {}
     this.globalCommand = new GlobalCommand(this)
     this.globalCommand.usage('<command> [options]')
   }
@@ -155,7 +158,7 @@ class CAC extends EventEmitter {
     }
     return this
   }
-  
+
   unsetMatchedCommand() {
     this.matchedCommand = undefined
     this.matchedCommandName = undefined
@@ -168,7 +171,7 @@ class CAC extends EventEmitter {
     argv = processArgs,
     {
       /** Whether to run the action for matched command */
-      run = true
+      run = true,
     } = {}
   ): ParsedArgv {
     this.rawArgs = argv
@@ -187,7 +190,7 @@ class CAC extends EventEmitter {
         shouldParse = false
         const parsedInfo = {
           ...parsed,
-          args: parsed.args.slice(1)
+          args: parsed.args.slice(1),
         }
         this.setParsedInfo(parsedInfo, command, commandName)
         this.emit(`command:${commandName}`, command)
@@ -243,7 +246,7 @@ class CAC extends EventEmitter {
     // All added options
     const cliOptions = [
       ...this.globalCommand.options,
-      ...(command ? command.options : [])
+      ...(command ? command.options : []),
     ]
     const mriOptions = getMriOptions(cliOptions)
 
@@ -260,17 +263,16 @@ class CAC extends EventEmitter {
       (res, name) => {
         return {
           ...res,
-          [camelcaseOptionName(name)]: parsed[name]
+          [camelcaseOptionName(name)]: parsed[name],
         }
       },
       { _: [] }
     )
 
     const args = parsed._
-    delete parsed._
 
     const options: { [k: string]: any } = {
-      '--': argsAfterDoubleDashes
+      '--': argsAfterDoubleDashes,
     }
 
     // Set option default value
@@ -300,16 +302,18 @@ class CAC extends EventEmitter {
       }
     }
 
-    // Set dot nested option values
+    // Set option values (support dot-nested property name)
     for (const key of Object.keys(parsed)) {
-      const keys = key.split('.')
-      setDotProp(options, keys, parsed[key])
-      setByType(options, transforms)
+      if (key !== '_') {
+        const keys = key.split('.')
+        setDotProp(options, keys, parsed[key])
+        setByType(options, transforms)
+      }
     }
 
     return {
       args,
-      options
+      options,
     }
   }
 

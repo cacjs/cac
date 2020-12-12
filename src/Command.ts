@@ -5,7 +5,7 @@ import {
   findAllBrackets,
   findLongest,
   padRight,
-  CACError
+  CACError,
 } from './utils'
 import { platformInfo } from './node'
 
@@ -125,7 +125,7 @@ class Command {
    */
   hasOption(name: string) {
     name = name.split('.')[0]
-    return this.options.find(option => {
+    return this.options.find((option) => {
       return option.names.includes(name)
     })
   }
@@ -135,18 +135,18 @@ class Command {
     const {
       versionNumber,
       options: globalOptions,
-      helpCallback
+      helpCallback,
     } = this.cli.globalCommand
 
     let sections: HelpSection[] = [
       {
-        body: `${name}${versionNumber ? ` v${versionNumber}` : ''}`
-      }
+        body: `${name}${versionNumber ? `/${versionNumber}` : ''}`,
+      },
     ]
 
     sections.push({
       title: 'Usage',
-      body: `  $ ${name} ${this.usageText || this.rawName}`
+      body: `  $ ${name} ${this.usageText || this.rawName}`,
     })
 
     const showCommands =
@@ -154,29 +154,29 @@ class Command {
 
     if (showCommands) {
       const longestCommandName = findLongest(
-        commands.map(command => command.rawName)
+        commands.map((command) => command.rawName)
       )
       sections.push({
         title: 'Commands',
         body: commands
-          .map(command => {
+          .map((command) => {
             return `  ${padRight(
               command.rawName,
               longestCommandName.length
             )}  ${command.description}`
           })
-          .join('\n')
+          .join('\n'),
       })
       sections.push({
         title: `For more info, run any command with the \`--help\` flag`,
         body: commands
           .map(
-            command =>
+            (command) =>
               `  $ ${name}${
                 command.name === '' ? '' : ` ${command.name}`
               } --help`
           )
-          .join('\n')
+          .join('\n'),
       })
     }
 
@@ -185,12 +185,12 @@ class Command {
       : [...this.options, ...(globalOptions || [])]
     if (options.length > 0) {
       const longestOptionName = findLongest(
-        options.map(option => option.rawName)
+        options.map((option) => option.rawName)
       )
       sections.push({
         title: 'Options',
         body: options
-          .map(option => {
+          .map((option) => {
             return `  ${padRight(option.rawName, longestOptionName.length)}  ${
               option.description
             } ${
@@ -199,7 +199,7 @@ class Command {
                 : `(default: ${option.config.default})`
             }`
           })
-          .join('\n')
+          .join('\n'),
       })
     }
 
@@ -207,13 +207,13 @@ class Command {
       sections.push({
         title: 'Examples',
         body: this.examples
-          .map(example => {
+          .map((example) => {
             if (typeof example === 'function') {
               return example(name)
             }
             return example
           })
-          .join('\n')
+          .join('\n'),
       })
     }
 
@@ -223,7 +223,7 @@ class Command {
 
     console.log(
       sections
-        .map(section => {
+        .map((section) => {
           return section.title
             ? `${section.title}:\n${section.body}`
             : section.body
@@ -241,7 +241,7 @@ class Command {
   }
 
   checkRequiredArgs() {
-    const minimalArgsCount = this.args.filter(arg => arg.required).length
+    const minimalArgsCount = this.args.filter((arg) => arg.required).length
 
     if (this.cli.args.length < minimalArgsCount) {
       throw new CACError(
@@ -284,7 +284,7 @@ class Command {
       // Check required option value
       if (option.required) {
         const hasNegated = options.some(
-          o => o.negated && o.names.includes(option.name)
+          (o) => o.negated && o.names.includes(option.name)
         )
         if (value === true || (value === false && !hasNegated)) {
           throw new CACError(`option \`${option.rawName}\` value is missing`)
@@ -300,6 +300,8 @@ class GlobalCommand extends Command {
   }
 }
 
-export { HelpCallback, CommandExample, CommandConfig, GlobalCommand }
+export type { HelpCallback, CommandExample, CommandConfig }
+
+export { GlobalCommand }
 
 export default Command

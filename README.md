@@ -41,7 +41,7 @@
     - [cli.parse(argv?)](#cliparseargv)
     - [cli.version(version, customFlags?)](#cliversionversion-customflags)
     - [cli.help(callback?)](#clihelpcallback)
-    - [cli.outputHelp(subCommand?)](#clioutputhelpsubcommand)
+    - [cli.outputHelp()](#clioutputhelp)
   - [Command Instance](#command-instance)
     - [command.option()](#commandoption)
     - [command.action(callback)](#commandactioncallback)
@@ -74,7 +74,7 @@ Use CAC as simple argument parser:
 const cli = require('cac')()
 
 cli.option('--type <type>', 'Choose a project type', {
-  default: 'node'
+  default: 'node',
 })
 
 const parsed = cli.parse()
@@ -91,7 +91,7 @@ console.log(JSON.stringify(parsed, null, 2))
 const cli = require('cac')()
 
 cli.option('--type [type]', 'Choose a project type', {
-  default: 'node'
+  default: 'node',
 })
 cli.option('--name <name>', 'Provide your name')
 
@@ -141,7 +141,7 @@ Options in kebab-case should be referenced in camelCase in your code:
 cli
   .command('dev', 'Start dev server')
   .option('--clear-screen', 'Clear screen')
-  .action(options => {
+  .action((options) => {
     console.log(options.clearScreen)
   })
 ```
@@ -221,7 +221,7 @@ cli
   .command('build', 'desc')
   .option('--env <env>', 'Set envs')
   .example('--env.API_SECRET xxx')
-  .action(options => {
+  .action((options) => {
     console.log(options)
   })
 
@@ -301,8 +301,7 @@ import { cac } from 'cac'
 ### With Deno
 
 ```ts
-// @deno-types="https://unpkg.com/cac/mod.d.ts"
-import { cac } from 'https://unpkg.com/cac/mod.js'
+import { cac } from 'https://unpkg.com/cac/mod.ts'
 
 const cli = cac('my-program')
 ```
@@ -402,11 +401,11 @@ interface HelpSection {
 }
 ```
 
-#### cli.outputHelp(subCommand?)
+#### cli.outputHelp()
 
-- Type: `(subCommand?: boolean) => CLI`
+- Type: `() => CLI`
 
-Output help message. Optional `subCommand` argument if you want to output the help message for the matched sub-command instead of the global help message.
+Output help message.
 
 #### cli.usage(text)
 

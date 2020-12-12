@@ -58,4 +58,4 @@ export default class Option {
   }
 }
 
-export { OptionConfig }
+export type { OptionConfig }

@@ -1,5 +1,4 @@
-// @deno-types="./mod.d.ts"
-import { cac } from './mod.js'
+import { cac } from './mod.ts'
 
 const cli = cac('my-program')
 
