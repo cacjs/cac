@@ -9,8 +9,9 @@ const cac = (name = '') => new CAC(name)
 export default cac
 export { cac, CAC, Command }
 
-if (typeof module !== 'undefined') {
+if (typeof module !== 'undefined' && typeof exports != 'undefined') {
   // @remove-for-deno
+  module.exports = exports
   module.exports = cac
   module.exports.default = cac
   module.exports.cac = cac
