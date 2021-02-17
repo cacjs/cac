@@ -43,7 +43,7 @@ export default class Option {
     // Use the longest name (last one) as actual option name
     this.name = this.names[this.names.length - 1]
 
-    if (this.negated) {
+    if (this.negated && this.config.default == null) {
       this.config.default = true
     }
 
