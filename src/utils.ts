@@ -79,9 +79,7 @@ export const getMriOptions = (options: Option[]) => {
 }
 
 export const findLongest = (arr: string[]) => {
-  return arr.sort((a, b) => {
-    return a.length > b.length ? -1 : 1
-  })[0]
+  return arr.reduce((acc, a) => (a.length > acc.length ? a : acc))
 }
 
 export const padRight = (str: string, length: number) => {
