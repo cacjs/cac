@@ -103,6 +103,34 @@ test('negated option validation', () => {
   expect(options.config).toBe(false)
 })
 
+test('negated option help output', () => {
+  const cli = cac()
+
+  cli.option('--config <config>', 'Use custom config file')
+  cli.option('--no-config', 'Skip')
+
+  const saved = console.log
+  let output = ''
+  try {
+    console.log = (msg, more) => {
+      if (more) throw new Error('Unexpected multi-arg call to console.log')
+      output += msg
+    }
+    cli.outputHelp()
+    expect(output).toBe(
+      `
+
+Usage:
+  $  <command> [options]
+
+Options:
+  --[no-]config <config>   Skip/Use custom config file `
+    )
+  } finally {
+    console.log = saved
+  }
+})
+
 test('array types without transformFunction', () => {
   const cli = cac()
 

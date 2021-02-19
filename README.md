@@ -188,6 +188,17 @@ cli
 ```
 
 This will let CAC set the default value of `config` to true, and you can use `--no-config` flag to set it to `false`.
+This also results in the familiar `[no-]foo` syntax in `cli.help()` output:
+
+```
+Usage:
+  $ foo build [project]
+
+Options:
+  --[no-]config <path>   Disable config file/Use a custom config file
+  -h, --help             Display this message
+  -v, --version          Display version number
+```
 
 ### Variadic Arguments
 

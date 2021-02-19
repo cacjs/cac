@@ -184,22 +184,42 @@ class Command {
       ? globalOptions
       : [...this.options, ...(globalOptions || [])]
     if (options.length > 0) {
-      const longestOptionName = findLongest(
-        options.map((option) => option.rawName)
-      )
+      const negatedOpts: { [key: string]: Option } = {}
+      // O(n2), let's hope there aren't a zillion options
+      for (const o1 of options) {
+        if (!o1.negated) continue
+        for (const o2 of options) {
+          if (o1.name == o2.name) negatedOpts[o2.name] = o1
+        }
+      }
+      const longest = options
+        .map((o) => {
+          if (o.negated) return 0
+          const l = o.rawName.length
+          // '5' is the length of '[no-]'. As to the 1, I have no clue...
+          return negatedOpts[o.name] ? l + 5 + 1 : l
+        })
+        .reduce((acc, l) => Math.max(acc, l), 0)
       sections.push({
         title: 'Options',
         body: options
           .map((option) => {
-            return `  ${padRight(option.rawName, longestOptionName.length)}  ${
-              option.description
-            } ${
+            if (option.negated) return
+            let desc = option.description
+            let name = option.rawName
+            if (negatedOpts[option.name]) {
+              const ndesc = negatedOpts[option.name].description
+              if (ndesc) desc = `${ndesc}/${desc}`
+              name = name.replace(/^(--?)/, '$1[no-]')
+            }
+
+            return `  ${padRight(name, longest)}  ${desc} ${
               option.config.default === undefined
                 ? ''
                 : `(default: ${option.config.default})`
             }`
           })
-          .join('\n'),
+          .filter(Boolean).join('\n'),
       })
     }
 
