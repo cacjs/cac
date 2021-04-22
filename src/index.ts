@@ -12,6 +12,10 @@ export { cac, CAC, Command }
 if (typeof module !== 'undefined') {
   // @remove-for-deno
   module.exports = cac
-  module.exports.default = cac
-  module.exports.cac = cac
+  Object.assign(module.exports, {
+    default: cac,
+    cac,
+    CAC,
+    Command,
+  })
 }
