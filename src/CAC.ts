@@ -220,7 +220,7 @@ class CAC extends EventEmitter {
       this.unsetMatchedCommand()
     }
 
-    if (this.options.version && this.showVersionOnExit && this.matchedCommandName === undefined) {
+    if (this.options.version && this.showVersionOnExit) {
       this.outputVersion()
       run = false
       this.unsetMatchedCommand()
