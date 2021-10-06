@@ -214,7 +214,7 @@ class CAC extends EventEmitter {
       this.setParsedInfo(parsed)
     }
 
-    if (this.options.help && this.showHelpOnExit && this.matchedCommandName == null) {
+    if (this.options.help && this.showHelpOnExit) {
       this.outputHelp()
       run = false
       this.unsetMatchedCommand()
