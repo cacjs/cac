@@ -180,9 +180,12 @@ class Command {
       })
     }
 
-    const options = this.isGlobalCommand
+    let options = this.isGlobalCommand
       ? globalOptions
       : [...this.options, ...(globalOptions || [])]
+    if (!this.isGlobalCommand) {
+      options = options.filter((option) => option.name !== 'version')
+    }
     if (options.length > 0) {
       const longestOptionName = findLongest(
         options.map((option) => option.rawName)
