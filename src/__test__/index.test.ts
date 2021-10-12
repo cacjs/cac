@@ -2,7 +2,7 @@ import path from 'path'
 import execa from 'execa'
 import cac from '..'
 
-function fixture(file: string) {
+function example(file: string) {
   return path.relative(
     process.cwd(),
     path.join(__dirname, '../../examples', file)
@@ -12,40 +12,39 @@ function fixture(file: string) {
 function snapshotOutput({
   title,
   file,
-  args
+  args,
 }: {
   title: string
   file: string
   args?: string[]
 }) {
   test(title, async () => {
-    const { stdout } = await execa('node', [fixture(file), ...(args || [])])
+    const { stdout } = await execa('node', [example(file), ...(args || [])])
     expect(stdout).toMatchSnapshot(title)
   })
+}
+
+async function getOutput(file: string, args: string[] = []) {
+  const { stdout } = await execa('node', [example(file), ...(args || [])])
+  return stdout
 }
 
 snapshotOutput({
   title: 'basic-usage',
   file: 'basic-usage.js',
-  args: ['foo', 'bar', '--type', 'ok', 'command']
-})
-
-snapshotOutput({
-  title: 'help',
-  file: 'help.js',
-  args: ['--help']
+  args: ['foo', 'bar', '--type', 'ok', 'command'],
 })
 
 snapshotOutput({
   title: 'variadic-arguments',
   file: 'variadic-arguments.js',
-  args: ['--foo', 'build', 'a', 'b', 'c', 'd']
+  args: ['--foo', 'build', 'a', 'b', 'c', 'd'],
 })
 
 snapshotOutput({
   title: 'ignore-default-value',
   file: 'ignore-default-value.js',
-  args: ['build']
+  args: ['build'],
 })
 
 test('negated option', () => {
@@ -59,7 +58,7 @@ test('negated option', () => {
   expect(options).toEqual({
     '--': [],
     foo: 'foo',
-    bar: true
+    bar: true,
   })
 })
 
@@ -73,7 +72,7 @@ test('double dashes', () => {
     'bar',
     '--',
     'npm',
-    'test'
+    'test',
   ])
 
   expect(args).toEqual(['foo', 'bar'])
@@ -111,7 +110,7 @@ test('array types without transformFunction', () => {
       '--externals <external>',
       'Add externals(can be used for multiple times',
       {
-        type: []
+        type: [],
       }
     )
     .option('--scale [level]', 'Scaling level')
@@ -139,7 +138,7 @@ test('array types with transformFunction', () => {
   cli
     .command('build [entry]', 'Build your app')
     .option('--config <configFlie>', 'Use config file for building', {
-      type: [String]
+      type: [String],
     })
     .option('--scale [level]', 'Scaling level')
 
@@ -162,4 +161,16 @@ test('throw on unknown options', () => {
   expect(() => {
     cli.parse(`node bin build app.js --fooBar --a-b --xx`.split(' '))
   }).toThrowError('Unknown option `--xx`')
+})
+
+describe('--version in help message', () => {
+  test('sub command', async () => {
+    const output = await getOutput('help.js', ['lint', '--help'])
+    expect(output).not.toContain(`--version`)
+  })
+
+  test('default command', async () => {
+    const output = await getOutput('help.js', ['--help'])
+    expect(output).toContain(`--version`)
+  })
 })

@@ -2,12 +2,16 @@ require('ts-node/register')
 const cli = require('../src/index')()
 
 cli.option('--type [type]', 'Choose a project type', {
-  default: 'node'
+  default: 'node',
 })
 cli.option('--name <name>', 'Provide your name')
 
 cli.command('lint [...files]', 'Lint files').action((files, options) => {
   console.log(files, options)
+})
+
+cli.command('[...files]', 'Run files').action((files, options) => {
+  console.log('run', files, options)
 })
 
 // Display help message when `-h` or `--help` appears

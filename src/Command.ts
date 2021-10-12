@@ -183,7 +183,7 @@ class Command {
     let options = this.isGlobalCommand
       ? globalOptions
       : [...this.options, ...(globalOptions || [])]
-    if (!this.isGlobalCommand) {
+    if (!this.isGlobalCommand && !this.isDefaultCommand) {
       options = options.filter((option) => option.name !== 'version')
     }
     if (options.length > 0) {
