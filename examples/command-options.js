@@ -1,5 +1,5 @@
 require('ts-node/register')
-const cli = require('../src/index')()
+const cli = require('../src/index').cac()
 
 cli
   .command('rm <dir>', 'Remove a dir')

@@ -1,12 +1,12 @@
 require('ts-node/register')
-const cli = require('../src/index')()
+const cli = require('../src/index').cac()
 
 cli
   .command('build', 'Build project', {
-    ignoreOptionDefaultValue: true
+    ignoreOptionDefaultValue: true,
   })
   .option('--type [type]', 'Choose a project type', {
-    default: 'node'
+    default: 'node',
   })
 
 const parsed = cli.parse()

@@ -6,7 +6,7 @@
     "url": "egoist/cac",
     "type": "git"
   },
-  "main": "dist/index.js",
+  "main": "index-compat.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
@@ -22,7 +22,8 @@
     "!**/__test__/**",
     "/mod.js",
     "/mod.ts",
-    "/deno"
+    "/deno",
+    "/index-compat.js"
   ],
   "scripts": {
     "test": "jest",

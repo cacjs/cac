@@ -2,6 +2,8 @@ import path from 'path'
 import execa from 'execa'
 import cac from '..'
 
+jest.setTimeout(30000)
+
 function example(file: string) {
   return path.relative(
     process.cwd(),

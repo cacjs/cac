@@ -23,12 +23,6 @@ function node2deno(options: { types: typeof Types }): PluginObj {
           source.value = `https://cdn.skypack.dev/mri`
         }
       },
-
-      IfStatement(path) {
-        if (path.getSource().includes('@remove-for-deno')) {
-          path.remove()
-        }
-      },
     },
   }
 }
