@@ -12,7 +12,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./index-compat.js"
     },
     "./package.json": "./package.json",
     "./": "./"
