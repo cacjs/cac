@@ -18,7 +18,7 @@ function node2deno(options: { types: typeof Types }): PluginObj {
           }
           source.value += '.ts'
         } else if (source.value === 'events') {
-          source.value = `https://deno.land/std@0.80.0/node/events.ts`
+          source.value = `https://deno.land/std@0.114.0/node/events.ts`
         } else if (source.value === 'mri') {
           source.value = `https://cdn.skypack.dev/mri`
         }
