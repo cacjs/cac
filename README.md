@@ -54,6 +54,7 @@
 - [FAQ](#faq)
   - [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
   - [Why not use Commander.js?](#why-not-use-commanderjs)
+- [Project Stats](#project-stats)
 - [Contributing](#contributing)
 - [Author](#author)
 
@@ -76,7 +77,7 @@ Use CAC as simple argument parser:
 const cli = require('cac')()
 
 cli.option('--type <type>', 'Choose a project type', {
-  default: 'node'
+  default: 'node',
 })
 
 const parsed = cli.parse()
@@ -93,7 +94,7 @@ console.log(JSON.stringify(parsed, null, 2))
 const cli = require('cac')()
 
 cli.option('--type [type]', 'Choose a project type', {
-  default: 'node'
+  default: 'node',
 })
 cli.option('--name <name>', 'Provide your name')
 
@@ -143,7 +144,7 @@ Options in kebab-case should be referenced in camelCase in your code:
 cli
   .command('dev', 'Start dev server')
   .option('--clear-screen', 'Clear screen')
-  .action(options => {
+  .action((options) => {
     console.log(options.clearScreen)
   })
 ```
@@ -223,7 +224,7 @@ cli
   .command('build', 'desc')
   .option('--env <env>', 'Set envs')
   .example('--env.API_SECRET xxx')
-  .action(options => {
+  .action((options) => {
     console.log(options)
   })
 
@@ -514,6 +515,10 @@ CAC is very similar to Commander.js, while the latter does not support dot neste
 _And maybe more..._
 
 Basically I made CAC to fulfill my own needs for building CLI apps like [Poi](https://poi.js.org), [SAO](https://saojs.org) and all my CLI apps. It's small, simple but powerful :P
+
+## Project Stats
+
+![Alt](https://repobeats.axiom.co/api/embed/58caf6203631bcdb9bbe22f0728a0af1683dc0bb.svg 'Repobeats analytics image')
 
 ## Contributing
 
