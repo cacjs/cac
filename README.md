@@ -514,7 +514,7 @@ CAC is very similar to Commander.js, while the latter does not support dot neste
 
 _And maybe more..._
 
-Basically I made CAC to fulfill my own needs for building CLI apps like [Poi](https://poi.js.org), [SAO](https://saojs.org) and all my CLI apps. It's small, simple but powerful :P
+Basically I made CAC to fulfill my own needs for building CLI apps like [Poi](https://poi.js.org), [SAO](https://sao.vercel.app) and all my CLI apps. It's small, simple but powerful :P
 
 ## Project Stats
 
