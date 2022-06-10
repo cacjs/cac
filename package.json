@@ -60,7 +60,7 @@
     "rollup": "^2.34.2",
     "rollup-plugin-dts": "^2.0.1",
     "rollup-plugin-esbuild": "^2.6.1",
-    "semantic-release": "^17.3.0",
+    "semantic-release": "^19.0.3",
     "sucrase": "^3.16.0",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
