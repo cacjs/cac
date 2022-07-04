@@ -5,7 +5,6 @@ import { transformAsync, PluginObj, types as Types } from '@babel/core'
 import tsSyntax from '@babel/plugin-syntax-typescript'
 
 function node2deno(options: { types: typeof Types }): PluginObj {
-  const t = options.types
   return {
     name: 'node2deno',
 
