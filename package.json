@@ -16,7 +16,7 @@
       "require": "./index-compat.js"
     },
     "./package.json": "./package.json",
-    "./": "./"
+    "./*": "./*"
   },
   "files": [
     "dist",
