@@ -156,6 +156,9 @@ class Command {
       const longestCommandName = findLongest(
         commands.map((command) => command.rawName)
       )
+      const longestCommandDescription = findLongest(
+        commands.map((command) => command.description)
+      )
       sections.push({
         title: 'Commands',
         body: commands
@@ -163,7 +166,14 @@ class Command {
             return `  ${padRight(
               command.rawName,
               longestCommandName.length
-            )}  ${command.description}`
+            )}  ${padRight(
+              command.description,
+              longestCommandDescription.length
+            )}  ${
+              command.aliasNames.length
+                ? `@ ${command.aliasNames.join(', ')}`
+                : ''
+            }`
           })
           .join('\n'),
       })
