@@ -176,3 +176,34 @@ describe('--version in help message', () => {
     expect(output).toContain(`--version`)
   })
 })
+
+describe('cli version and sub-command version', () => {
+  test('global command version', async () => {
+    const output = await getOutput('versions.js', ['-v'])
+    expect(output).toContain('1.0.2')
+  })
+
+  test('sub command version', async () => {
+    const output1 = await getOutput('versions.js', ['build', '-v'])
+    expect(output1).toContain('1.0.0')
+
+    const output2 = await getOutput('versions.js', ['set', '-v'])
+    expect(output2).toContain('1.0.1')
+
+    //help message
+    const output_help = await getOutput('versions.js', ['set', '--help'])
+    expect(output_help).toContain('--version')
+  })
+
+  test('without sub-command version', async () => {
+    const default_command_output = await getOutput('help.js', ['-v'])
+    expect(default_command_output).toContain('0.0.0')
+
+    const sub_command_output = await getOutput('help.js', ['lint', '-v'])
+    expect(sub_command_output).toEqual(default_command_output) // fall back to default
+
+    //help message
+    const sub_command_help = await getOutput('help.js', ['lint', '-h'])
+    expect(sub_command_help).not.toContain('--version')
+  })
+})

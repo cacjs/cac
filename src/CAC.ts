@@ -96,6 +96,11 @@ class CAC extends EventEmitter {
    */
   help(callback?: HelpCallback) {
     this.globalCommand.option('-h, --help', 'Display this message')
+
+    for (const command of this.commands) {
+      command.option('-h, --help', 'Display this message')
+    }
+
     this.globalCommand.helpCallback = callback
     this.showHelpOnExit = true
     return this
@@ -140,7 +145,11 @@ class CAC extends EventEmitter {
    *
    */
   outputVersion() {
-    this.globalCommand.outputVersion()
+    if (this.matchedCommand) {
+      this.matchedCommand.outputVersion()
+    } else {
+      this.globalCommand.outputVersion()
+    }
   }
 
   private setParsedInfo(
@@ -220,7 +229,7 @@ class CAC extends EventEmitter {
       this.unsetMatchedCommand()
     }
 
-    if (this.options.version && this.showVersionOnExit && this.matchedCommandName == null) {
+    if (this.options.version && this.showVersionOnExit) {
       this.outputVersion()
       run = false
       this.unsetMatchedCommand()
