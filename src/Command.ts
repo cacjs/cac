@@ -119,6 +119,10 @@ class Command {
     return this instanceof GlobalCommand
   }
 
+  get isGlobalOrDefaultCommand(): boolean {
+    return this.isDefaultCommand || this.isGlobalCommand
+  }
+
   /**
    * Check if an option is registered in this command
    * @param name Option name
@@ -132,15 +136,11 @@ class Command {
 
   outputHelp() {
     const { name, commands } = this.cli
-    const {
-      versionNumber,
-      options: globalOptions,
-      helpCallback,
-    } = this.cli.globalCommand
+    const { options: globalOptions, helpCallback } = this.cli.globalCommand
 
     let sections: HelpSection[] = [
       {
-        body: `${name}${versionNumber ? `/${versionNumber}` : ''}`,
+        body: this.getVersionOutput(),
       },
     ]
 
@@ -149,8 +149,7 @@ class Command {
       body: `  $ ${name} ${this.usageText || this.rawName}`,
     })
 
-    const showCommands =
-      (this.isGlobalCommand || this.isDefaultCommand) && commands.length > 0
+    const showCommands = this.isGlobalOrDefaultCommand && commands.length > 0
 
     if (showCommands) {
       const longestCommandName = findLongest(
@@ -180,12 +179,9 @@ class Command {
       })
     }
 
-    let options = this.isGlobalCommand
+    let options = this.isGlobalOrDefaultCommand
       ? globalOptions
-      : [...this.options, ...(globalOptions || [])]
-    if (!this.isGlobalCommand && !this.isDefaultCommand) {
-      options = options.filter((option) => option.name !== 'version')
-    }
+      : [...this.options]
     if (options.length > 0) {
       const longestOptionName = findLongest(
         options.map((option) => option.rawName)
@@ -235,11 +231,21 @@ class Command {
     )
   }
 
-  outputVersion() {
+  private getVersionOutput(): string {
     const { name } = this.cli
-    const { versionNumber } = this.cli.globalCommand
-    if (versionNumber) {
-      console.log(`${name}/${versionNumber} ${platformInfo}`)
+    const commandVersion = this.versionNumber
+    const globalVersion = this.cli.globalCommand.versionNumber
+
+    if (!this.isGlobalOrDefaultCommand && commandVersion) {
+      return `${name} ${this.name}/${commandVersion} ${platformInfo}`
+    } else {
+      return `${name}/${globalVersion} ${platformInfo}`
+    }
+  }
+  outputVersion() {
+    const versionText = this.getVersionOutput()
+    if (versionText) {
+      console.log(versionText)
     }
   }
 
