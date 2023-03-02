@@ -81,6 +81,71 @@ test('double dashes', () => {
   expect(options['--']).toEqual(['npm', 'test'])
 })
 
+test('default value for option', () => {
+  const cli = cac()
+
+  cli.option('-b, --base-url <baseUrl>', 'Set the instance URL', {
+    default: 'https://github.com',
+  })
+
+  const { options } = cli.parse(`node bin`.split(' '))
+
+  expect(options).toEqual({
+    '--': [],
+    b: 'https://github.com',
+    baseUrl: 'https://github.com',
+  })
+})
+
+test('default value for option names 1', () => {
+  const cli = cac()
+
+  cli.option('-b, --base-url <baseUrl>', 'Set the instance URL', {
+    default: 'https://github.com',
+  })
+
+  let { options } = cli.parse(`node bin -b https://gitlab.com`.split(' '))
+
+  expect(options).toEqual({
+    '--': [],
+    b: 'https://gitlab.com',
+    baseUrl: 'https://gitlab.com',
+  })
+})
+
+test('default value for option names 2', () => {
+  const cli = cac()
+
+  cli.option('-b, --base-url <baseUrl>', 'Set the instance URL', {
+    default: 'https://github.com',
+  })
+
+  let { options } = cli.parse(
+    `node bin --base-url https://gitlab.com`.split(' ')
+  )
+
+  expect(options).toEqual({
+    '--': [],
+    baseUrl: 'https://gitlab.com',
+  })
+})
+
+test('default value for option names 3', () => {
+  const cli = cac()
+
+  cli.option('-s, --skip', 'Skip process', {
+    default: false,
+  })
+
+  const { options } = cli.parse(`node bin`.split(' '))
+
+  expect(options).toEqual({
+    '--': [],
+    s: false,
+    skip: false,
+  })
+})
+
 test('default value for negated option', () => {
   const cli = cac()
 

@@ -220,7 +220,11 @@ class CAC extends EventEmitter {
       this.unsetMatchedCommand()
     }
 
-    if (this.options.version && this.showVersionOnExit && this.matchedCommandName == null) {
+    if (
+      this.options.version &&
+      this.showVersionOnExit &&
+      this.matchedCommandName == null
+    ) {
       this.outputVersion()
       run = false
       this.unsetMatchedCommand()
@@ -285,8 +289,14 @@ class CAC extends EventEmitter {
 
     for (const cliOption of cliOptions) {
       if (!ignoreDefault && cliOption.config.default !== undefined) {
-        for (const name of cliOption.names) {
-          options[name] = cliOption.config.default
+        // apply default value only if none of the names was parsed
+        const parsedOptionNames = cliOption.names.filter(
+          (name: PropertyKey) => parsed[name] !== undefined
+        )
+        if (parsedOptionNames.length === 0) {
+          for (const name of cliOption.names) {
+            options[name] = cliOption.config.default
+          }
         }
       }
 
