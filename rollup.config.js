@@ -16,6 +16,7 @@ function createConfig({ dts, esm } = {}) {
       format: dts || esm ? 'esm' : 'cjs',
       file,
       exports: 'named',
+      inlineDynamicImports: true,
     },
     plugins: [
       nodeResolvePlugin({

@@ -15,6 +15,7 @@ import {
   camelcaseOptionName,
 } from './utils'
 import { processArgs } from './node'
+import { getLatestVersion } from './npm'
 
 interface ParsedArgv {
   args: ReadonlyArray<string>
@@ -220,7 +221,11 @@ class CAC extends EventEmitter {
       this.unsetMatchedCommand()
     }
 
-    if (this.options.version && this.showVersionOnExit && this.matchedCommandName == null) {
+    if (
+      this.options.version &&
+      this.showVersionOnExit &&
+      this.matchedCommandName == null
+    ) {
       this.outputVersion()
       run = false
       this.unsetMatchedCommand()
@@ -338,6 +343,41 @@ class CAC extends EventEmitter {
     })
     actionArgs.push(options)
     return command.commandAction.apply(this, actionArgs)
+  }
+  /**
+   * @param pjson package.json object
+   */
+  async checkUpdate(
+    pjson: any,
+    customTips: (p: {
+      latestVersion: string
+      curVersion: string
+      pkgName: string
+    }) => void
+  ) {
+    const latestVersion = await getLatestVersion(pjson.name)
+    try {
+      // @ts-expect-error need developer to install semver
+      const semver = (await import('semver')).default
+      if (latestVersion && semver.gt(latestVersion, pjson.version)) {
+        if (customTips) {
+          customTips({
+            latestVersion,
+            curVersion: pjson.version,
+            pkgName: pjson.name,
+          })
+        } else {
+          console.warn(
+            '\x1b[33m%s',
+            `The latest version of ${pjson.name} is ${latestVersion} and you have ${pjson.version}. Update it now: npm i -g ${pjson.name}`
+          )
+        }
+      }
+    } catch (e) {
+      if (e.code === 'ERR_MODULE_NOT_FOUND') {
+        console.error('\x1B[31m%s', '"semver" not found. Did you install it?')
+      }
+    }
   }
 }
 
