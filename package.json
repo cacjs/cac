@@ -100,5 +100,8 @@
     "hooks": {
       "pre-commit": "npm t && lint-staged"
     }
+  },
+  "dependencies": {
+    "pkg-up": "^4.0.0"
   }
 }

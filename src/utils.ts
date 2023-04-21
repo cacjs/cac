@@ -1,4 +1,6 @@
 import Option from './Option'
+import { pkgUp } from 'pkg-up'
+import fs from 'fs'
 
 export const removeBrackets = (v: string) => v.replace(/[<[].+/, '').trim()
 
@@ -18,7 +20,7 @@ export const findAllBrackets = (v: string) => {
     return {
       required: match[0].startsWith('<'),
       value,
-      variadic
+      variadic,
     }
   }
 
@@ -62,7 +64,7 @@ export const getMriOptions = (options: Option[]) => {
         const hasStringTypeOption = options.some((o, i) => {
           return (
             i !== index &&
-            o.names.some(name => option.names.includes(name)) &&
+            o.names.some((name) => option.names.includes(name)) &&
             typeof o.required === 'boolean'
           )
         })
@@ -159,4 +161,9 @@ export class CACError extends Error {
       this.stack = new Error(message).stack
     }
   }
+}
+
+export const getCWDPackageJson = async () => {
+  const pjsonPath = (await pkgUp())!
+  return JSON.parse(fs.readFileSync(pjsonPath, { encoding: 'utf-8' }))
 }

@@ -13,6 +13,7 @@ import {
   setByType,
   getFileName,
   camelcaseOptionName,
+  getCWDPackageJson,
 } from './utils'
 import { processArgs } from './node'
 import { getLatestVersion } from './npm'
@@ -348,13 +349,13 @@ class CAC extends EventEmitter {
    * @param pjson package.json object
    */
   async checkUpdate(
-    pjson: any,
     customTips: (p: {
       latestVersion: string
       curVersion: string
       pkgName: string
     }) => void
   ) {
+    const pjson = await getCWDPackageJson()
     const latestVersion = await getLatestVersion(pjson.name)
     try {
       // @ts-expect-error need developer to install semver
