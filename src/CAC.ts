@@ -328,6 +328,8 @@ class CAC extends EventEmitter {
 
     command.checkRequiredArgs()
 
+    command.checkPreviousArgument()
+
     const actionArgs: any[] = []
     command.args.forEach((arg, index) => {
       if (arg.variadic) {
