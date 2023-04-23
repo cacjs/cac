@@ -3,14 +3,14 @@ import Option from './Option'
 export const removeBrackets = (v: string) => v.replace(/[<[].+/, '').trim()
 
 export const findAllBrackets = (v: string) => {
-  const ANGLED_BRACKET_RE_GLOBAL = /<([^>]+)>/g
-  const SQUARE_BRACKET_RE_GLOBAL = /\[([^\]]+)\]/g
+  const BRACKET_RE_GLOBAL = /<([^>]+)>|\[([^\]]+)\]/g
 
   const res = []
 
   const parse = (match: string[]) => {
     let variadic = false
-    let value = match[1]
+    let value = match[1] ?? match[2]
+
     if (value.startsWith('...')) {
       value = value.slice(3)
       variadic = true
@@ -22,14 +22,9 @@ export const findAllBrackets = (v: string) => {
     }
   }
 
-  let angledMatch
-  while ((angledMatch = ANGLED_BRACKET_RE_GLOBAL.exec(v))) {
-    res.push(parse(angledMatch))
-  }
-
-  let squareMatch
-  while ((squareMatch = SQUARE_BRACKET_RE_GLOBAL.exec(v))) {
-    res.push(parse(squareMatch))
+  let match
+  while ((match = BRACKET_RE_GLOBAL.exec(v))) {
+    res.push(parse(match))
   }
 
   return res
