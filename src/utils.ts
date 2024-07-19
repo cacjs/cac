@@ -110,9 +110,9 @@ export const setDotProp = (
         ? val
         : x != null
         ? x
-        : !!~keys[i + 1].indexOf('.') || !(+keys[i + 1] > -1)
-        ? {}
-        : []
+        : +keys[i + 1] > -1
+        ? []
+        : {}
   }
 }
 
