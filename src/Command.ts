@@ -253,6 +253,18 @@ class Command {
     }
   }
 
+  checkPreviousArgument() {
+    const length = this.args.length
+
+    for (let i = 0; i < length; i++) {
+      const { variadic, value } = this.args[i]
+
+      if (variadic && i !== length - 1) {
+        throw new CACError(`only the last argument can be variadic '${value}'`)
+      }
+    }
+  }
+
   /**
    * Check if the parsed options contain any unknown options
    *
