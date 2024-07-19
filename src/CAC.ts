@@ -220,7 +220,11 @@ class CAC extends EventEmitter {
       this.unsetMatchedCommand()
     }
 
-    if (this.options.version && this.showVersionOnExit && this.matchedCommandName == null) {
+    if (
+      this.options.version &&
+      this.showVersionOnExit &&
+      this.matchedCommandName == null
+    ) {
       this.outputVersion()
       run = false
       this.unsetMatchedCommand()
@@ -327,6 +331,8 @@ class CAC extends EventEmitter {
     command.checkOptionValue()
 
     command.checkRequiredArgs()
+
+    command.checkUnusedArgs()
 
     const actionArgs: any[] = []
     command.args.forEach((arg, index) => {

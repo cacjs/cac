@@ -295,6 +295,22 @@ class Command {
       }
     }
   }
+
+  /**
+   * Check if the number of args is more than expected
+   */
+  checkUnusedArgs() {
+    const hasVariadicArg = this.args.some((arg) => arg.variadic)
+    const maximumArgsCount = hasVariadicArg ? Infinity : this.args.length
+
+    if (maximumArgsCount < this.cli.args.length) {
+      const argsString = this.cli.args
+        .slice(maximumArgsCount)
+        .map((arg) => `\`${arg}\``)
+        .join(', ')
+      throw new CACError(`Unused args: ${argsString}`)
+    }
+  }
 }
 
 class GlobalCommand extends Command {
