@@ -18,7 +18,7 @@ export const findAllBrackets = (v: string) => {
     return {
       required: match[0].startsWith('<'),
       value,
-      variadic
+      variadic,
     }
   }
 
@@ -40,10 +40,11 @@ interface MriOptions {
     [k: string]: string[]
   }
   boolean: string[]
+  string: string[]
 }
 
 export const getMriOptions = (options: Option[]) => {
-  const result: MriOptions = { alias: {}, boolean: [] }
+  const result: MriOptions = { alias: {}, boolean: [], string: [] }
 
   for (const [index, option] of options.entries()) {
     // We do not set default values in mri options
@@ -62,7 +63,7 @@ export const getMriOptions = (options: Option[]) => {
         const hasStringTypeOption = options.some((o, i) => {
           return (
             i !== index &&
-            o.names.some(name => option.names.includes(name)) &&
+            o.names.some((name) => option.names.includes(name)) &&
             typeof o.required === 'boolean'
           )
         })
@@ -72,6 +73,8 @@ export const getMriOptions = (options: Option[]) => {
       } else {
         result.boolean.push(option.names[0])
       }
+    } else {
+      result.string.push(option.names[0])
     }
   }
 
