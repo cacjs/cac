@@ -54,7 +54,7 @@ test('negated option', () => {
 
   cli.option('--foo [foo]', 'Set foo').option('--no-foo', 'Disable foo')
 
-  cli.option('--bar [bar]', 'Set bar').option('--no-bar', 'Disable bar')
+  cli.option('--bar', 'Set bar').option('--no-bar', 'Disable bar')
 
   const { options } = cli.parse(['node', 'bin', '--foo', 'foo', '--bar'])
   expect(options).toEqual({
@@ -115,7 +115,7 @@ test('array types without transformFunction', () => {
         type: [],
       }
     )
-    .option('--scale [level]', 'Scaling level')
+    .option('--scale', 'Scaling level')
 
   const { options: options1 } = cli.parse(
     `node bin --externals.env.prod production --scale`.split(' ')
@@ -142,7 +142,7 @@ test('array types with transformFunction', () => {
     .option('--config <configFlie>', 'Use config file for building', {
       type: [String],
     })
-    .option('--scale [level]', 'Scaling level')
+    .option('--scale', 'Scaling level')
 
   const { options } = cli.parse(
     `node bin build app.js --config config.js --scale`.split(' ')
