@@ -1,6 +1,6 @@
 {
   "name": "@xmorse/cac",
-  "version": "6.0.2",
+  "version": "6.0.6",
   "description": "Simple yet powerful framework for building command-line apps.",
   "repository": {
     "url": "egoist/cac",

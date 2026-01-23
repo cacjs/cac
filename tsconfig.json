@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types"],
     "target": "es2015",
     "declaration": true,
     "declarationDir": "types",
