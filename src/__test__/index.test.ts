@@ -296,6 +296,47 @@ describe('space-separated subcommands', () => {
     expect(matched).toBe('mcp base')
   })
 
+  test('default command should not match if args are prefix of another command', () => {
+    const cli = cac()
+    let matched = ''
+
+    cli.command('mcp login', 'Login to MCP').action(() => {
+      matched = 'mcp login'
+    })
+
+    // Default command with empty name
+    cli.command('', 'Default command').action(() => {
+      matched = 'default'
+    })
+
+    // User types 'mcp' but there's no 'mcp' command, only 'mcp login'
+    // The default command should NOT match because 'mcp' is a prefix of 'mcp login'
+    cli.parse(['node', 'bin', 'mcp'], { run: true })
+    expect(matched).toBe('')
+    expect(cli.matchedCommand).toBeUndefined()
+  })
+
+  test('default command should match when args do not prefix any command', () => {
+    const cli = cac()
+    let matched = ''
+    let receivedArg = ''
+
+    cli.command('mcp login', 'Login to MCP').action(() => {
+      matched = 'mcp login'
+    })
+
+    // Default command with empty name
+    cli.command('<file>', 'Default command').action((file) => {
+      matched = 'default'
+      receivedArg = file
+    })
+
+    // User types 'foo' which is not a prefix of any command
+    cli.parse(['node', 'bin', 'foo'], { run: true })
+    expect(matched).toBe('default')
+    expect(receivedArg).toBe('foo')
+  })
+
   test('help output with subcommands', () => {
     const cli = cac('mycli')
 

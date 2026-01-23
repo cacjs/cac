@@ -210,8 +210,22 @@ class CAC extends EventEmitter {
       // Search the default command
       for (const command of this.commands) {
         if (command.name === '') {
-          shouldParse = false
+          // Check if any argument is a prefix of an existing command
+          // If so, don't match the default command (user probably mistyped a subcommand)
           const parsed = this.mri(argv.slice(2), command)
+          const firstArg = parsed.args[0]
+          if (firstArg) {
+            const isPrefixOfCommand = this.commands.some((cmd) => {
+              if (cmd.name === '') return false
+              const cmdParts = cmd.name.split(' ')
+              return cmdParts[0] === firstArg
+            })
+            if (isPrefixOfCommand) {
+              // Don't match default command - let it fall through to "unknown command"
+              continue
+            }
+          }
+          shouldParse = false
           this.setParsedInfo(parsed, command)
           this.emit(`command:!`, command)
         }
