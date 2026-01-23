@@ -181,8 +181,7 @@ class CAC extends EventEmitter {
 
     let shouldParse = true
 
-    // Sort commands by name length (longest first) for greedy matching
-    // This ensures "mcp login" matches before "mcp" when both are defined
+    // Sort by name length (longest first) so "mcp login" matches before "mcp"
     const sortedCommands = [...this.commands].sort((a, b) => {
       const aLength = a.name.split(' ').filter(Boolean).length
       const bLength = b.name.split(' ').filter(Boolean).length
@@ -196,7 +195,6 @@ class CAC extends EventEmitter {
       const result = command.isMatched(parsed.args as string[])
       if (result.matched) {
         shouldParse = false
-        // Build the matched command name from consumed args
         const matchedCommandName = parsed.args.slice(0, result.consumedArgs).join(' ')
         const parsedInfo = {
           ...parsed,

@@ -4,4 +4,4 @@ node_modules
 /api-doc
 coverage
 /dist
-/denodist/
+/deno
