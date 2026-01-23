@@ -1,5 +1,5 @@
 {
-  "name": "cac",
+  "name": "@xmorse/cac",
   "version": "6.0.0",
   "description": "Simple yet powerful framework for building command-line apps.",
   "repository": {
