@@ -105,10 +105,36 @@ class Command {
 
   /**
    * Check if a command name is matched by this command
-   * @param name Command name
+   * Supports multi-word command names like "mcp login" or "mcp getNodeXml"
+   * @param args Array of CLI arguments to match against
+   * @returns Object with matched status and number of args consumed
    */
-  isMatched(name: string) {
-    return this.name === name || this.aliasNames.includes(name)
+  isMatched(args: string[]): { matched: boolean; consumedArgs: number } {
+    // Split command name by spaces to support subcommands
+    const nameParts = this.name.split(' ').filter(Boolean)
+
+    // Empty command name is the default command
+    if (nameParts.length === 0) {
+      return { matched: false, consumedArgs: 0 }
+    }
+
+    // Check if we have enough args
+    if (args.length < nameParts.length) {
+      return { matched: false, consumedArgs: 0 }
+    }
+
+    // Check each part matches
+    for (let i = 0; i < nameParts.length; i++) {
+      if (nameParts[i] !== args[i]) {
+        // Also check aliases for first part only
+        if (i === 0 && this.aliasNames.includes(args[i])) {
+          continue
+        }
+        return { matched: false, consumedArgs: 0 }
+      }
+    }
+
+    return { matched: true, consumedArgs: nameParts.length }
   }
 
   get isDefaultCommand() {

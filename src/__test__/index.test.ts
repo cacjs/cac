@@ -176,3 +176,123 @@ describe('--version in help message', () => {
     expect(output).toContain(`--version`)
   })
 })
+
+describe('space-separated subcommands', () => {
+  test('basic subcommand matching', () => {
+    const cli = cac()
+    let matched = ''
+
+    cli.command('mcp login', 'Login to MCP').action(() => {
+      matched = 'mcp login'
+    })
+
+    cli.parse(['node', 'bin', 'mcp', 'login'], { run: true })
+    expect(matched).toBe('mcp login')
+    expect(cli.matchedCommandName).toBe('mcp login')
+  })
+
+  test('subcommand with positional args', () => {
+    const cli = cac()
+    let receivedId = ''
+
+    cli.command('mcp getNodeXml <id>', 'Get XML for a node').action((id) => {
+      receivedId = id
+    })
+
+    cli.parse(['node', 'bin', 'mcp', 'getNodeXml', '123'], { run: true })
+    expect(receivedId).toBe('123')
+    expect(cli.matchedCommandName).toBe('mcp getNodeXml')
+  })
+
+  test('subcommand with options', () => {
+    const cli = cac()
+    let result: any = {}
+
+    cli
+      .command('mcp export <id>', 'Export something')
+      .option('--format <format>', 'Output format')
+      .action((id, options) => {
+        result = { id, format: options.format }
+      })
+
+    cli.parse(['node', 'bin', 'mcp', 'export', 'abc', '--format', 'json'], {
+      run: true,
+    })
+    expect(result).toEqual({ id: 'abc', format: 'json' })
+  })
+
+  test('greedy matching - longer commands match first', () => {
+    const cli = cac()
+    let matched = ''
+
+    // Register shorter command first
+    cli.command('mcp', 'MCP base command').action(() => {
+      matched = 'mcp'
+    })
+
+    // Register longer command second
+    cli.command('mcp login', 'Login to MCP').action(() => {
+      matched = 'mcp login'
+    })
+
+    cli.parse(['node', 'bin', 'mcp', 'login'], { run: true })
+    expect(matched).toBe('mcp login')
+  })
+
+  test('three-level subcommand', () => {
+    const cli = cac()
+    let matched = ''
+
+    cli.command('git remote add', 'Add a remote').action(() => {
+      matched = 'git remote add'
+    })
+
+    cli.parse(['node', 'bin', 'git', 'remote', 'add'], { run: true })
+    expect(matched).toBe('git remote add')
+    expect(cli.matchedCommandName).toBe('git remote add')
+  })
+
+  test('subcommand with alias for first part', () => {
+    const cli = cac()
+    let matched = ''
+
+    cli
+      .command('mcp login', 'Login to MCP')
+      .alias('m')
+      .action(() => {
+        matched = 'mcp login via alias'
+      })
+
+    cli.parse(['node', 'bin', 'm', 'login'], { run: true })
+    expect(matched).toBe('mcp login via alias')
+  })
+
+  test('single-word commands still work (backward compatibility)', () => {
+    const cli = cac()
+    let matched = ''
+
+    cli.command('build', 'Build the project').action(() => {
+      matched = 'build'
+    })
+
+    cli.parse(['node', 'bin', 'build'], { run: true })
+    expect(matched).toBe('build')
+    expect(cli.matchedCommandName).toBe('build')
+  })
+
+  test('subcommand does not match when args are insufficient', () => {
+    const cli = cac()
+    let matched = ''
+
+    cli.command('mcp login', 'Login to MCP').action(() => {
+      matched = 'mcp login'
+    })
+
+    cli.command('mcp', 'MCP base').action(() => {
+      matched = 'mcp base'
+    })
+
+    cli.parse(['node', 'bin', 'mcp'], { run: true })
+    expect(matched).toBe('mcp base')
+  })
+})

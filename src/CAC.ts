@@ -181,19 +181,30 @@ class CAC extends EventEmitter {
 
     let shouldParse = true
 
+    // Sort commands by name length (longest first) for greedy matching
+    // This ensures "mcp login" matches before "mcp" when both are defined
+    const sortedCommands = [...this.commands].sort((a, b) => {
+      const aLength = a.name.split(' ').filter(Boolean).length
+      const bLength = b.name.split(' ').filter(Boolean).length
+      return bLength - aLength
+    })
+
     // Search sub-commands
-    for (const command of this.commands) {
+    for (const command of sortedCommands) {
       const parsed = this.mri(argv.slice(2), command)
 
-      const commandName = parsed.args[0]
-      if (command.isMatched(commandName)) {
+      const result = command.isMatched(parsed.args as string[])
+      if (result.matched) {
         shouldParse = false
+        // Build the matched command name from consumed args
+        const matchedCommandName = parsed.args.slice(0, result.consumedArgs).join(' ')
         const parsedInfo = {
           ...parsed,
-          args: parsed.args.slice(1),
+          args: parsed.args.slice(result.consumedArgs),
         }
-        this.setParsedInfo(parsedInfo, command, commandName)
-        this.emit(`command:${commandName}`, command)
+        this.setParsedInfo(parsedInfo, command, matchedCommandName)
+        this.emit(`command:${matchedCommandName}`, command)
+        break // Stop after first match (greedy matching)
       }
     }
 
