@@ -149,6 +149,17 @@ class Command {
       body: `  $ ${name} ${this.usageText || this.rawName}`,
     })
 
+    // Show full description for specific commands (not global/default)
+    if (!this.isGlobalCommand && !this.isDefaultCommand && this.description) {
+      sections.push({
+        title: 'Description',
+        body: this.description
+          .split('\n')
+          .map((line) => `  ${line}`)
+          .join('\n'),
+      })
+    }
+
     const showCommands =
       (this.isGlobalCommand || this.isDefaultCommand) && commands.length > 0
 
@@ -160,10 +171,12 @@ class Command {
         title: 'Commands',
         body: commands
           .map((command) => {
+            // Only show first line of description in commands listing
+            const firstLine = command.description.split('\n')[0].trim()
             return `  ${padRight(
               command.rawName,
               longestCommandName.length
-            )}  ${command.description}`
+            )}  ${firstLine}`
           })
           .join('\n'),
       })
