@@ -149,6 +149,17 @@ class Command {
       body: `  $ ${name} ${this.usageText || this.rawName}`,
     })
 
+    // Show full description for specific commands (not global/default)
+    if (!this.isGlobalCommand && !this.isDefaultCommand && this.description) {
+      sections.push({
+        title: 'Description',
+        body: this.description
+          .split('\n')
+          .map((line) => `  ${line}`)
+          .join('\n'),
+      })
+    }
+
     const showCommands =
       (this.isGlobalCommand || this.isDefaultCommand) && commands.length > 0
 
