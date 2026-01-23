@@ -295,4 +295,53 @@ describe('space-separated subcommands', () => {
     cli.parse(['node', 'bin', 'mcp'], { run: true })
     expect(matched).toBe('mcp base')
   })
+
+  test('help output with subcommands', () => {
+    const cli = cac('mycli')
+
+    cli.command('mcp login <url>', 'Login to MCP server')
+    cli.command('mcp logout', 'Logout from MCP server')
+    cli.command('mcp status', 'Show connection status')
+    cli.command('git remote add <name> <url>', 'Add a git remote')
+    cli.command('git remote remove <name>', 'Remove a git remote')
+    cli.command('build', 'Build the project')
+      .option('--watch', 'Watch mode')
+
+    cli.help()
+    cli.parse(['node', 'bin', '--help'], { run: false })
+
+    // Capture help output
+    let output = ''
+    const originalLog = console.log
+    console.log = (msg: string) => { output += msg + '\n' }
+    cli.outputHelp()
+    console.log = originalLog
+
+    expect(output).toMatchInlineSnapshot(`
+"mycli
+
+Usage:
+  $ mycli <command> [options]
+
+Commands:
+  mcp login <url>              Login to MCP server
+  mcp logout                   Logout from MCP server
+  mcp status                   Show connection status
+  git remote add <name> <url>  Add a git remote
+  git remote remove <name>     Remove a git remote
+  build                        Build the project
+
+For more info, run any command with the \`--help\` flag:
+  $ mycli mcp login --help
+  $ mycli mcp logout --help
+  $ mycli mcp status --help
+  $ mycli git remote add --help
+  $ mycli git remote remove --help
+  $ mycli build --help
+
+Options:
+  -h, --help  Display this message 
+"
+`)
+  })
 })
