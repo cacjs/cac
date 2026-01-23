@@ -1,6 +1,6 @@
 {
   "name": "@xmorse/cac",
-  "version": "6.0.0",
+  "version": "6.0.2",
   "description": "Simple yet powerful framework for building command-line apps.",
   "repository": {
     "url": "egoist/cac",
@@ -31,7 +31,7 @@
     "test:cov": "jest --coverage",
     "build:deno": "node -r sucrase/register scripts/build-deno.ts",
     "build:node": "rollup -c",
-    "build": "yarn build:deno && yarn build:node",
+    "build": "npm run build:deno && npm run build:node",
     "toc": "markdown-toc -i README.md",
     "prepublishOnly": "npm run build && cp mod.js mod.mjs",
     "docs:api": "typedoc --out api-doc --readme none --exclude \"**/__test__/**\" --theme minimal"
