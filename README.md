@@ -27,7 +27,8 @@ Use CAC as simple argument parser:
 
 ```js
 // examples/basic-usage.js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli.option('--type <type>', 'Choose a project type', {
   default: 'node',
@@ -44,7 +45,8 @@ console.log(JSON.stringify(parsed, null, 2))
 
 ```js
 // examples/help.js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli.option('--type [type]', 'Choose a project type', {
   default: 'node',
@@ -71,7 +73,8 @@ cli.parse()
 You can attach options to a command.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('rm <dir>', 'Remove a dir')
@@ -111,7 +114,8 @@ When using brackets in command name, angled brackets indicate required command a
 When using brackets in option name, angled brackets indicate that a string / number value is required, while square bracket indicate that the value can also be `true`.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('deploy <folder>', 'Deploy a folder to AWS')
@@ -148,7 +152,8 @@ This will let CAC set the default value of `config` to true, and you can use `--
 The last argument of a command can be variadic, and only the last argument. To make an argument variadic you have to add `...` to the start of argument name, just like the rest operator in JavaScript. Here is an example:
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('build <entry> [...otherFiles]', 'Build your app')
@@ -171,7 +176,8 @@ cli.parse()
 Dot-nested options will be merged into a single option.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('build', 'desc')
@@ -193,7 +199,8 @@ cli.parse()
 Register a command that will be used when no other command is matched.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   // Simply omit the command name, just brackets
@@ -264,10 +271,11 @@ const cli = cac('my-program')
 
 Projects that use **CAC**:
 
+- [Vite](https://github.com/vitejs/vite): ⚡️ Next generation frontend tooling. It's fast!
+- [Vitest](https://github.com/vitest-dev/vitest) - Next generation testing framework powered by Vite.
+- [tsdown](https://github.com/rolldown/tsdown) - The elegant bundler for libraries powered by Rolldown.
 - [VuePress](https://github.com/vuejs/vuepress): :memo: Minimalistic Vue-powered static site generator.
-- [SAO](https://github.com/egoist/sao): ⚔️ Futuristic scaffolding tool.
 - [DocPad](https://github.com/docpad/docpad): 🏹 Powerful Static Site Generator.
-- [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
 - [bili](https://github.com/egoist/bili): 🥂 Schweizer Armeemesser for bundling JavaScript libraries.
 - [Lad](https://github.com/ladjs/lad): 👦 Lad scaffolds a Koa webapp and API framework for Node.js.
 - [Lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
@@ -287,7 +295,7 @@ Below is a brief overview.
 CLI instance is created by invoking the `cac` function:
 
 ```js
-const cac = require('cac')
+import cac from 'cac'
 const cli = cac()
 ```
 
@@ -466,10 +474,6 @@ CAC is very similar to Commander.js, while the latter does not support dot neste
 _And maybe more..._
 
 Basically I made CAC to fulfill my own needs for building CLI apps like [Poi](https://poi.js.org), [SAO](https://sao.vercel.app) and all my CLI apps. It's small, simple but powerful :P
-
-## Project Stats
-
-![Alt](https://repobeats.axiom.co/api/embed/58caf6203631bcdb9bbe22f0728a0af1683dc0bb.svg 'Repobeats analytics image')
 
 ## Contributing
 
