@@ -43,6 +43,7 @@
     "@types/deno": "^2.5.0",
     "@types/node": "^25.3.0",
     "@typescript/native-preview": "7.0.0-dev.20260220.1",
+    "@vitest/coverage-v8": "^4.0.18",
     "bumpp": "^10.4.1",
     "eslint": "^10.0.1",
     "lint-staged": "^16.2.7",
