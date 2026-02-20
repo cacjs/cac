@@ -1,7 +1,7 @@
 {
   "name": "cac",
   "type": "module",
-  "version": "6.0.0",
+  "version": "6.7.14",
   "description": "Simple yet powerful framework for building command-line apps.",
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
@@ -32,6 +32,7 @@
     "typecheck": "tsgo --noEmit",
     "format": "prettier --cache --write .",
     "toc": "markdown-toc -i README.md",
+    "release": "bumpp",
     "prepublishOnly": "pnpm build",
     "docs:api": "typedoc --out api-doc --readme none --exclude \"**/__test__/**\" --theme minimal"
   },
@@ -42,6 +43,7 @@
     "@types/deno": "^2.5.0",
     "@types/node": "^25.3.0",
     "@typescript/native-preview": "7.0.0-dev.20260220.1",
+    "bumpp": "^10.4.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^10.0.0",
     "husky": "^9.1.7",
@@ -49,16 +51,12 @@
     "markdown-toc": "^1.2.0",
     "mri": "^1.2.0",
     "prettier": "^3.8.1",
-    "semantic-release": "^25.0.3",
     "tinyexec": "^1.0.2",
     "tsdown": "^0.20.3",
     "tsdown-preset-sxzz": "^0.3.3",
     "typedoc": "^0.28.17",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
-  },
-  "release": {
-    "branch": "main"
   },
   "config": {
     "commitizen": {

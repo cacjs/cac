@@ -63,7 +63,7 @@
 ## Install
 
 ```bash
-yarn add cac
+npm i cac
 ```
 
 ## Usage
@@ -124,7 +124,7 @@ cli
   .command('rm <dir>', 'Remove a dir')
   .option('-r, --recursive', 'Remove recursively')
   .action((dir, options) => {
-    console.log('remove ' + dir + (options.recursive ? ' recursively' : ''))
+    console.log(`remove ${dir}${options.recursive ? ' recursively' : ''}`)
   })
 
 cli.help()
@@ -280,8 +280,8 @@ try {
 } catch (error) {
   // Handle error here..
   // e.g.
-  // console.error(error.stack)
-  // process.exit(1)
+  console.error(error.stack)
+  process.exit(1)
 }
 ```
 
@@ -290,14 +290,12 @@ try {
 First you need `@types/node` to be installed as a dev dependency in your project:
 
 ```bash
-yarn add @types/node --dev
+npm i @types/node --dev
 ```
 
 Then everything just works out of the box:
 
 ```js
-const { cac } = require('cac')
-// OR ES modules
 import { cac } from 'cac'
 ```
 
@@ -438,7 +436,7 @@ Use a callback function as the command action when the command matches user inpu
 type ActionCallback = (
   // Parsed CLI args
   // The last arg will be an array if it's a variadic argument
-  ...args: string | string[] | number | number[]
+  ...args: string | string[] | number | number[],
   // Parsed CLI options
   options: Options
 ) => any
@@ -482,17 +480,17 @@ Listen to commands:
 
 ```js
 // Listen to the `foo` command
-cli.on('command:foo', () => {
+cli.addEventListener('command:foo', () => {
   // Do something
 })
 
 // Listen to the default command
-cli.on('command:!', () => {
+cli.addEventListener('command:!', () => {
   // Do something
 })
 
 // Listen to unknown commands
-cli.on('command:*', () => {
+cli.addEventListener('command:*', () => {
   console.error('Invalid command: %s', cli.args.join(' '))
   process.exit(1)
 })

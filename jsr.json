@@ -1,0 +1,14 @@
+{
+  "name": "@cac/cac",
+  "version": "6.7.14",
+  "license": "MIT",
+  "exports": "./src/index.ts",
+  "publish": {
+    "include": [
+      "src",
+      "jsr.json",
+      "README.md",
+      "LICENSE"
+    ]
+  }
+}

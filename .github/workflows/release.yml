@@ -13,3 +13,9 @@ jobs:
     permissions:
       contents: write
       id-token: write
+
+  release-jsr:
+    uses: sxzz/workflows/.github/workflows/release-jsr.yml@v1
+    permissions:
+      contents: read
+      id-token: write
