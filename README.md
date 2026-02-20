@@ -255,7 +255,7 @@ import { cac } from 'cac'
 ### With Deno
 
 ```ts
-import { cac } from 'https://unpkg.com/cac/mod.ts'
+import { cac } from 'jsr:@cac/cac'
 
 const cli = cac('my-program')
 ```

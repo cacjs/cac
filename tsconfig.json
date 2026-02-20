@@ -20,5 +20,5 @@
     "skipLibCheck": true
   },
   "include": ["src", "tests", "examples"],
-  "exclude": ["src/deno.ts"]
+  "exclude": ["examples/deno.ts"]
 }
