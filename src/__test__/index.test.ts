@@ -1,13 +1,17 @@
-import path from 'path'
-import execa from 'execa'
-import cac from '..'
+import path from 'node:path'
+import process from 'node:process'
+import { x } from 'tinyexec'
+import { describe, expect, test, vi } from 'vitest'
+import cac from '../index.ts'
 
-jest.setTimeout(30000)
+vi.setConfig({
+  testTimeout: 30000,
+})
 
 function example(file: string) {
   return path.relative(
     process.cwd(),
-    path.join(__dirname, '../../examples', file)
+    path.join(__dirname, '../../examples', file),
   )
 }
 
@@ -21,31 +25,31 @@ function snapshotOutput({
   args?: string[]
 }) {
   test(title, async () => {
-    const { stdout } = await execa('node', [example(file), ...(args || [])])
+    const { stdout } = await x('node', [example(file), ...(args || [])])
     expect(stdout).toMatchSnapshot(title)
   })
 }
 
 async function getOutput(file: string, args: string[] = []) {
-  const { stdout } = await execa('node', [example(file), ...(args || [])])
+  const { stdout } = await x('node', [example(file), ...(args || [])])
   return stdout
 }
 
 snapshotOutput({
   title: 'basic-usage',
-  file: 'basic-usage.js',
+  file: 'basic-usage.ts',
   args: ['foo', 'bar', '--type', 'ok', 'command'],
 })
 
 snapshotOutput({
   title: 'variadic-arguments',
-  file: 'variadic-arguments.js',
+  file: 'variadic-arguments.ts',
   args: ['--foo', 'build', 'a', 'b', 'c', 'd'],
 })
 
 snapshotOutput({
   title: 'ignore-default-value',
-  file: 'ignore-default-value.js',
+  file: 'ignore-default-value.ts',
   args: ['build'],
 })
 
@@ -113,23 +117,23 @@ test('array types without transformFunction', () => {
       'Add externals(can be used for multiple times',
       {
         type: [],
-      }
+      },
     )
     .option('--scale [level]', 'Scaling level')
 
   const { options: options1 } = cli.parse(
-    `node bin --externals.env.prod production --scale`.split(' ')
+    `node bin --externals.env.prod production --scale`.split(' '),
   )
   expect(options1.externals).toEqual([{ env: { prod: 'production' } }])
   expect(options1.scale).toEqual(true)
 
   const { options: options2 } = cli.parse(
-    `node bin --externals foo --externals bar`.split(' ')
+    `node bin --externals foo --externals bar`.split(' '),
   )
   expect(options2.externals).toEqual(['foo', 'bar'])
 
   const { options: options3 } = cli.parse(
-    `node bin --externals.env foo --externals.env bar`.split(' ')
+    `node bin --externals.env foo --externals.env bar`.split(' '),
   )
   expect(options3.externals).toEqual([{ env: ['foo', 'bar'] }])
 })
@@ -145,7 +149,7 @@ test('array types with transformFunction', () => {
     .option('--scale [level]', 'Scaling level')
 
   const { options } = cli.parse(
-    `node bin build app.js --config config.js --scale`.split(' ')
+    `node bin build app.js --config config.js --scale`.split(' '),
   )
   expect(options.config).toEqual(['config.js'])
   expect(options.scale).toEqual(true)
@@ -167,12 +171,12 @@ test('throw on unknown options', () => {
 
 describe('--version in help message', () => {
   test('sub command', async () => {
-    const output = await getOutput('help.js', ['lint', '--help'])
+    const output = await getOutput('help.ts', ['lint', '--help'])
     expect(output).not.toContain(`--version`)
   })
 
   test('default command', async () => {
-    const output = await getOutput('help.js', ['--help'])
+    const output = await getOutput('help.ts', ['--help'])
     expect(output).toContain(`--version`)
   })
 })

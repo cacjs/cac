@@ -1,3 +1,6 @@
-export const processArgs = process.argv
+import process from 'node:process'
 
-export const platformInfo = `${process.platform}-${process.arch} node-${process.version}`
+export const processArgs: string[] = process.argv
+
+export const platformInfo: string =
+  `${process.platform}-${process.arch} node-${process.version}` as const

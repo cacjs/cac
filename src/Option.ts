@@ -1,11 +1,14 @@
-import { removeBrackets, camelcaseOptionName } from './utils'
+import { camelcaseOptionName, removeBrackets } from './utils.ts'
 
 interface OptionConfig {
   default?: any
   type?: any[]
 }
 
-export default class Option {
+export class Option {
+  rawName: string
+  description: string
+
   /** Option name */
   name: string
   /** Option name and aliases */
@@ -16,15 +19,13 @@ export default class Option {
   config: OptionConfig
   negated: boolean
 
-  constructor(
-    public rawName: string,
-    public description: string,
-    config?: OptionConfig
-  ) {
+  constructor(rawName: string, description: string, config?: OptionConfig) {
+    this.rawName = rawName
+    this.description = description
     this.config = Object.assign({}, config)
 
     // You may use cli.option('--env.* [value]', 'desc') to denote a dot-nested option
-    rawName = rawName.replace(/\.\*/g, '')
+    rawName = rawName.replaceAll('.*', '')
 
     this.negated = false
     this.names = removeBrackets(rawName)
@@ -41,7 +42,7 @@ export default class Option {
       .sort((a, b) => (a.length > b.length ? 1 : -1)) // Sort names
 
     // Use the longest name (last one) as actual option name
-    this.name = this.names[this.names.length - 1]
+    this.name = this.names.at(-1)!
 
     if (this.negated && this.config.default == null) {
       this.config.default = true

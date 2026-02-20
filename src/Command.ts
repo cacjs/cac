@@ -1,13 +1,13 @@
-import CAC from './CAC'
-import Option, { OptionConfig } from './Option'
+import { platformInfo } from './node.ts'
+import { Option, type OptionConfig } from './Option.ts'
 import {
-  removeBrackets,
+  CACError,
   findAllBrackets,
   findLongest,
   padRight,
-  CACError,
-} from './utils'
-import { platformInfo } from './node'
+  removeBrackets,
+} from './utils.ts'
+import type CAC from './CAC.ts'
 
 interface CommandArg {
   required: boolean
@@ -29,7 +29,12 @@ type HelpCallback = (sections: HelpSection[]) => void | HelpSection[]
 
 type CommandExample = ((bin: string) => string) | string
 
-class Command {
+export class Command {
+  rawName: string
+  description: string
+  config: CommandConfig
+  cli: CAC
+
   options: Option[]
   aliasNames: string[]
   /* Parsed command name */
@@ -43,11 +48,16 @@ class Command {
   globalCommand?: GlobalCommand
 
   constructor(
-    public rawName: string,
-    public description: string,
-    public config: CommandConfig = {},
-    public cli: CAC
+    rawName: string,
+    description: string,
+    config: CommandConfig | undefined = {},
+    cli: CAC,
   ) {
+    this.rawName = rawName
+    this.description = description
+    this.config = config
+    this.cli = cli
+
     this.options = []
     this.aliasNames = []
     this.name = removeBrackets(rawName)
@@ -55,28 +65,28 @@ class Command {
     this.examples = []
   }
 
-  usage(text: string) {
+  usage(text: string): this {
     this.usageText = text
     return this
   }
 
-  allowUnknownOptions() {
+  allowUnknownOptions(): this {
     this.config.allowUnknownOptions = true
     return this
   }
 
-  ignoreOptionDefaultValue() {
+  ignoreOptionDefaultValue(): this {
     this.config.ignoreOptionDefaultValue = true
     return this
   }
 
-  version(version: string, customFlags = '-v, --version') {
+  version(version: string, customFlags = '-v, --version'): this {
     this.versionNumber = version
     this.option(customFlags, 'Display version number')
     return this
   }
 
-  example(example: CommandExample) {
+  example(example: CommandExample): this {
     this.examples.push(example)
     return this
   }
@@ -87,18 +97,18 @@ class Command {
    * @param description Option description
    * @param config Option config
    */
-  option(rawName: string, description: string, config?: OptionConfig) {
+  option(rawName: string, description: string, config?: OptionConfig): this {
     const option = new Option(rawName, description, config)
     this.options.push(option)
     return this
   }
 
-  alias(name: string) {
+  alias(name: string): this {
     this.aliasNames.push(name)
     return this
   }
 
-  action(callback: (...args: any[]) => any) {
+  action(callback: (...args: any[]) => any): this {
     this.commandAction = callback
     return this
   }
@@ -107,11 +117,11 @@ class Command {
    * Check if a command name is matched by this command
    * @param name Command name
    */
-  isMatched(name: string) {
+  isMatched(name: string): boolean {
     return this.name === name || this.aliasNames.includes(name)
   }
 
-  get isDefaultCommand() {
+  get isDefaultCommand(): boolean {
     return this.name === '' || this.aliasNames.includes('!')
   }
 
@@ -123,14 +133,14 @@ class Command {
    * Check if an option is registered in this command
    * @param name Option name
    */
-  hasOption(name: string) {
+  hasOption(name: string): Option | undefined {
     name = name.split('.')[0]
     return this.options.find((option) => {
       return option.names.includes(name)
     })
   }
 
-  outputHelp() {
+  outputHelp(): void {
     const { name, commands } = this.cli
     const {
       versionNumber,
@@ -154,30 +164,32 @@ class Command {
 
     if (showCommands) {
       const longestCommandName = findLongest(
-        commands.map((command) => command.rawName)
+        commands.map((command) => command.rawName),
       )
-      sections.push({
-        title: 'Commands',
-        body: commands
-          .map((command) => {
-            return `  ${padRight(
-              command.rawName,
-              longestCommandName.length
-            )}  ${command.description}`
-          })
-          .join('\n'),
-      })
-      sections.push({
-        title: `For more info, run any command with the \`--help\` flag`,
-        body: commands
-          .map(
-            (command) =>
-              `  $ ${name}${
-                command.name === '' ? '' : ` ${command.name}`
-              } --help`
-          )
-          .join('\n'),
-      })
+      sections.push(
+        {
+          title: 'Commands',
+          body: commands
+            .map((command) => {
+              return `  ${padRight(
+                command.rawName,
+                longestCommandName.length,
+              )}  ${command.description}`
+            })
+            .join('\n'),
+        },
+        {
+          title: `For more info, run any command with the \`--help\` flag`,
+          body: commands
+            .map(
+              (command) =>
+                `  $ ${name}${
+                  command.name === '' ? '' : ` ${command.name}`
+                } --help`,
+            )
+            .join('\n'),
+        },
+      )
     }
 
     let options = this.isGlobalCommand
@@ -188,7 +200,7 @@ class Command {
     }
     if (options.length > 0) {
       const longestOptionName = findLongest(
-        options.map((option) => option.rawName)
+        options.map((option) => option.rawName),
       )
       sections.push({
         title: 'Options',
@@ -224,31 +236,31 @@ class Command {
       sections = helpCallback(sections) || sections
     }
 
-    console.log(
+    console.info(
       sections
         .map((section) => {
           return section.title
             ? `${section.title}:\n${section.body}`
             : section.body
         })
-        .join('\n\n')
+        .join('\n\n'),
     )
   }
 
-  outputVersion() {
+  outputVersion(): void {
     const { name } = this.cli
     const { versionNumber } = this.cli.globalCommand
     if (versionNumber) {
-      console.log(`${name}/${versionNumber} ${platformInfo}`)
+      console.info(`${name}/${versionNumber} ${platformInfo}`)
     }
   }
 
-  checkRequiredArgs() {
+  checkRequiredArgs(): void {
     const minimalArgsCount = this.args.filter((arg) => arg.required).length
 
     if (this.cli.args.length < minimalArgsCount) {
       throw new CACError(
-        `missing required args for command \`${this.rawName}\``
+        `missing required args for command \`${this.rawName}\``,
       )
     }
   }
@@ -258,7 +270,7 @@ class Command {
    *
    * Exit and output error when true
    */
-  checkUnknownOptions() {
+  checkUnknownOptions(): void {
     const { options, globalCommand } = this.cli
 
     if (!this.config.allowUnknownOptions) {
@@ -269,7 +281,7 @@ class Command {
           !globalCommand.hasOption(name)
         ) {
           throw new CACError(
-            `Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``
+            `Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``,
           )
         }
       }
@@ -279,7 +291,7 @@ class Command {
   /**
    * Check if the required string-type options exist
    */
-  checkOptionValue() {
+  checkOptionValue(): void {
     const { options: parsedOptions, globalCommand } = this.cli
     const options = [...globalCommand.options, ...this.options]
     for (const option of options) {
@@ -287,7 +299,7 @@ class Command {
       // Check required option value
       if (option.required) {
         const hasNegated = options.some(
-          (o) => o.negated && o.names.includes(option.name)
+          (o) => o.negated && o.names.includes(option.name),
         )
         if (value === true || (value === false && !hasNegated)) {
           throw new CACError(`option \`${option.rawName}\` value is missing`)
@@ -297,14 +309,10 @@ class Command {
   }
 }
 
-class GlobalCommand extends Command {
+export class GlobalCommand extends Command {
   constructor(cli: CAC) {
     super('@@global@@', '', {}, cli)
   }
 }
 
-export type { HelpCallback, CommandExample, CommandConfig }
-
-export { GlobalCommand }
-
-export default Command
+export type { CommandConfig, CommandExample, HelpCallback }

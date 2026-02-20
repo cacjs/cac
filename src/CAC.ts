@@ -1,20 +1,21 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'node:events'
 import mri from 'mri'
-import Command, {
-  GlobalCommand,
-  CommandConfig,
-  HelpCallback,
-  CommandExample,
-} from './Command'
-import { OptionConfig } from './Option'
 import {
-  getMriOptions,
-  setDotProp,
-  setByType,
-  getFileName,
+  Command,
+  GlobalCommand,
+  type CommandConfig,
+  type CommandExample,
+  type HelpCallback,
+} from './Command.ts'
+import { processArgs } from './node.ts'
+import {
   camelcaseOptionName,
-} from './utils'
-import { processArgs } from './node'
+  getFileName,
+  getMriOptions,
+  setByType,
+  setDotProp,
+} from './utils.ts'
+import type { OptionConfig } from './Option.ts'
 
 interface ParsedArgv {
   args: ReadonlyArray<string>
@@ -23,6 +24,7 @@ interface ParsedArgv {
   }
 }
 
+// eslint-disable-next-line unicorn/prefer-event-target
 class CAC extends EventEmitter {
   /** The program name to display in help and version message */
   name: string
@@ -65,7 +67,7 @@ class CAC extends EventEmitter {
    *
    * This is not used by sub-commands.
    */
-  usage(text: string) {
+  usage(text: string): this {
     this.globalCommand.usage(text)
     return this
   }
@@ -73,7 +75,11 @@ class CAC extends EventEmitter {
   /**
    * Add a sub-command
    */
-  command(rawName: string, description?: string, config?: CommandConfig) {
+  command(
+    rawName: string,
+    description?: string,
+    config?: CommandConfig,
+  ): Command {
     const command = new Command(rawName, description || '', config, this)
     command.globalCommand = this.globalCommand
     this.commands.push(command)
@@ -85,7 +91,7 @@ class CAC extends EventEmitter {
    *
    * Which is also applied to sub-commands.
    */
-  option(rawName: string, description: string, config?: OptionConfig) {
+  option(rawName: string, description: string, config?: OptionConfig): this {
     this.globalCommand.option(rawName, description, config)
     return this
   }
@@ -94,7 +100,7 @@ class CAC extends EventEmitter {
    * Show help message when `-h, --help` flags appear.
    *
    */
-  help(callback?: HelpCallback) {
+  help(callback?: HelpCallback): this {
     this.globalCommand.option('-h, --help', 'Display this message')
     this.globalCommand.helpCallback = callback
     this.showHelpOnExit = true
@@ -105,7 +111,7 @@ class CAC extends EventEmitter {
    * Show version number when `-v, --version` flags appear.
    *
    */
-  version(version: string, customFlags = '-v, --version') {
+  version(version: string, customFlags = '-v, --version'): this {
     this.globalCommand.version(version, customFlags)
     this.showVersionOnExit = true
     return this
@@ -116,7 +122,7 @@ class CAC extends EventEmitter {
    *
    * This example added here will not be used by sub-commands.
    */
-  example(example: CommandExample) {
+  example(example: CommandExample): this {
     this.globalCommand.example(example)
     return this
   }
@@ -127,7 +133,7 @@ class CAC extends EventEmitter {
    * Otherwise output the global one.
    *
    */
-  outputHelp() {
+  outputHelp(): void {
     if (this.matchedCommand) {
       this.matchedCommand.outputHelp()
     } else {
@@ -139,14 +145,14 @@ class CAC extends EventEmitter {
    * Output the version number.
    *
    */
-  outputVersion() {
+  outputVersion(): void {
     this.globalCommand.outputVersion()
   }
 
   private setParsedInfo(
     { args, options }: ParsedArgv,
     matchedCommand?: Command,
-    matchedCommandName?: string
+    matchedCommandName?: string,
   ) {
     this.args = args
     this.options = options
@@ -159,7 +165,7 @@ class CAC extends EventEmitter {
     return this
   }
 
-  unsetMatchedCommand() {
+  unsetMatchedCommand(): void {
     this.matchedCommand = undefined
     this.matchedCommandName = undefined
   }
@@ -168,11 +174,13 @@ class CAC extends EventEmitter {
    * Parse argv
    */
   parse(
-    argv = processArgs,
+    argv: string[] = processArgs,
     {
-      /** Whether to run the action for matched command */
       run = true,
-    } = {}
+    }: {
+      /** Whether to run the action for matched command */
+      run?: boolean | undefined
+    } = {},
   ): ParsedArgv {
     this.rawArgs = argv
     if (!this.name) {
@@ -220,7 +228,11 @@ class CAC extends EventEmitter {
       this.unsetMatchedCommand()
     }
 
-    if (this.options.version && this.showVersionOnExit && this.matchedCommandName == null) {
+    if (
+      this.options.version &&
+      this.showVersionOnExit &&
+      this.matchedCommandName == null
+    ) {
       this.outputVersion()
       run = false
       this.unsetMatchedCommand()
@@ -241,7 +253,7 @@ class CAC extends EventEmitter {
 
   private mri(
     argv: string[],
-    /** Matched command */ command?: Command
+    /** Matched command */ command?: Command,
   ): ParsedArgv {
     // All added options
     const cliOptions = [
@@ -253,7 +265,7 @@ class CAC extends EventEmitter {
     // Extract everything after `--` since mri doesn't support it
     let argsAfterDoubleDashes: string[] = []
     const doubleDashesIndex = argv.indexOf('--')
-    if (doubleDashesIndex > -1) {
+    if (doubleDashesIndex !== -1) {
       argsAfterDoubleDashes = argv.slice(doubleDashesIndex + 1)
       argv = argv.slice(0, doubleDashesIndex)
     }
@@ -266,7 +278,7 @@ class CAC extends EventEmitter {
           [camelcaseOptionName(name)]: parsed[name],
         }
       },
-      { _: [] }
+      { _: [] },
     )
 
     const args = parsed._
@@ -281,7 +293,7 @@ class CAC extends EventEmitter {
         ? command.config.ignoreOptionDefaultValue
         : this.globalCommand.config.ignoreOptionDefaultValue
 
-    let transforms = Object.create(null)
+    const transforms = Object.create(null)
 
     for (const cliOption of cliOptions) {
       if (!ignoreDefault && cliOption.config.default !== undefined) {
@@ -291,14 +303,14 @@ class CAC extends EventEmitter {
       }
 
       // If options type is defined
-      if (Array.isArray(cliOption.config.type)) {
-        if (transforms[cliOption.name] === undefined) {
-          transforms[cliOption.name] = Object.create(null)
+      if (
+        Array.isArray(cliOption.config.type) &&
+        transforms[cliOption.name] === undefined
+      ) {
+        transforms[cliOption.name] = Object.create(null)
 
-          transforms[cliOption.name]['shouldTransform'] = true
-          transforms[cliOption.name]['transformFunction'] =
-            cliOption.config.type[0]
-        }
+        transforms[cliOption.name].shouldTransform = true
+        transforms[cliOption.name].transformFunction = cliOption.config.type[0]
       }
     }
 
@@ -317,7 +329,7 @@ class CAC extends EventEmitter {
     }
   }
 
-  runMatchedCommand() {
+  runMatchedCommand(): any {
     const { args, options, matchedCommand: command } = this
 
     if (!command || !command.commandAction) return
@@ -341,4 +353,5 @@ class CAC extends EventEmitter {
   }
 }
 
+// eslint-disable-next-line import/no-default-export
 export default CAC
