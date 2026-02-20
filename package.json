@@ -34,7 +34,7 @@
     "format": "prettier --cache --write .",
     "release": "bumpp",
     "prepublishOnly": "pnpm build",
-    "docs:api": "typedoc --out api-doc --readme none --exclude \"**/__test__/**\" --theme minimal"
+    "docs:api": "typedoc"
   },
   "devDependencies": {
     "@sxzz/eslint-config": "^7.8.0",

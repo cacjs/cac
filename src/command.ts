@@ -1,5 +1,5 @@
-import { runtimeInfo } from './runtime.ts'
 import { Option, type OptionConfig } from './option.ts'
+import { runtimeInfo } from './runtime.ts'
 import {
   CACError,
   findAllBrackets,
