@@ -5,7 +5,7 @@ import {
   type CommandConfig,
   type CommandExample,
   type HelpCallback,
-} from './Command.ts'
+} from './command.ts'
 import { processArgs } from './node.ts'
 import {
   camelcaseOptionName,
@@ -14,7 +14,7 @@ import {
   setByType,
   setDotProp,
 } from './utils.ts'
-import type { OptionConfig } from './Option.ts'
+import type { OptionConfig } from './option.ts'
 
 interface ParsedArgv {
   args: ReadonlyArray<string>
@@ -23,7 +23,7 @@ interface ParsedArgv {
   }
 }
 
-class CAC extends EventTarget {
+export class CAC extends EventTarget {
   /** The program name to display in help and version message */
   name: string
   commands: Command[]
@@ -352,6 +352,3 @@ class CAC extends EventTarget {
     return command.commandAction.apply(this, actionArgs)
   }
 }
-
-// eslint-disable-next-line import/no-default-export
-export default CAC

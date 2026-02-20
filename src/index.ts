@@ -1,5 +1,5 @@
-import CAC from './CAC.ts'
-import { Command } from './Command.ts'
+import { CAC } from './cac.ts'
+import { Command } from './command.ts'
 
 /**
  * @param name The program name to display in help and version message

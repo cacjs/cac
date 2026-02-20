@@ -1,5 +1,5 @@
 import { platformInfo } from './node.ts'
-import { Option, type OptionConfig } from './Option.ts'
+import { Option, type OptionConfig } from './option.ts'
 import {
   CACError,
   findAllBrackets,
@@ -7,7 +7,7 @@ import {
   padRight,
   removeBrackets,
 } from './utils.ts'
-import type CAC from './CAC.ts'
+import type { CAC } from './cac.ts'
 
 interface CommandArg {
   required: boolean

@@ -1,4 +1,4 @@
-import type { Option } from './Option.ts'
+import type { Option } from './option.ts'
 
 export const removeBrackets = (v: string): string =>
   v.replace(/[<[].+/, '').trim()
