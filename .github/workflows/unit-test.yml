@@ -11,6 +11,8 @@ permissions: {}
 jobs:
   unit-test:
     uses: sxzz/workflows/.github/workflows/unit-test.yml@v1
+    with:
+      node-versions: 22, 24, 25
 
   coverage:
     uses: sxzz/workflows/.github/workflows/coverage.yml@v1
