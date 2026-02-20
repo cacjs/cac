@@ -1,4 +1,3 @@
-import { EventEmitter } from 'node:events'
 import mri from 'mri'
 import {
   Command,
@@ -24,8 +23,7 @@ interface ParsedArgv {
   }
 }
 
-// eslint-disable-next-line unicorn/prefer-event-target
-class CAC extends EventEmitter {
+class CAC extends EventTarget {
   /** The program name to display in help and version message */
   name: string
   commands: Command[]
@@ -201,7 +199,9 @@ class CAC extends EventEmitter {
           args: parsed.args.slice(1),
         }
         this.setParsedInfo(parsedInfo, command, commandName)
-        this.emit(`command:${commandName}`, command)
+        this.dispatchEvent(
+          new CustomEvent(`command:${commandName}`, { detail: command }),
+        )
       }
     }
 
@@ -212,7 +212,7 @@ class CAC extends EventEmitter {
           shouldParse = false
           const parsed = this.mri(argv.slice(2), command)
           this.setParsedInfo(parsed, command)
-          this.emit(`command:!`, command)
+          this.dispatchEvent(new CustomEvent('command:!', { detail: command }))
         }
       }
     }
@@ -245,7 +245,7 @@ class CAC extends EventEmitter {
     }
 
     if (!this.matchedCommand && this.args[0]) {
-      this.emit('command:*')
+      this.dispatchEvent(new CustomEvent('command:*', { detail: this.args[0] }))
     }
 
     return parsedArgv
