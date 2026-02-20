@@ -19,6 +19,6 @@
     "erasableSyntaxOnly": true,
     "skipLibCheck": true
   },
-  "include": ["src", "tests", "examples"],
+  "include": ["src", "tests", "examples", "tests"],
   "exclude": ["examples/deno.ts"]
 }

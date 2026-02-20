@@ -1,17 +1,13 @@
 import path from 'node:path'
 import process from 'node:process'
 import { x } from 'tinyexec'
-import { describe, expect, test, vi } from 'vitest'
-import cac from '../index.ts'
-
-vi.setConfig({
-  testTimeout: 30000,
-})
+import { describe, expect, test } from 'vitest'
+import cac from '../src/index.ts'
 
 function example(file: string) {
   return path.relative(
     process.cwd(),
-    path.join(__dirname, '../../examples', file),
+    path.join(import.meta.dirname, '../examples', file),
   )
 }
 
