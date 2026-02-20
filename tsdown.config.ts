@@ -1,6 +1,6 @@
-import { nodeLib } from 'tsdown-preset-sxzz'
+import { lib } from 'tsdown-preset-sxzz'
 
-export default nodeLib(
+export default lib(
   {
     inlineDeps: ['mri'],
   },

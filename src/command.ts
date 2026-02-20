@@ -1,4 +1,4 @@
-import { platformInfo } from './node.ts'
+import { runtimeInfo } from './runtime.ts'
 import { Option, type OptionConfig } from './option.ts'
 import {
   CACError,
@@ -251,7 +251,7 @@ export class Command {
     const { name } = this.cli
     const { versionNumber } = this.cli.globalCommand
     if (versionNumber) {
-      console.info(`${name}/${versionNumber} ${platformInfo}`)
+      console.info(`${name}/${versionNumber} ${runtimeInfo}`)
     }
   }
 
