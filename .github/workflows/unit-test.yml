@@ -11,3 +11,9 @@ permissions: {}
 jobs:
   unit-test:
     uses: sxzz/workflows/.github/workflows/unit-test.yml@v1
+
+  coverage:
+    uses: sxzz/workflows/.github/workflows/coverage.yml@v1
+    needs: unit-test
+    permissions:
+      id-token: write

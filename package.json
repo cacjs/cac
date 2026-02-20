@@ -2,6 +2,7 @@
   "name": "cac",
   "type": "module",
   "version": "6.7.14",
+  "packageManager": "pnpm@10.30.1",
   "description": "Simple yet powerful framework for building command-line apps.",
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
