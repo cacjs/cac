@@ -321,6 +321,7 @@ Projects that use **CAC**:
 - [Foy](https://github.com/zaaack/foy): 🏗 A lightweight and modern task runner and build tool for general purpose.
 - [Vuese](https://github.com/vuese/vuese): 🤗 One-stop solution for vue component documentation.
 - [NUT](https://github.com/nut-project/nut): 🌰 A framework born for microfrontends
+- [Vite](https://vitejs.dev): ⚡Next generation frontend tooling.
 - Feel free to add yours here...
 
 ## References
