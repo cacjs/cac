@@ -57,11 +57,6 @@
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "husky": {
     "hooks": {
       "pre-commit": "pnpm test && lint-staged"
