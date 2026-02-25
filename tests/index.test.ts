@@ -165,6 +165,16 @@ test('throw on unknown options', () => {
   }).toThrowError('Unknown option `--xx`')
 })
 
+test('throw on unused args', () => {
+  const cli = cac()
+
+  cli.command('build [entry]', 'Build your app').action(() => {})
+
+  expect(() => {
+    cli.parse(`node bin build app.js foo bar`.split(' '))
+  }).toThrowError('Unused args: `foo`, `bar`')
+})
+
 describe('--version in help message', () => {
   test('sub command', async () => {
     const output = await getOutput('help.ts', ['lint', '--help'])

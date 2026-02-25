@@ -349,6 +349,8 @@ export class CAC extends EventTarget {
 
     command.checkRequiredArgs()
 
+    command.checkUnusedArgs()
+
     const actionArgs: any[] = []
     command.args.forEach((arg, index) => {
       if (arg.variadic) {
