@@ -311,7 +311,7 @@ export class Command {
   /**
    * Check if the number of args is more than expected
    */
-  checkUnusedArgs() {
+  checkUnusedArgs(): void {
     const hasVariadicArg = this.args.some((arg) => arg.variadic)
     const maximumArgsCount = hasVariadicArg ? Infinity : this.args.length
 
