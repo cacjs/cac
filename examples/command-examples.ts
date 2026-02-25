@@ -1,5 +1,5 @@
-require('ts-node/register')
-const cli = require('../src/index').cac()
+import { cac } from '../src/index.ts'
+const cli = cac()
 
 cli
   .command('build', 'Build project')
@@ -11,4 +11,4 @@ cli
 
 const parsed = cli.parse()
 
-console.log(JSON.stringify(parsed, null, 2))
+console.info(JSON.stringify(parsed, null, 2))

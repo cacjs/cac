@@ -1,0 +1,11 @@
+export const snapshot = {};
+
+snapshot[`deno example 1`] = `
+'{
+  "args": [],
+  "options": {
+    "--": []
+  }
+}
+'
+`;

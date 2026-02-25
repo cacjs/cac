@@ -1,7 +1,5 @@
 node_modules
-/lib
-/types
-/api-doc
+dist
 coverage
-/dist
-/deno
+api-doc
+.eslintcache

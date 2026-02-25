@@ -1,103 +1,74 @@
 {
   "name": "cac",
-  "version": "6.0.0",
+  "type": "module",
+  "version": "7.0.0-beta.1",
+  "packageManager": "pnpm@10.30.1",
   "description": "Simple yet powerful framework for building command-line apps.",
-  "repository": {
-    "url": "egoist/cac",
-    "type": "git"
-  },
-  "main": "index-compat.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./index-compat.js"
-    },
-    "./package.json": "./package.json",
-    "./": "./"
-  },
-  "files": [
-    "dist",
-    "!**/__test__/**",
-    "/mod.js",
-    "/mod.ts",
-    "/deno",
-    "/index-compat.js"
-  ],
-  "scripts": {
-    "test": "jest",
-    "test:cov": "jest --coverage",
-    "build:deno": "node -r sucrase/register scripts/build-deno.ts",
-    "build:node": "rollup -c",
-    "build": "yarn build:deno && yarn build:node",
-    "toc": "markdown-toc -i README.md",
-    "prepublishOnly": "npm run build && cp mod.js mod.mjs",
-    "docs:api": "typedoc --out api-doc --readme none --exclude \"**/__test__/**\" --theme minimal"
-  },
   "author": "egoist <0x142857@gmail.com>",
   "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-syntax-typescript": "^7.12.1",
-    "@rollup/plugin-commonjs": "^17.0.0",
-    "@rollup/plugin-node-resolve": "^11.0.0",
-    "@types/fs-extra": "^9.0.5",
-    "@types/jest": "^26.0.19",
-    "@types/mri": "^1.1.0",
-    "cz-conventional-changelog": "^2.1.0",
-    "esbuild": "^0.8.21",
-    "eslint-config-rem": "^3.0.0",
-    "execa": "^5.0.0",
-    "fs-extra": "^9.0.1",
-    "globby": "^11.0.1",
-    "husky": "^1.2.0",
-    "jest": "^24.9.0",
-    "lint-staged": "^8.1.0",
-    "markdown-toc": "^1.2.0",
-    "mri": "^1.1.6",
-    "prettier": "^2.2.1",
-    "rollup": "^2.34.2",
-    "rollup-plugin-dts": "^2.0.1",
-    "rollup-plugin-esbuild": "^2.6.1",
-    "semantic-release": "^17.3.0",
-    "sucrase": "^3.16.0",
-    "ts-jest": "^26.4.4",
-    "ts-node": "^9.1.1",
-    "typedoc": "^0.19.2",
-    "typescript": "^4.1.2"
+  "homepage": "https://github.com/cacjs/cac#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cacjs/cac.git"
   },
+  "bugs": {
+    "url": "https://github.com/cacjs/cac/issues"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
   "engines": {
-    "node": ">=8"
+    "node": ">=20.19.0"
   },
-  "release": {
-    "branch": "master"
+  "scripts": {
+    "lint": "eslint --cache .",
+    "lint:fix": "pnpm run lint --fix",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "typecheck": "tsgo --noEmit",
+    "format": "prettier --cache --write .",
+    "release": "bumpp",
+    "prepublishOnly": "pnpm build",
+    "docs:api": "typedoc"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "lint-staged": {
-    "linters": {
-      "*.{js,json,ts}": [
-        "prettier --write",
-        "git add"
-      ],
-      "*.md": [
-        "markdown-toc -i",
-        "prettier --write",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "dist/**",
-      "mod.js"
-    ]
+  "devDependencies": {
+    "@sxzz/eslint-config": "^7.8.0",
+    "@sxzz/prettier-config": "^2.3.1",
+    "@types/bun": "^1.3.9",
+    "@types/deno": "^2.5.0",
+    "@types/node": "^25.3.0",
+    "@typescript/native-preview": "7.0.0-dev.20260220.1",
+    "@vitest/coverage-v8": "^4.0.18",
+    "bumpp": "^10.4.1",
+    "eslint": "^10.0.1",
+    "lint-staged": "^16.2.7",
+    "mri": "^1.2.0",
+    "prettier": "^3.8.1",
+    "simple-git-hooks": "^2.13.1",
+    "tinyexec": "^1.0.2",
+    "tsdown": "^0.20.3",
+    "tsdown-preset-sxzz": "^0.3.3",
+    "typedoc": "^0.28.17",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm t && lint-staged"
+      "pre-commit": "pnpm test && lint-staged"
     }
-  }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged && pnpm typecheck"
+  },
+  "lint-staged": {
+    "*.{js,json,ts,md}": [
+      "eslint"
+    ]
+  },
+  "prettier": "@sxzz/prettier-config"
 }

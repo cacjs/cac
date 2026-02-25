@@ -1,8 +1,15 @@
-import Option from './Option'
+import type { Option } from './option.ts'
 
-export const removeBrackets = (v: string) => v.replace(/[<[].+/, '').trim()
+export const removeBrackets = (v: string): string =>
+  v.replace(/[<[].+/, '').trim()
 
-export const findAllBrackets = (v: string) => {
+export const findAllBrackets = (
+  v: string,
+): {
+  required: boolean
+  value: string
+  variadic: boolean
+}[] => {
   const ANGLED_BRACKET_RE_GLOBAL = /<([^>]+)>/g
   const SQUARE_BRACKET_RE_GLOBAL = /\[([^\]]+)\]/g
 
@@ -18,7 +25,7 @@ export const findAllBrackets = (v: string) => {
     return {
       required: match[0].startsWith('<'),
       value,
-      variadic
+      variadic,
     }
   }
 
@@ -42,7 +49,7 @@ interface MriOptions {
   boolean: string[]
 }
 
-export const getMriOptions = (options: Option[]) => {
+export const getMriOptions = (options: Option[]): MriOptions => {
   const result: MriOptions = { alias: {}, boolean: [] }
 
   for (const [index, option] of options.entries()) {
@@ -62,7 +69,7 @@ export const getMriOptions = (options: Option[]) => {
         const hasStringTypeOption = options.some((o, i) => {
           return (
             i !== index &&
-            o.names.some(name => option.names.includes(name)) &&
+            o.names.some((name) => option.names.includes(name)) &&
             typeof o.required === 'boolean'
           )
         })
@@ -78,29 +85,29 @@ export const getMriOptions = (options: Option[]) => {
   return result
 }
 
-export const findLongest = (arr: string[]) => {
+export const findLongest = (arr: string[]): string => {
   return arr.sort((a, b) => {
     return a.length > b.length ? -1 : 1
   })[0]
 }
 
-export const padRight = (str: string, length: number) => {
+export const padRight = (str: string, length: number): string => {
   return str.length >= length ? str : `${str}${' '.repeat(length - str.length)}`
 }
 
-export const camelcase = (input: string) => {
-  return input.replace(/([a-z])-([a-z])/g, (_, p1, p2) => {
+export const camelcase = (input: string): string => {
+  return input.replaceAll(/([a-z])-([a-z])/g, (_, p1, p2) => {
     return p1 + p2.toUpperCase()
   })
 }
 
-export const setDotProp = (
+export function setDotProp(
   obj: { [k: string]: any },
   keys: string[],
-  val: any
-) => {
+  val: any,
+): void {
   let i = 0
-  let length = keys.length
+  const length = keys.length
   let t = obj
   let x
   for (; i < length; ++i) {
@@ -108,23 +115,23 @@ export const setDotProp = (
     t = t[keys[i]] =
       i === length - 1
         ? val
-        : x != null
-        ? x
-        : !!~keys[i + 1].indexOf('.') || !(+keys[i + 1] > -1)
-        ? {}
-        : []
+        : x == null
+          ? !!~keys[i + 1].indexOf('.') || !(+keys[i + 1] > -1)
+            ? {}
+            : []
+          : x
   }
 }
 
-export const setByType = (
+export function setByType(
   obj: { [k: string]: any },
-  transforms: { [k: string]: any }
-) => {
+  transforms: { [k: string]: any },
+): void {
   for (const key of Object.keys(transforms)) {
     const transform = transforms[key]
 
     if (transform.shouldTransform) {
-      obj[key] = Array.prototype.concat.call([], obj[key])
+      obj[key] = [obj[key]].flat()
 
       if (typeof transform.transformFunction === 'function') {
         obj[key] = obj[key].map(transform.transformFunction)
@@ -133,12 +140,12 @@ export const setByType = (
   }
 }
 
-export const getFileName = (input: string) => {
-  const m = /([^\\\/]+)$/.exec(input)
+export const getFileName = (input: string): string => {
+  const m = /([^\\/]+)$/.exec(input)
   return m ? m[1] : ''
 }
 
-export const camelcaseOptionName = (name: string) => {
+export const camelcaseOptionName = (name: string): string => {
   // Camelcase the option name
   // Don't camelcase anything after the dot `.`
   return name
@@ -152,10 +159,8 @@ export const camelcaseOptionName = (name: string) => {
 export class CACError extends Error {
   constructor(message: string) {
     super(message)
-    this.name = this.constructor.name
-    if (typeof Error.captureStackTrace === 'function') {
-      Error.captureStackTrace(this, this.constructor)
-    } else {
+    this.name = 'CACError'
+    if (typeof Error.captureStackTrace !== 'function') {
       this.stack = new Error(message).stack
     }
   }

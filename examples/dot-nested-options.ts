@@ -1,5 +1,5 @@
-require('ts-node/register')
-const cli = require('../src/index').cac()
+import { cac } from '../src/index.ts'
+const cli = cac()
 
 cli
   .command('build', 'desc')
@@ -7,7 +7,7 @@ cli
   .option('--foo-bar <value>', 'Set foo bar')
   .example('--env.API_SECRET xxx')
   .action((options) => {
-    console.log(options)
+    console.info(options)
   })
 
 cli.help()
