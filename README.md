@@ -286,7 +286,7 @@ Projects that use **CAC**:
 
 ## References
 
-**💁 Check out [the generated docs](https://cac-api-doc.egoist.dev/classes/_cac_.cac.html) from source code if you want a more in-depth API references.**
+**💁 Check out [API reference](https://npmx.dev/package-docs/cac) from source code if you want a more in-depth API references.**
 
 Below is a brief overview.
 
