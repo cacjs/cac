@@ -1,6 +1,6 @@
 <img width="945" alt="2017-07-26 9 27 05" src="https://user-images.githubusercontent.com/8784712/28623641-373450f4-7249-11e7-854d-1b076dab274d.png">
 
-[![NPM version](https://img.shields.io/npm/v/cac.svg?style=flat)](https://npmjs.com/package/cac) [![NPM downloads](https://img.shields.io/npm/dm/cac.svg?style=flat)](https://npmjs.com/package/cac) [![CircleCI](https://circleci.com/gh/cacjs/cac/tree/master.svg?style=shield)](https://circleci.com/gh/cacjs/cac/tree/master) [![Codecov](https://badgen.net/codecov/c/github/cacjs/cac/master)](https://codecov.io/gh/cacjs/cac) [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/egoist/donate) [![chat](https://img.shields.io/badge/chat-on%20discord-7289DA.svg?style=flat)](https://chat.egoist.moe) [![install size](https://badgen.net/packagephobia/install/cac)](https://packagephobia.now.sh/result?p=cac)
+[![NPM version](https://img.shields.io/npm/v/cac.svg?style=flat)](https://npmx.dev/package/cac) [![NPM downloads](https://img.shields.io/npm/dm/cac.svg?style=flat)](https://npmx.dev/package/cac) [![CircleCI](https://circleci.com/gh/cacjs/cac/tree/master.svg?style=shield)](https://circleci.com/gh/cacjs/cac/tree/master) [![Codecov](https://badgen.net/codecov/c/github/cacjs/cac/master)](https://codecov.io/gh/cacjs/cac) [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/egoist/donate) [![install size](https://badgen.net/packagephobia/install/cac)](https://packagephobia.now.sh/result?p=cac)
 
 ## Introduction
 
@@ -13,57 +13,10 @@
 - **Yet so powerful**. Enable features like default command, git-like subcommands, validation for required arguments and options, variadic arguments, dot-nested options, automated help message generation and so on.
 - **Developer friendly**. Written in TypeScript.
 
-## Table of Contents
-
-<!-- toc -->
-
-- [Install](#install)
-- [Usage](#usage)
-  - [Simple Parsing](#simple-parsing)
-  - [Display Help Message and Version](#display-help-message-and-version)
-  - [Command-specific Options](#command-specific-options)
-  - [Dash in option names](#dash-in-option-names)
-  - [Brackets](#brackets)
-  - [Negated Options](#negated-options)
-  - [Variadic Arguments](#variadic-arguments)
-  - [Dot-nested Options](#dot-nested-options)
-  - [Default Command](#default-command)
-  - [Supply an array as option value](#supply-an-array-as-option-value)
-  - [Error Handling](#error-handling)
-  - [With TypeScript](#with-typescript)
-  - [With Deno](#with-deno)
-- [Projects Using CAC](#projects-using-cac)
-- [References](#references)
-  - [CLI Instance](#cli-instance)
-    - [cac(name?)](#cacname)
-    - [cli.command(name, description, config?)](#clicommandname-description-config)
-    - [cli.option(name, description, config?)](#clioptionname-description-config)
-    - [cli.parse(argv?)](#cliparseargv)
-    - [cli.version(version, customFlags?)](#cliversionversion-customflags)
-    - [cli.help(callback?)](#clihelpcallback)
-    - [cli.outputHelp()](#clioutputhelp)
-    - [cli.usage(text)](#cliusagetext)
-  - [Command Instance](#command-instance)
-    - [command.option()](#commandoption)
-    - [command.action(callback)](#commandactioncallback)
-    - [command.alias(name)](#commandaliasname)
-    - [command.allowUnknownOptions()](#commandallowunknownoptions)
-    - [command.example(example)](#commandexampleexample)
-    - [command.usage(text)](#commandusagetext)
-  - [Events](#events)
-- [FAQ](#faq)
-  - [How is the name written and pronounced?](#how-is-the-name-written-and-pronounced)
-  - [Why not use Commander.js?](#why-not-use-commanderjs)
-- [Project Stats](#project-stats)
-- [Contributing](#contributing)
-- [Author](#author)
-
-<!-- tocstop -->
-
 ## Install
 
 ```bash
-yarn add cac
+npm i cac
 ```
 
 ## Usage
@@ -74,7 +27,8 @@ Use CAC as simple argument parser:
 
 ```js
 // examples/basic-usage.js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli.option('--type <type>', 'Choose a project type', {
   default: 'node',
@@ -91,7 +45,8 @@ console.log(JSON.stringify(parsed, null, 2))
 
 ```js
 // examples/help.js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli.option('--type [type]', 'Choose a project type', {
   default: 'node',
@@ -118,13 +73,14 @@ cli.parse()
 You can attach options to a command.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('rm <dir>', 'Remove a dir')
   .option('-r, --recursive', 'Remove recursively')
   .action((dir, options) => {
-    console.log('remove ' + dir + (options.recursive ? ' recursively' : ''))
+    console.log(`remove ${dir}${options.recursive ? ' recursively' : ''}`)
   })
 
 cli.help()
@@ -158,7 +114,8 @@ When using brackets in command name, angled brackets indicate required command a
 When using brackets in option name, angled brackets indicate that a string / number value is required, while square bracket indicate that the value can also be `true`.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('deploy <folder>', 'Deploy a folder to AWS')
@@ -195,7 +152,8 @@ This will let CAC set the default value of `config` to true, and you can use `--
 The last argument of a command can be variadic, and only the last argument. To make an argument variadic you have to add `...` to the start of argument name, just like the rest operator in JavaScript. Here is an example:
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('build <entry> [...otherFiles]', 'Build your app')
@@ -218,7 +176,8 @@ cli.parse()
 Dot-nested options will be merged into a single option.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   .command('build', 'desc')
@@ -240,7 +199,8 @@ cli.parse()
 Register a command that will be used when no other command is matched.
 
 ```js
-const cli = require('cac')()
+import cac from 'cac'
+const cli = cac()
 
 cli
   // Simply omit the command name, just brackets
@@ -280,8 +240,8 @@ try {
 } catch (error) {
   // Handle error here..
   // e.g.
-  // console.error(error.stack)
-  // process.exit(1)
+  console.error(error.stack)
+  process.exit(1)
 }
 ```
 
@@ -290,21 +250,19 @@ try {
 First you need `@types/node` to be installed as a dev dependency in your project:
 
 ```bash
-yarn add @types/node --dev
+npm i @types/node --dev
 ```
 
 Then everything just works out of the box:
 
 ```js
-const { cac } = require('cac')
-// OR ES modules
 import { cac } from 'cac'
 ```
 
 ### With Deno
 
 ```ts
-import { cac } from 'https://unpkg.com/cac/mod.ts'
+import { cac } from 'jsr:@cac/cac'
 
 const cli = cac('my-program')
 ```
@@ -313,10 +271,11 @@ const cli = cac('my-program')
 
 Projects that use **CAC**:
 
+- [Vite](https://github.com/vitejs/vite): ⚡️ Next generation frontend tooling. It's fast!
+- [Vitest](https://github.com/vitest-dev/vitest) - Next generation testing framework powered by Vite.
+- [tsdown](https://github.com/rolldown/tsdown) - The elegant bundler for libraries powered by Rolldown.
 - [VuePress](https://github.com/vuejs/vuepress): :memo: Minimalistic Vue-powered static site generator.
-- [SAO](https://github.com/egoist/sao): ⚔️ Futuristic scaffolding tool.
 - [DocPad](https://github.com/docpad/docpad): 🏹 Powerful Static Site Generator.
-- [Poi](https://github.com/egoist/poi): ⚡️ Delightful web development.
 - [bili](https://github.com/egoist/bili): 🥂 Schweizer Armeemesser for bundling JavaScript libraries.
 - [Lad](https://github.com/ladjs/lad): 👦 Lad scaffolds a Koa webapp and API framework for Node.js.
 - [Lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
@@ -327,7 +286,7 @@ Projects that use **CAC**:
 
 ## References
 
-**💁 Check out [the generated docs](https://cac-api-doc.egoist.sh/classes/_cac_.cac.html) from source code if you want a more in-depth API references.**
+**💁 Check out [API reference](https://npmx.dev/package-docs/cac) from source code if you want a more in-depth API references.**
 
 Below is a brief overview.
 
@@ -336,7 +295,7 @@ Below is a brief overview.
 CLI instance is created by invoking the `cac` function:
 
 ```js
-const cac = require('cac')
+import cac from 'cac'
 const cli = cac()
 ```
 
@@ -438,7 +397,7 @@ Use a callback function as the command action when the command matches user inpu
 type ActionCallback = (
   // Parsed CLI args
   // The last arg will be an array if it's a variadic argument
-  ...args: string | string[] | number | number[]
+  ...args: string | string[] | number | number[],
   // Parsed CLI options
   options: Options
 ) => any
@@ -482,17 +441,17 @@ Listen to commands:
 
 ```js
 // Listen to the `foo` command
-cli.on('command:foo', () => {
+cli.addEventListener('command:foo', () => {
   // Do something
 })
 
 // Listen to the default command
-cli.on('command:!', () => {
+cli.addEventListener('command:!', () => {
   // Do something
 })
 
 // Listen to unknown commands
-cli.on('command:*', () => {
+cli.addEventListener('command:*', () => {
   console.error('Invalid command: %s', cli.args.join(' '))
   process.exit(1)
 })
@@ -516,10 +475,6 @@ _And maybe more..._
 
 Basically I made CAC to fulfill my own needs for building CLI apps like [Poi](https://poi.js.org), [SAO](https://sao.vercel.app) and all my CLI apps. It's small, simple but powerful :P
 
-## Project Stats
-
-![Alt](https://repobeats.axiom.co/api/embed/58caf6203631bcdb9bbe22f0728a0af1683dc0bb.svg 'Repobeats analytics image')
-
 ## Contributing
 
 1. Fork it!
@@ -533,4 +488,4 @@ Basically I made CAC to fulfill my own needs for building CLI apps like [Poi](ht
 **CAC** © [EGOIST](https://github.com/egoist), Released under the [MIT](./LICENSE) License.<br>
 Authored and maintained by egoist with help from contributors ([list](https://github.com/cacjs/cac/contributors)).
 
-> [Website](https://egoist.sh) · GitHub [@egoist](https://github.com/egoist) · Twitter [@\_egoistlily](https://twitter.com/_egoistlily)
+> [Website](https://egoist.dev) · GitHub [@egoist](https://github.com/egoist) · Twitter [@\_egoistlily](https://twitter.com/_egoistlily)
