@@ -281,7 +281,8 @@ Projects that use **CAC**:
 - [Lass](https://github.com/lassjs/lass): 💁🏻 Scaffold a modern package boilerplate for Node.js.
 - [Foy](https://github.com/zaaack/foy): 🏗 A lightweight and modern task runner and build tool for general purpose.
 - [Vuese](https://github.com/vuese/vuese): 🤗 One-stop solution for vue component documentation.
-- [NUT](https://github.com/nut-project/nut): 🌰 A framework born for microfrontends
+- [NUT](https://github.com/nut-project/nut): 🌰 A framework born for microfrontends.
+- [Taze](https://github.com/antfu-collective/taze): 🥦 A modern cli tool that keeps your deps fresh.
 - Feel free to add yours here...
 
 ## References
