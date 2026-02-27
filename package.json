@@ -33,8 +33,7 @@
     "typecheck": "tsgo --noEmit",
     "format": "prettier --cache --write .",
     "release": "bumpp",
-    "prepublishOnly": "pnpm build",
-    "docs:api": "typedoc"
+    "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
     "@sxzz/eslint-config": "^7.8.2",
@@ -53,7 +52,6 @@
     "tinyexec": "^1.0.2",
     "tsdown": "^0.21.0-beta.2",
     "tsdown-preset-sxzz": "^0.4.0",
-    "typedoc": "^0.28.17",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
