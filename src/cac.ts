@@ -217,7 +217,7 @@ export class CAC extends EventTarget {
     if (shouldParse) {
       // Search the default command
       for (const command of this.commands) {
-        if (command.name === '') {
+        if (command.isDefaultCommand) {
           shouldParse = false
           const parsed = this.mri(argv.slice(2), command)
           this.setParsedInfo(parsed, command)

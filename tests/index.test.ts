@@ -186,3 +186,26 @@ describe('--version in help message', () => {
     expect(output).toContain(`--version`)
   })
 })
+
+describe('default commands', () => {
+  test('simple: empty call', async () => {
+    const output = await getOutput('default-command.ts', [])
+    expect(output).toContain('Did something!')
+  })
+
+  test('simple: name alias call', async () => {
+    const output = await getOutput('default-command.ts', ['something'])
+    expect(output).toContain('Did something!')
+  })
+
+  // See https://github.com/cacjs/cac/issues/151
+  test('inverted: empty call', async () => {
+    const output = await getOutput('default-command-inverted.ts', [])
+    expect(output).toContain('Did something!')
+  })
+
+  test('inverted: name alias call', async () => {
+    const output = await getOutput('default-command-inverted.ts', ['something'])
+    expect(output).toContain('Did something!')
+  })
+})
