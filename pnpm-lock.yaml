@@ -66,6 +66,15 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@25.3.2)(jiti@2.6.1)(yaml@2.8.2)
 
+  examples/browser:
+    devDependencies:
+      cac:
+        specifier: workspace:*
+        version: link:../..
+      vite:
+        specifier: ^7.3.1
+        version: 7.3.1(@types/node@25.3.2)(jiti@2.6.1)(yaml@2.8.2)
+
 packages:
 
   '@andrewbranch/untar.js@1.0.3':

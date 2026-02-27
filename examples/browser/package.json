@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "cac": "workspace:*",
+    "vite": "^7.3.1"
+  }
+}
