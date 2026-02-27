@@ -102,24 +102,28 @@ export const camelcase = (input: string): string => {
 }
 
 export function setDotProp(
-  obj: { [k: string]: any },
+  obj: Record<string, any>,
   keys: string[],
   val: any,
 ): void {
-  let i = 0
-  const length = keys.length
-  let t = obj
-  let x
-  for (; i < length; ++i) {
-    x = t[keys[i]]
-    t = t[keys[i]] =
-      i === length - 1
-        ? val
-        : x == null
-          ? !!~keys[i + 1].indexOf('.') || !(+keys[i + 1] > -1)
-            ? {}
-            : []
-          : x
+  let current = obj
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    const isLastKey = i === keys.length - 1
+
+    if (isLastKey) {
+      current[key] = val
+      return
+    }
+
+    if (current[key] == null) {
+      const nextKey = keys[i + 1]
+      const nextKeyIsArrayIndex = +nextKey > -1
+      current[key] = nextKeyIsArrayIndex ? [] : {}
+    }
+
+    current = current[key]
   }
 }
 
