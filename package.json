@@ -5,6 +5,9 @@
   "packageManager": "pnpm@10.30.3",
   "description": "Simple yet powerful framework for building command-line apps.",
   "author": "egoist <0x142857@gmail.com>",
+  "maintainers": [
+    "Kevin Deng <sxzz@sxzz.moe>"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/cacjs/cac#readme",
   "repository": {
