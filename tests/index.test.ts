@@ -64,6 +64,37 @@ test('negated option', () => {
   })
 })
 
+test('kebab-case boolean option does not consume next positional arg (#119)', () => {
+  const cli = cac()
+  cli.command('[mode]').option('--include-locked, -l', 'include locked')
+
+  // Long kebab-case form
+  const a = cli.parse(['node', 'bin', '--include-locked', 'latest'], {
+    run: false,
+  })
+  expect(a.options.includeLocked).toBe(true)
+  expect(a.options.l).toBe(true)
+  expect(a.args).toEqual(['latest'])
+
+  // Short alias
+  const b = cli.parse(['node', 'bin', '-l', 'latest'], { run: false })
+  expect(b.options.includeLocked).toBe(true)
+  expect(b.options.l).toBe(true)
+  expect(b.args).toEqual(['latest'])
+})
+
+test('long hyphenated option propagates to camelCase aliases (#119)', () => {
+  const cli = cac()
+  cli.option('-c, --clear, --clear-screen', 'desc')
+
+  for (const flag of ['-c', '--clear', '--clearScreen', '--clear-screen']) {
+    const { options } = cli.parse(['node', 'bin', flag], { run: false })
+    expect(options.c).toBe(true)
+    expect(options.clear).toBe(true)
+    expect(options.clearScreen).toBe(true)
+  }
+})
+
 test('double dashes', () => {
   const cli = cac()
 
