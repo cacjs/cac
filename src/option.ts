@@ -13,6 +13,15 @@ export class Option {
   name: string
   /** Option name and aliases */
   names: string[]
+  /**
+   * Original (pre-camelcase) option names, e.g. `include-locked` for
+   * `--include-locked`. Needed so the underlying parser can recognise
+   * the kebab-case form on the command line as a boolean flag — without
+   * this, mri would consume the next positional argument as the option's
+   * value (e.g. `--include-locked latest` was parsed as
+   * `{ includeLocked: 'latest' }` with `latest` removed from the args).
+   */
+  rawNames: string[]
   isBoolean?: boolean
   // `required` will be a boolean for options with brackets
   required?: boolean
@@ -28,7 +37,7 @@ export class Option {
     rawName = rawName.replaceAll('.*', '')
 
     this.negated = false
-    this.names = removeBrackets(rawName)
+    const stripped = removeBrackets(rawName)
       .split(',')
       .map((v: string) => {
         let name = v.trim().replace(/^-{1,2}/, '')
@@ -37,8 +46,15 @@ export class Option {
           name = name.replace(/^no-/, '')
         }
 
-        return camelcaseOptionName(name)
+        return name
       })
+    this.rawNames = stripped
+      .slice()
+      .sort((a, b) =>
+        camelcaseOptionName(a).length > camelcaseOptionName(b).length ? 1 : -1,
+      )
+    this.names = stripped
+      .map((name) => camelcaseOptionName(name))
       .sort((a, b) => (a.length > b.length ? 1 : -1)) // Sort names
 
     // Use the longest name (last one) as actual option name
