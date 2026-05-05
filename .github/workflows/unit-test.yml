@@ -10,9 +10,7 @@ permissions: {}
 
 jobs:
   unit-test:
-    uses: sxzz/workflows/.github/workflows/unit-test.yml@v1
-    with:
-      node-versions: 22, 24, 25
+    uses: sxzz/workflows/.github/workflows/unit-test.yml@main
 
   unit-test-deno:
     runs-on: ubuntu-latest
@@ -32,7 +30,7 @@ jobs:
         run: deno run --no-lock examples/deno.ts
 
   coverage:
-    uses: sxzz/workflows/.github/workflows/coverage.yml@v1
+    uses: sxzz/workflows/.github/workflows/coverage.yml@main
     needs: unit-test
     permissions:
       id-token: write
