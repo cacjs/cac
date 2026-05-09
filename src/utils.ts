@@ -56,8 +56,13 @@ export function getMriOptions(options: Option[]): MriOptions {
     // Since its type (typeof) will be used to cast parsed arguments.
     // Which mean `--foo foo` will be parsed as `{foo: true}` if we have `{default:{foo: true}}`
     // Set alias
-    if (option.names.length > 1) {
-      result.alias[option.names[0]] = option.names.slice(1)
+    // Build the alias list using both the camelCased names (for end-user
+    // ergonomics — e.g. `--includeLocked` works) and the original
+    // kebab-case forms (so the parser actually recognises the form the
+    // user typed on the command line).
+    const aliasNames = mergeAliasNames(option.names, option.rawNames)
+    if (aliasNames.length > 1) {
+      result.alias[aliasNames[0]] = aliasNames.slice(1)
     }
     // Set boolean
     if (option.isBoolean) {
@@ -72,15 +77,33 @@ export function getMriOptions(options: Option[]): MriOptions {
           )
         })
         if (!hasStringTypeOption) {
-          result.boolean.push(option.names[0])
+          result.boolean.push(aliasNames[0])
         }
       } else {
-        result.boolean.push(option.names[0])
+        result.boolean.push(aliasNames[0])
       }
     }
   }
 
   return result
+}
+
+// Merge camelCased names with the original kebab-case names, preserving
+// uniqueness and the original "shortest first" ordering. The shortest
+// alias is kept as the canonical entry — typically the short flag like
+// `-l` — and remaining names follow as aliases for mri.
+function mergeAliasNames(names: string[], rawNames: string[]): string[] {
+  const merged: string[] = []
+  const seen = new Set<string>()
+  const push = (name: string) => {
+    if (!seen.has(name)) {
+      seen.add(name)
+      merged.push(name)
+    }
+  }
+  for (const name of names) push(name)
+  for (const raw of rawNames) push(raw)
+  return merged
 }
 
 export function findLongest(arr: string[]): string {
