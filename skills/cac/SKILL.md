@@ -54,7 +54,7 @@ Install with `pnpm add cac`.
 | Required option value | `--out <dir>` | missing value throws |
 | Global option | `cli.option('--cwd <dir>', ...)` | available to all commands |
 | Command option | `command.option('--watch', ...)` | scoped to one command |
-| Repeated option | `--include a --include b` | becomes an array |
+| Repeated option | `--include a --include b` | becomes `['a', 'b']` |
 | Dot-nested option | `--env.API_SECRET xxx` | becomes `options.env.API_SECRET` |
 | Passthrough args | `-- pnpm test` | stored in `options['--']` |
 
@@ -82,6 +82,20 @@ cli
   .option('--no-config', 'Disable config file')
   .option('--config <path>', 'Use a custom config file')
 ```
+
+For array-valued options, prefer repeated flags:
+
+```bash
+--include a --include b --include c
+```
+
+CAC parses that as:
+
+```ts
+{ include: ['a', 'b', 'c'] }
+```
+
+Do not model array input as `--include a,b,c` and split the string manually unless the CLI intentionally documents comma-separated syntax. If consumers should always receive an array, use `type: []` so even one `--include a` becomes `['a']`.
 
 ## Scenario References
 
