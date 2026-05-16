@@ -24,6 +24,7 @@ This document records how the CAC skill was generated and how to keep it synchro
 skills/
 ├── GENERATION.md
 └── cac/
+    ├── README.md
     ├── SKILL.md
     └── references/
         ├── basic-usage.md
