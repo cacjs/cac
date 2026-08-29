@@ -175,6 +175,23 @@ test('throw on unused args', () => {
   }).toThrowError('Unused args: `foo`, `bar`')
 })
 
+// See https://github.com/cacjs/cac/issues/170
+test('multi-word command', () => {
+  const cli = cac()
+  let matchedAccount: string | undefined
+
+  cli.command('creds set <account>', 'Set credentials').action(() => {})
+  cli.command('creds get <account>', 'Get credentials').action((account) => {
+    matchedAccount = account
+  })
+
+  const { args } = cli.parse('node bin creds get my-account'.split(' '))
+
+  expect(cli.matchedCommand?.name).toBe('creds get')
+  expect(args).toEqual(['my-account'])
+  expect(matchedAccount).toBe('my-account')
+})
+
 describe('--version in help message', () => {
   test('sub command', async () => {
     const output = await getOutput('help.ts', ['lint', '--help'])
