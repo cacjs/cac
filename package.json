@@ -59,6 +59,7 @@
     "tsdown": "^0.22.14",
     "tsdown-preset-sxzz": "^0.7.0",
     "typescript": "^6.0.3",
+    "vite-node": "^6.0.0",
     "vitest": "^4.1.11"
   },
   "husky": {
