@@ -49,6 +49,34 @@ snapshotOutput({
   args: ['build'],
 })
 
+test('parse() with no explicit argv under an alternative runtime (vite-node)', async () => {
+  // Regression test for https://github.com/cacjs/cac/issues/158.
+  // `.parse()` with no explicit argv falls back to `runtimeProcessArgs`
+  // (captured from `process.argv` in src/runtime.ts). Every other test in
+  // this file exercises that fallback only via a plain `node` subprocess;
+  // this runs the same fixture through vite-node, which executes the file
+  // in its own SSR/module context, to confirm the fallback still resolves
+  // to the real CLI args (not vite-node's own) when invoked as
+  // `vite-node basic-usage.ts foo bar --type ok command`.
+  const { stdout } = await x('npx', [
+    'vite-node',
+    example('basic-usage.ts'),
+    'foo',
+    'bar',
+    '--type',
+    'ok',
+    'command',
+  ])
+
+  expect(JSON.parse(stdout)).toEqual({
+    args: ['foo', 'bar', 'command'],
+    options: {
+      '--': [],
+      type: 'ok',
+    },
+  })
+})
+
 test('negated option', () => {
   const cli = cac()
 
