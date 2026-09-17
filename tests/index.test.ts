@@ -151,6 +151,23 @@ test('array types with transformFunction', () => {
   expect(options.scale).toEqual(true)
 })
 
+test('omitted array option stays absent when another option is passed', () => {
+  const cli = cac()
+    .option('--type <type>', 'Choose a project type', {
+      default: 'node',
+    })
+    .option('--externals <external>', 'Add externals', {
+      type: [],
+    })
+
+  const { options: withoutOption } = cli.parse(['node', 'bin'])
+  expect(withoutOption).not.toHaveProperty('externals')
+
+  const { options: withOption } = cli.parse(['node', 'bin', '--type', 'node'])
+  expect(withOption.type).toBe('node')
+  expect(withOption).not.toHaveProperty('externals')
+})
+
 test('throw on unknown options', () => {
   const cli = cac()
 
