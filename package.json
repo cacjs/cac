@@ -17,6 +17,7 @@
   "bugs": {
     "url": "https://github.com/cacjs/cac/issues"
   },
+  "sideEffects": false,
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
