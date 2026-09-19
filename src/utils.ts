@@ -128,7 +128,7 @@ export function setByType(
   transforms: { [k: string]: any },
 ): void {
   for (const [key, transform] of Object.entries(transforms)) {
-    if (transform.shouldTransform) {
+    if (transform.shouldTransform && Object.hasOwn(obj, key)) {
       obj[key] = [obj[key]].flat()
 
       if (typeof transform.transformFunction === 'function') {
