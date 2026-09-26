@@ -46,10 +46,11 @@ interface MriOptions {
     [k: string]: string[]
   }
   boolean: string[]
+  string: string[]
 }
 
 export function getMriOptions(options: Option[]): MriOptions {
-  const result: MriOptions = { alias: {}, boolean: [] }
+  const result: MriOptions = { alias: {}, boolean: [], string: [] }
 
   for (const [index, option] of options.entries()) {
     // We do not set default values in mri options
@@ -76,6 +77,22 @@ export function getMriOptions(options: Option[]): MriOptions {
         }
       } else {
         result.boolean.push(option.names[0])
+      }
+    }
+    // Keep the raw string for `type: [String]` so that mri doesn't coerce
+    // numeric-looking values (e.g. `0123` or `+1`) to numbers first
+    if (
+      typeof option.required === 'boolean' &&
+      Array.isArray(option.config.type) &&
+      option.config.type[0] === String
+    ) {
+      for (const name of removeBrackets(option.rawName).split(',')) {
+        result.string.push(
+          name
+            .trim()
+            .replace(/^-{1,2}/, '')
+            .replaceAll('.*', ''),
+        )
       }
     }
   }
