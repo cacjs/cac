@@ -151,6 +151,53 @@ test('array types with transformFunction', () => {
   expect(options.scale).toEqual(true)
 })
 
+test('array types with String transformFunction keep raw values', () => {
+  const cli = cac()
+
+  cli
+    .option('-p, --phone-number <phone>', 'Phone number', {
+      type: [String],
+    })
+    .option('--code [code]', 'Code', { type: [String] })
+    .option('--port <port>', 'Port')
+    .option('--ids <id>', 'IDs', { type: [] })
+
+  const { options } = cli.parse([
+    'node',
+    'bin',
+    '--phone-number',
+    '+310000',
+    '--code',
+    '01234',
+    '--code',
+    '1e3',
+    '--port',
+    '0080',
+    '--ids',
+    '007',
+  ])
+  expect(options.phoneNumber).toEqual(['+310000'])
+  expect(options.code).toEqual(['01234', '1e3'])
+  // Options without a String transform are coerced as before
+  expect(options.port).toBe(80)
+  expect(options.ids).toEqual([7])
+
+  const { options: options2 } = cli.parse([
+    'node',
+    'bin',
+    '-p',
+    '0x10',
+    '--code',
+    '日本語',
+  ])
+  expect(options2.p).toBe('0x10')
+  expect(options2.phoneNumber).toEqual(['0x10'])
+  expect(options2.code).toEqual(['日本語'])
+
+  const { options: options3 } = cli.parse(['node', 'bin', '--code', ''])
+  expect(options3.code).toEqual([''])
+})
+
 test('throw on unknown options', () => {
   const cli = cac()
 
