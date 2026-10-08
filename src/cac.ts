@@ -200,12 +200,15 @@ export class CAC extends EventTarget {
     for (const command of this.commands) {
       const parsed = this.mri(argv.slice(2), command)
 
-      const commandName = parsed.args[0]
+      // A command name may consist of multiple words (e.g. `creds get`), so
+      // match it against the same number of leading positional arguments.
+      const wordCount = command.name ? command.name.split(' ').length : 1
+      const commandName = parsed.args.slice(0, wordCount).join(' ')
       if (command.isMatched(commandName)) {
         shouldParse = false
         const parsedInfo = {
           ...parsed,
-          args: parsed.args.slice(1),
+          args: parsed.args.slice(wordCount),
         }
         this.setParsedInfo(parsedInfo, command, commandName)
         this.dispatchEvent(
