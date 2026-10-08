@@ -49,7 +49,9 @@ interface MriOptions {
 }
 
 export function getMriOptions(options: Option[]): MriOptions {
-  const result: MriOptions = { alias: {}, boolean: [] }
+  // `alias` is looked up by user-provided option names inside mri,
+  // so it must not inherit from `Object.prototype`
+  const result: MriOptions = { alias: Object.create(null), boolean: [] }
 
   for (const [index, option] of options.entries()) {
     // We do not set default values in mri options
@@ -97,11 +99,17 @@ export function camelcase(input: string): string {
   })
 }
 
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
+
 export function setDotProp(
   obj: Record<string, any>,
   keys: string[],
   val: any,
 ): void {
+  // Ignore option names that could reach the prototype chain,
+  // otherwise `--__proto__.isAdmin` would pollute `Object.prototype`
+  if (keys.some((key) => UNSAFE_KEYS.has(key))) return
+
   let current = obj
 
   for (let i = 0; i < keys.length; i++) {

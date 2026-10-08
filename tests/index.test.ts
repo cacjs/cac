@@ -209,3 +209,31 @@ describe('default commands', () => {
     expect(output).toContain('Did something!')
   })
 })
+
+test('ignore prototype polluting option names', () => {
+  const cli = cac()
+
+  const { options } = cli.parse(
+    `node bin --__proto__.isAdmin --constructor.prototype.isAdmin --a.__proto__.isAdmin --a.constructor.prototype.isAdmin --constructor foo --prototype bar`.split(
+      ' ',
+    ),
+  )
+
+  expect(Object.prototype).not.toHaveProperty('isAdmin')
+  expect(({} as any).isAdmin).toBeUndefined()
+  expect(options).toEqual({ '--': [] })
+})
+
+test('dot-nested option names', () => {
+  const cli = cac()
+
+  const { options } = cli.parse(
+    `node bin --foo.bar baz --list.0 a --list.1 b`.split(' '),
+  )
+
+  expect(options).toEqual({
+    '--': [],
+    foo: { bar: 'baz' },
+    list: ['a', 'b'],
+  })
+})
