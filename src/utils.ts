@@ -136,7 +136,9 @@ export function setByType(
   transforms: { [k: string]: any },
 ): void {
   for (const [key, transform] of Object.entries(transforms)) {
-    if (transform.shouldTransform) {
+    // Only transform options that actually have a value,
+    // otherwise an omitted option would become `[undefined]`
+    if (transform.shouldTransform && key in obj) {
       obj[key] = [obj[key]].flat()
 
       if (typeof transform.transformFunction === 'function') {
