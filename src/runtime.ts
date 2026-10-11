@@ -1,4 +1,4 @@
-/* eslint-disable import/no-mutable-exports */
+// eslint-disable-next-line import/no-mutable-exports
 export let runtimeInfo: string
 
 if (typeof process !== 'undefined') {
