@@ -1,7 +1,7 @@
 {
   "name": "cac",
   "type": "module",
-  "version": "7.0.1",
+  "version": "7.1.0",
   "packageManager": "pnpm@12.11.2",
   "description": "Simple yet powerful framework for building command-line apps.",
   "author": "egoist <0x142857@gmail.com>",
