@@ -134,6 +134,26 @@ test('array types without transformFunction', () => {
   expect(options3.externals).toEqual([{ env: ['foo', 'bar'] }])
 })
 
+test('array types are left absent when the option is omitted', () => {
+  const cli = cac()
+
+  cli
+    .option('--type <type>', 'Choose a project type', { default: 'node' })
+    .option('--externals <external>', 'Add externals', { type: [] })
+
+  const { options: options1 } = cli.parse(`node bin`.split(' '))
+  expect(options1).not.toHaveProperty('externals')
+
+  // An unrelated option must not materialize the omitted array option
+  const { options: options2 } = cli.parse(`node bin --type node`.split(' '))
+  expect(options2).not.toHaveProperty('externals')
+
+  const { options: options3 } = cli.parse(
+    `node bin --type node --externals foo`.split(' '),
+  )
+  expect(options3.externals).toEqual(['foo'])
+})
+
 test('array types with transformFunction', () => {
   const cli = cac()
 
