@@ -1,7 +1,7 @@
 import path from 'node:path'
 import process from 'node:process'
 import { x } from 'tinyexec'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, onTestFinished, test } from 'vitest'
 import cac from '../src/index.ts'
 
 function example(file: string) {
@@ -258,24 +258,23 @@ test('dot-nested option names', () => {
   })
 })
 
-describe('parse() without arguments', () => {
-  // https://github.com/cacjs/cac/issues/158
-  // `process.argv` used to be captured when the module was imported. Runners
-  // such as vite-node load cac first (their own CLI uses it) and only then
-  // rewrite `process.argv` for the script, so a later `parse()` saw the stale
-  // array and treated the script file as a positional argument.
-  test('reads process.argv when called, not when imported', () => {
-    const original = process.argv
-    try {
-      process.argv = ['node', 'cli.js', 'hello']
-      const cli = cac('cli')
-      cli.command('hello')
-      const parsed = cli.parse(undefined, { run: false })
-      expect(cli.rawArgs).toEqual(['node', 'cli.js', 'hello'])
-      expect(cli.matchedCommandName).toBe('hello')
-      expect(parsed.args).toEqual([])
-    } finally {
-      process.argv = original
-    }
+// https://github.com/cacjs/cac/issues/158
+// `process.argv` used to be captured when the module was imported. Runners
+// such as vite-node load cac first (their own CLI uses it) and only then
+// rewrite `process.argv` for the script, so a later `parse()` saw the stale
+// array and treated the script file as a positional argument.
+test('reads process.argv when called, not when imported', () => {
+  const original = process.argv
+  process.argv = ['node', 'cli.js', 'hello']
+
+  const cli = cac('cli')
+  cli.command('hello')
+  const parsed = cli.parse(undefined, { run: false })
+  expect(cli.rawArgs).toEqual(['node', 'cli.js', 'hello'])
+  expect(cli.matchedCommandName).toBe('hello')
+  expect(parsed.args).toEqual([])
+
+  onTestFinished(() => {
+    process.argv = original
   })
 })
