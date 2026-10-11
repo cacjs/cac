@@ -315,6 +315,7 @@ export class Command {
     const hasVariadicArg = this.args.some((arg) => arg.variadic)
     const maximumArgsCount = hasVariadicArg ? Infinity : this.args.length
 
+    // eslint-disable-next-line unicorn/prefer-early-return
     if (maximumArgsCount < this.cli.args.length) {
       const argsString = this.cli.args
         .slice(maximumArgsCount)
