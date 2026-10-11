@@ -259,14 +259,6 @@ Then everything just works out of the box:
 import { cac } from 'cac'
 ```
 
-### With Deno
-
-```ts
-import { cac } from 'jsr:@cac/cac'
-
-const cli = cac('my-program')
-```
-
 ## Projects Using CAC
 
 Projects that use **CAC**:

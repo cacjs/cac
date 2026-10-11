@@ -46,7 +46,6 @@
     "@sxzz/eslint-config": "^8.7.0",
     "@sxzz/prettier-config": "^2.3.3",
     "@types/bun": "^1.4.2",
-    "@types/deno": "^2.7.0",
     "@types/node": "^26.6.5",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
     "@vitest/coverage-v8": "^5.0.3",

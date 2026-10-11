@@ -12,23 +12,6 @@ jobs:
   unit-test:
     uses: sxzz/workflows/.github/workflows/unit-test.yml@main
 
-  unit-test-deno:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
-        with:
-          deno-version: v2.x
-
-      - name: Install
-        run: deno install
-
-      - name: Run Deno Example
-        run: deno run --no-lock examples/deno.ts
-
   coverage:
     uses: sxzz/workflows/.github/workflows/coverage.yml@main
     needs: unit-test
