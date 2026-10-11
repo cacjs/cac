@@ -6,7 +6,7 @@ import {
   type CommandExample,
   type HelpCallback,
 } from './command.ts'
-import { runtimeProcessArgs } from './runtime.ts'
+import { getRuntimeProcessArgs } from './runtime.ts'
 import {
   camelcaseOptionName,
   getFileName,
@@ -181,6 +181,7 @@ export class CAC extends EventTarget {
     } = {},
   ): ParsedArgv {
     if (!argv) {
+      const runtimeProcessArgs = getRuntimeProcessArgs()
       if (!runtimeProcessArgs) {
         throw new Error(
           'No argv provided and runtime process argv is not available.',
