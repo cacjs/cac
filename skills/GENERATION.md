@@ -33,7 +33,6 @@ skills/
         ├── command-options.md
         ├── default-command-inverted.md
         ├── default-command.md
-        ├── deno.md
         ├── dot-nested-options.md
         ├── help.md
         ├── ignore-default-value.md
@@ -54,7 +53,6 @@ Reference files mirror the canonical examples so changes have an obvious destina
 | `examples/command-options.ts` | `skills/cac/references/command-options.md` |
 | `examples/default-command-inverted.ts` | `skills/cac/references/default-command-inverted.md` |
 | `examples/default-command.ts` | `skills/cac/references/default-command.md` |
-| `examples/deno.ts` | `skills/cac/references/deno.md` |
 | `examples/dot-nested-options.ts` | `skills/cac/references/dot-nested-options.md` |
 | `examples/help.ts` | `skills/cac/references/help.md` |
 | `examples/ignore-default-value.ts` | `skills/cac/references/ignore-default-value.md` |

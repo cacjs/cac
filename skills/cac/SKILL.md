@@ -109,7 +109,6 @@ Use the reference that matches the user's task:
 | Add command-scoped options | [command-options](references/command-options.md) |
 | Define an empty-name default command | [default-command](references/default-command.md) |
 | Make a named command also act as default | [default-command-inverted](references/default-command-inverted.md) |
-| Use CAC from Deno | [deno](references/deno.md) |
 | Parse nested option keys | [dot-nested-options](references/dot-nested-options.md) |
 | Combine help, version, global options, and a default command | [help](references/help.md) |
 | Show defaults in help without filling parsed output | [ignore-default-value](references/ignore-default-value.md) |

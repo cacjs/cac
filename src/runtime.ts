@@ -3,6 +3,7 @@ export let runtimeInfo: string
 
 if (typeof process !== 'undefined') {
   let runtimeName: string
+  // @ts-expect-error missing Deno type definitions
   if (typeof Deno !== 'undefined' && typeof Deno.version?.deno === 'string') {
     runtimeName = 'deno'
   } else if (typeof Bun !== 'undefined' && typeof Bun.version === 'string') {

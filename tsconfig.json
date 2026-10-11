@@ -6,7 +6,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
-    "types": ["node", "deno", "bun"],
+    "types": ["node", "bun"],
     "allowImportingTsExtensions": true,
     "strict": true,
     "noUnusedLocals": true,
@@ -20,5 +20,5 @@
     "skipLibCheck": true
   },
   "include": ["src", "tests", "examples", "tests"],
-  "exclude": ["examples/deno.ts", "examples/browser"]
+  "exclude": ["examples/browser"]
 }
