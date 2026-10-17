@@ -81,6 +81,28 @@ test('double dashes', () => {
   expect(options['--']).toEqual(['npm', 'test'])
 })
 
+test('keep args after boolean options as strings', () => {
+  const cli = cac()
+
+  cli.option('-r, --run', 'run').option('-w, --watch', 'watch')
+
+  const { args, options } = cli.parse(`node bin --run 03 04 -w 1e3`.split(' '))
+  expect(args).toEqual(['03', '04', '1e3'])
+  expect(options).toEqual({
+    '--': [],
+    r: true,
+    run: true,
+    w: true,
+    watch: true,
+  })
+
+  expect(cli.parse(`node bin -rw 0x10`.split(' ')).args).toEqual(['0x10'])
+  expect(cli.parse(`node bin --run false 1`.split(' '))).toEqual({
+    args: ['1'],
+    options: { '--': [], r: false, run: false },
+  })
+})
+
 test('default value for negated option', () => {
   const cli = cac()
 

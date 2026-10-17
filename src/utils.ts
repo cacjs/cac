@@ -85,6 +85,48 @@ export function getMriOptions(options: Option[]): MriOptions {
   return result
 }
 
+/**
+ * mri pushes the arg after a boolean option to the positional args, but casts
+ * it to a number first: `--watch 03` gives `[3]`, while `03` alone gives `['03']`.
+ * Pass `true` inline (`--watch=true`) so that mri parses the next arg as
+ * an ordinary positional arg instead.
+ */
+export function inlineBooleanValues(
+  argv: string[],
+  mriOptions: MriOptions,
+): string[] {
+  const booleans = new Set(
+    mriOptions.boolean.flatMap((name) => [
+      name,
+      ...(mriOptions.alias[name] || []),
+    ]),
+  )
+
+  return argv.map((arg, i) => {
+    const next = argv[i + 1]
+    // Only an option without an inline value takes the next arg, and mri does
+    // not push an empty, dashed, `true` or `false` value to the positional args
+    if (
+      !arg.startsWith('-') ||
+      arg.includes('=') ||
+      next === undefined ||
+      next === '' ||
+      next.startsWith('-') ||
+      next === 'true' ||
+      next === 'false'
+    ) {
+      return arg
+    }
+
+    const name = arg.replace(/^-+/, '')
+    if (name.startsWith('no-')) return arg
+
+    // Like mri, treat `-abc` as `-a -b -c`, so only `c` takes the next arg
+    const lastName = arg.length - name.length === 2 ? name : name.slice(-1)
+    return booleans.has(lastName) ? `${arg}=true` : arg
+  })
+}
+
 export function findLongest(arr: string[]): string {
   return arr.sort((a, b) => b.length - a.length)[0]
 }

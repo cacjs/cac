@@ -11,6 +11,7 @@ import {
   camelcaseOptionName,
   getFileName,
   getMriOptions,
+  inlineBooleanValues,
   setByType,
   setDotProp,
 } from './utils.ts'
@@ -280,7 +281,7 @@ export class CAC extends EventTarget {
       argv = argv.slice(0, doubleDashesIndex)
     }
 
-    let parsed = mri(argv, mriOptions)
+    let parsed = mri(inlineBooleanValues(argv, mriOptions), mriOptions)
     parsed = Object.keys(parsed).reduce(
       (res, name) => {
         return {
