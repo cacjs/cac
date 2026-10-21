@@ -94,8 +94,8 @@ export function padRight(str: string, length: number): string {
 }
 
 export function camelcase(input: string): string {
-  return input.replaceAll(/([a-z])-([a-z])/g, (_, p1, p2) => {
-    return p1 + p2.toUpperCase()
+  return input.replaceAll(/-+([a-z\d])/gi, (_, p1) => {
+    return p1.toUpperCase()
   })
 }
 
