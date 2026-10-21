@@ -278,3 +278,24 @@ test('reads process.argv when called, not when imported', () => {
     process.argv = original
   })
 })
+
+test('camelcase option names with numbers', () => {
+  const cli = cac()
+
+  cli
+    .option('--step-1-name <name>', 'step name')
+    .option('--api-v1-key <key>', 'api key')
+    .option('--utf-8-mode', 'utf-8 mode')
+    .option('--web-v2-api <endpoint>', 'web v2 api')
+
+  const { options } = cli.parse(
+    `node bin --step-1-name compile --api-v1-key secret --utf-8-mode --web-v2-api /v2`.split(
+      ' ',
+    ),
+  )
+
+  expect(options.step1Name).toBe('compile')
+  expect(options.apiV1Key).toBe('secret')
+  expect(options.utf8Mode).toBe(true)
+  expect(options.webV2Api).toBe('/v2')
+})
