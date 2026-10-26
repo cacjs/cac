@@ -171,6 +171,28 @@ test('array types with transformFunction', () => {
   expect(options.scale).toEqual(true)
 })
 
+test('array types apply transformFunction once', () => {
+  const cli = cac()
+
+  cli
+    .option('-c, --color <hex>', 'Color as hex', {
+      type: [(v: string) => Number.parseInt(v, 16)],
+    })
+    .option('--verbose', 'Verbose output')
+
+  const { options } = cli.parse(`node bin --color ff --verbose`.split(' '))
+  expect(options.color).toEqual([255])
+})
+
+test('array types keep every dot-nested value', () => {
+  const cli = cac()
+
+  cli.option('--env <env>', 'Set env', { type: [] })
+
+  const { options } = cli.parse(`node bin --env.a 1 --env.b 2`.split(' '))
+  expect(options.env).toEqual([{ a: 1, b: 2 }])
+})
+
 test('throw on unknown options', () => {
   const cli = cac()
 

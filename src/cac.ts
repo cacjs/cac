@@ -329,9 +329,11 @@ export class CAC extends EventTarget {
       if (key !== '_') {
         const keys = key.split('.')
         setDotProp(options, keys, value)
-        setByType(options, transforms)
       }
     }
+
+    // Apply type transforms once, after all values (including dot-nested ones) are set
+    setByType(options, transforms)
 
     return {
       args,
