@@ -400,11 +400,11 @@ interface Options {
 }
 ```
 
-#### command.alias(name)
+#### command.alias(...names)
 
-- Type: `(name: string) => Command`
+- Type: `(...names: (string | readonly string[])[]) => Command`
 
-Add an alias name to this command, the `name` here can't contain brackets.
+Add alias name(s) to this command, the alias names here can't contain brackets.
 
 #### command.allowUnknownOptions()
 

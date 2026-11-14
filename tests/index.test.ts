@@ -278,3 +278,85 @@ test('reads process.argv when called, not when imported', () => {
     process.argv = original
   })
 })
+
+describe('command.alias()', () => {
+  test('multiple aliases via rest arguments', () => {
+    const cli = cac()
+    const events: string[] = []
+    let matchedFiles: string[] | undefined
+
+    const cmd = cli
+      .command('format [...files]', 'Format files')
+      .alias('fmt', 'fromat', 'foramt')
+      .action((files: string[]) => {
+        matchedFiles = files
+      })
+
+    for (const name of ['format', 'fmt', 'fromat', 'foramt']) {
+      cli.addEventListener(`command:${name}`, () => {
+        events.push(name)
+      })
+    }
+
+    expect(cmd.aliasNames).toEqual(['fmt', 'fromat', 'foramt'])
+
+    for (const name of ['format', 'fmt', 'fromat', 'foramt']) {
+      matchedFiles = []
+      cli.parse(['node', 'bin', name, 'a.ts', 'b.ts'])
+      expect(cli.matchedCommand).toBe(cmd)
+      expect(cli.matchedCommandName).toBe(name)
+      expect(matchedFiles).toEqual(['a.ts', 'b.ts'])
+    }
+
+    expect(events).toEqual(['format', 'fmt', 'fromat', 'foramt'])
+  })
+
+  test('multiple aliases via array and chained calls', () => {
+    const cli = cac()
+    let called = 0
+    const readonlyAliases = ['fromat', 'foramt'] as const
+
+    const cmd = cli
+      .command('format [...files]', 'Format files')
+      .alias(['fmt'])
+      .alias(readonlyAliases)
+      .alias('f')
+      .action(() => {
+        called++
+      })
+
+    expect(cmd.aliasNames).toEqual(['fmt', 'fromat', 'foramt', 'f'])
+
+    for (const name of ['fmt', 'fromat', 'foramt', 'f']) {
+      cli.parse(['node', 'bin', name])
+      expect(cli.matchedCommandName).toBe(name)
+    }
+
+    expect(called).toBe(4)
+  })
+
+  test('default command marker (!) combined with named aliases', () => {
+    const cli = cac()
+    const runs: string[] = []
+
+    const cmd = cli
+      .command('format [...files]', 'Format files')
+      .alias(['fmt', '!'])
+      .action((files: string[]) => {
+        runs.push(files.join(','))
+      })
+
+    expect(cmd.isDefaultCommand).toBe(true)
+
+    cli.parse(['node', 'bin', 'a.ts'])
+    expect(cli.matchedCommand).toBe(cmd)
+    expect(cli.matchedCommandName).toBeUndefined()
+
+    cli.unsetMatchedCommand()
+    cli.parse(['node', 'bin', 'fmt', 'b.ts'])
+    expect(cli.matchedCommand).toBe(cmd)
+    expect(cli.matchedCommandName).toBe('fmt')
+
+    expect(runs).toEqual(['a.ts', 'b.ts'])
+  })
+})

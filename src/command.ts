@@ -103,8 +103,8 @@ export class Command {
     return this
   }
 
-  alias(name: string): this {
-    this.aliasNames.push(name)
+  alias(...names: (string | readonly string[])[]): this {
+    this.aliasNames.push(...names.flat())
     return this
   }
 

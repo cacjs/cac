@@ -135,7 +135,7 @@ try {
 - Use `ignoreOptionDefaultValue()` when help should show defaults but parsed output should stay sparse.
 - Variadic positional args arrive as arrays.
 - `options['--']` is reserved for everything after a double dash.
-- `command.alias(name)` accepts plain aliases; use `alias('!')` to mark a named command as the default command.
+- `command.alias(...names)` accepts one or more alias strings or arrays of strings; use `alias('!')` to mark a named command as the default command.
 - Listen to `command:<name>`, `command:!`, and `command:*` when you need matched/default/unknown-command hooks.
 
 ## API Surface
@@ -171,7 +171,7 @@ cli.matchedCommandName
 ```ts
 command.option(name, description, config?)
 command.action(callback)
-command.alias(name)
+command.alias(...names)
 command.allowUnknownOptions()
 command.ignoreOptionDefaultValue()
 command.example(example)
