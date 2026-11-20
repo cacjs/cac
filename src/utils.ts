@@ -1,8 +1,11 @@
 import type { MriOptions } from './mri.ts'
 import type { Option } from './option.ts'
 
+const BRACKETS_AND_REST_RE = /[<[].+/
+const FILE_NAME_RE = /([^\\/]+)$/
+
 export function removeBrackets(v: string): string {
-  return v.replace(/[<[].+/, '').trim()
+  return v.replace(BRACKETS_AND_REST_RE, '').trim()
 }
 
 export function findAllBrackets(v: string): {
@@ -145,7 +148,7 @@ export function setByType(
 }
 
 export function getFileName(input: string): string {
-  const m = /([^\\/]+)$/.exec(input)
+  const m = FILE_NAME_RE.exec(input)
   return m ? m[1] : ''
 }
 

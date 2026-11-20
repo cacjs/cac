@@ -1,5 +1,8 @@
 import { camelcaseOptionName, removeBrackets } from './utils.ts'
 
+const LEADING_DASHES_RE = /^-{1,2}/
+const NEGATED_PREFIX_RE = /^no-/
+
 interface OptionConfig {
   default?: any
   type?: any[]
@@ -31,10 +34,10 @@ export class Option {
     this.names = removeBrackets(rawName)
       .split(',')
       .map((v: string) => {
-        let name = v.trim().replace(/^-{1,2}/, '')
+        let name = v.trim().replace(LEADING_DASHES_RE, '')
         if (name.startsWith('no-')) {
           this.negated = true
-          name = name.replace(/^no-/, '')
+          name = name.replace(NEGATED_PREFIX_RE, '')
         }
 
         return camelcaseOptionName(name)
