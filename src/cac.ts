@@ -1,4 +1,3 @@
-import mri from 'mri'
 import {
   Command,
   GlobalCommand,
@@ -6,6 +5,7 @@ import {
   type CommandExample,
   type HelpCallback,
 } from './command.ts'
+import { mri } from './mri.ts'
 import { getRuntimeProcessArgs } from './runtime.ts'
 import {
   camelcaseOptionName,
@@ -280,7 +280,7 @@ export class CAC extends EventTarget {
       argv = argv.slice(0, doubleDashesIndex)
     }
 
-    let parsed = mri(argv, mriOptions)
+    let parsed: Record<string, any> = mri(argv, mriOptions)
     parsed = Object.keys(parsed).reduce(
       (res, name) => {
         return {

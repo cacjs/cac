@@ -244,6 +244,32 @@ test('ignore prototype polluting option names', () => {
   expect(options).toEqual({ '--': [] })
 })
 
+test('ignore inherited members while parsing options', () => {
+  // `--__proto__=x` used to swap the prototype of mri's result, so `--0=x`
+  // read `Object.prototype` from it and `--0.0.polluted` wrote onto it.
+  // The value conflict left behind still throws, same as `--a=1 --a.b=2`
+  expect(() =>
+    cac().parse(`node bin --__proto__=x --0=x --0.0.polluted=yes`.split(' ')),
+  ).toThrow(TypeError)
+  expect(({} as any).polluted).toBeUndefined()
+  expect(([] as any).polluted).toBeUndefined()
+
+  const { options } = cac().parse(
+    `node bin --toString=x --valueOf.polluted=yes --a.hasOwnProperty.polluted=yes`.split(
+      ' ',
+    ),
+  )
+
+  expect((Object.prototype.valueOf as any).polluted).toBeUndefined()
+  expect((Object.prototype.hasOwnProperty as any).polluted).toBeUndefined()
+  expect(options).toEqual({
+    '--': [],
+    toString: 'x',
+    valueOf: { polluted: 'yes' },
+    a: { hasOwnProperty: { polluted: 'yes' } },
+  })
+})
+
 test('dot-nested option names', () => {
   const cli = cac()
 

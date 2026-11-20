@@ -1,3 +1,4 @@
+import type { MriOptions } from './mri.ts'
 import type { Option } from './option.ts'
 
 export function removeBrackets(v: string): string {
@@ -39,13 +40,6 @@ export function findAllBrackets(v: string): {
   }
 
   return res
-}
-
-interface MriOptions {
-  alias: {
-    [k: string]: string[]
-  }
-  boolean: string[]
 }
 
 export function getMriOptions(options: Option[]): MriOptions {
@@ -121,7 +115,9 @@ export function setDotProp(
       return
     }
 
-    if (current[key] == null) {
+    // Inherited members (e.g. `toString`) are shared built-ins,
+    // so descending into them would mutate global objects
+    if (!Object.hasOwn(current, key) || current[key] == null) {
       const nextKey = keys[i + 1]
       const nextKeyIsArrayIndex = +nextKey > -1
       current[key] = nextKeyIsArrayIndex ? [] : {}
